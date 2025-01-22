@@ -1,6 +1,8 @@
 package com.backend.allreva.chatting.message.domain;
 
+import com.backend.allreva.chatting.Participant;
 import com.backend.allreva.chatting.message.domain.value.Content;
+import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,20 +22,31 @@ public class SingleMessage {
     @Field(value = "_id", targetType = FieldType.OBJECT_ID)
     private String id;
 
-    private Long chatId;
+    private Long singleChatId;
     private long messageNumber;
 
     private Content content;
+
+    private Participant sender;
     private LocalDateTime sentAt;
 
     public SingleMessage(
-            final Long chatId,
+            final Long singleChatId,
             final long messageNumber,
-            final Content content
+            final Content content,
+            final Long memberId,
+            final String nickname,
+            final String profileImageUrl
     ) {
-        this.chatId = chatId;
+        this.singleChatId = singleChatId;
         this.messageNumber = messageNumber;
         this.content = content;
+
+        this.sender = new Participant(
+                memberId,
+                nickname,
+                new Image(profileImageUrl)
+        );
         this.sentAt = LocalDateTime.now();
     }
 }

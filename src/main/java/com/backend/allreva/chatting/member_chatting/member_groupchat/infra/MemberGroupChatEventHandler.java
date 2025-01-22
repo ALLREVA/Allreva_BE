@@ -1,7 +1,7 @@
 package com.backend.allreva.chatting.member_chatting.member_groupchat.infra;
 
-import com.backend.allreva.chatting.group_chat.command.domain.AddedGroupChatEvent;
-import com.backend.allreva.chatting.group_chat.command.domain.DeletedGroupChatEvent;
+import com.backend.allreva.chatting.chat.group_chat.command.domain.AddedGroupChatEvent;
+import com.backend.allreva.chatting.chat.group_chat.command.domain.DeletedGroupChatEvent;
 import com.backend.allreva.chatting.member_chatting.member_groupchat.command.domain.MemberGroupChat;
 import com.backend.allreva.chatting.member_chatting.member_groupchat.command.domain.MemberGroupChatRepository;
 import lombok.RequiredArgsConstructor;

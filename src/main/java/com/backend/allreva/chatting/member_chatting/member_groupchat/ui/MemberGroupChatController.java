@@ -5,10 +5,7 @@ import com.backend.allreva.chatting.member_chatting.member_groupchat.command.app
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController

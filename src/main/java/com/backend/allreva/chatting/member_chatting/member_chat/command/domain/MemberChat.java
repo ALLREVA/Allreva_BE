@@ -22,8 +22,6 @@ public class MemberChat {
     private Long chatId;
     private Long memberId;
 
-    private Boolean enableNotification;
-
     @Embedded
     private OtherMember otherMember;
 
@@ -36,18 +34,11 @@ public class MemberChat {
     public MemberChat(
             final Long memberId,
             final Long chatId,
-            final Long otherMemberId,
-            final String otherMemberNickname,
-            final String otherMemberThumbnail
+            final OtherMember otherMember
     ) {
         this.memberId = memberId;
         this.chatId = chatId;
-        this.enableNotification = true;
 
-        this.otherMember = new OtherMember(
-                otherMemberId,
-                otherMemberNickname,
-                new Image(otherMemberThumbnail)
-        );
+        this.otherMember = otherMember;
     }
 }

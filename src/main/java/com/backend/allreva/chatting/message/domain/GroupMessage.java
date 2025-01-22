@@ -1,6 +1,8 @@
 package com.backend.allreva.chatting.message.domain;
 
+import com.backend.allreva.chatting.Participant;
 import com.backend.allreva.chatting.message.domain.value.Content;
+import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,16 +26,27 @@ public class GroupMessage {
     private long messageNumber;
 
     private Content content;
+
+    private Participant sender;
     private LocalDateTime sentAt;
 
     public GroupMessage(
             final Long groupChatId,
             final long messageNumber,
-            final Content content
+            final Content content,
+            final Long memberId,
+            final String nickname,
+            final String profileImageUrl
     ) {
         this.groupChatId = groupChatId;
         this.messageNumber = messageNumber;
         this.content = content;
+
+        this.sender = new Participant(
+                memberId,
+                nickname,
+                new Image(profileImageUrl)
+        );
         this.sentAt = LocalDateTime.now();
     }
 }

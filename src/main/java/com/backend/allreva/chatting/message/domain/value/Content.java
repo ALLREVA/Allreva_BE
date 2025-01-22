@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Content {
 
-    private Type type;
+    private ContentType contentType;
     private String payload;
 
     public Content(
-            final Type type,
+            final ContentType contentType,
             final String payload
     ) {
-        this.type = type;
+        this.contentType = contentType;
         this.payload = payload;
     }
 }

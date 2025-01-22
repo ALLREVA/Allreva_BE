@@ -2,7 +2,6 @@ package com.backend.allreva.chatting.member_chatting.member_chat.command.domain;
 
 import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +12,19 @@ public class OtherMember {
     private Long otherMemberId;
     private String otherMemberNickname;
 
-    @Embedded
     private Image otherMemberThumbnail;
+
+    public OtherMember(
+            final Long otherMemberId,
+            final String otherMemberNickname,
+            final String otherMemberThumbnailUrl
+    ) {
+        this(
+                otherMemberId,
+                otherMemberNickname,
+                new Image(otherMemberThumbnailUrl)
+        );
+    }
 
     public OtherMember(
             final Long otherMemberId,
