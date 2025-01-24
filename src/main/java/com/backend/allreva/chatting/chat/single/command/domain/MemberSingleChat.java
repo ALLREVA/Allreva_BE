@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
         @Index(columnList = "member_id"),
-        @Index(columnList = "chat_id")
+        @Index(columnList = "single_chat_id")
 })
 @Entity
-public class MemberChat {
+public class MemberSingleChat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long chatId;
+    private Long singleChatId;
     private Long memberId;
 
     @Embedded
@@ -30,13 +30,13 @@ public class MemberChat {
      */
     private String lastMessageId;
 
-    public MemberChat(
+    public MemberSingleChat(
             final Long memberId,
-            final Long chatId,
+            final Long singleChatId,
             final OtherMember otherMember
     ) {
         this.memberId = memberId;
-        this.chatId = chatId;
+        this.singleChatId = singleChatId;
 
         this.otherMember = otherMember;
     }

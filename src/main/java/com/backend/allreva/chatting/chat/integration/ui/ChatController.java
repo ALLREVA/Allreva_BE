@@ -1,9 +1,9 @@
 package com.backend.allreva.chatting.chat.integration.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.chatting.chat.integration.model.chat_room.ChatRoomSummary;
-import com.backend.allreva.chatting.chat.integration.model.document.MemberChatRoomDoc;
-import com.backend.allreva.chatting.chat.integration.model.document.MemberChatRoomRepository;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
+import com.backend.allreva.chatting.chat.integration.model.ChatParticipantDoc;
+import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
 import com.backend.allreva.chatting.message.infra.MessageSseService;
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;
@@ -23,7 +23,7 @@ import java.util.SortedSet;
 @RestController
 public class ChatController {
 
-    private final MemberChatRoomRepository memberChatRoomRepository;
+    private final ChatParticipantRepository chatParticipantRepository;
     private final MessageSseService messageSseService;
 
     @GetMapping(value = "/single/stream/{chatId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -45,13 +45,13 @@ public class ChatController {
     }
 
     @GetMapping("/list")
-    public Response<SortedSet<ChatRoomSummary>> findParticipatingRooms(
+    public Response<SortedSet<ChatSummary>> findParticipatingRooms(
             @AuthMember final Member member
     ) {
-        MemberChatRoomDoc document = memberChatRoomRepository.findById(member.getId())
+        ChatParticipantDoc document = chatParticipantRepository.findById(member.getId())
                 .orElseThrow(MemberNotFoundException::new);
 
-        SortedSet<ChatRoomSummary> responses = document.getChatRoomSummaries();
+        SortedSet<ChatSummary> responses = document.getChatSummaries();
         return Response.onSuccess(responses);
     }
 }

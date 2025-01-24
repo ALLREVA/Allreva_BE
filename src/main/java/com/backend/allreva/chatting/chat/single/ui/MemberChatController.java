@@ -1,6 +1,8 @@
 package com.backend.allreva.chatting.chat.single.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
+import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.chatting.chat.single.command.application.LeaveSingleChatRequest;
 import com.backend.allreva.chatting.chat.single.command.application.MemberChatCommandService;
 import com.backend.allreva.common.dto.Response;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberChatController {
 
     private final MemberChatCommandService memberChatCommandService;
+    private final ChatParticipantService chatParticipantService;
 
     @PostMapping
     public Response<Long> startSingleChatting(
@@ -24,22 +27,33 @@ public class MemberChatController {
                 member.getId(),
                 request.otherMemberId()
         );
-        memberChatCommandService.startSingleChatting(
+        memberChatCommandService.startOtherSingleChatting(
+                chatId,
+                member.getId(),
+                request.otherMemberId()
+        );
+
+        chatParticipantService.addSingleChatSummary(
+                member.getId(),
+                chatId
+        );
+        chatParticipantService.addSingleChatSummary(
                 request.otherMemberId(),
-                member.getId()
+                chatId
         );
         return Response.onSuccess(chatId);
     }
 
 
     @DeleteMapping
-    public Response<Void> leaveChatRoom(
+    public Response<Void> leaveSingleChat(
             @RequestBody final LeaveSingleChatRequest request,
             @AuthMember final Member member
     ) {
-        memberChatCommandService.leaveSingleChat(
+        chatParticipantService.leaveChat(
                 member.getId(),
-                request.singleChatId()
+                request.singleChatId(),
+                ChatType.SINGLE
         );
         return Response.onSuccess();
     }

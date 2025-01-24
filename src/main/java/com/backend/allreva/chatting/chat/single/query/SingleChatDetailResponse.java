@@ -1,6 +1,6 @@
 package com.backend.allreva.chatting.chat.single.query;
 
-import com.backend.allreva.chatting.chat.integration.model.Participant;
+import com.backend.allreva.chatting.chat.integration.model.value.Participant;
 import com.backend.allreva.common.model.Image;
 import lombok.Getter;
 

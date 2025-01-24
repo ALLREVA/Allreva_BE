@@ -1,12 +1,14 @@
-package com.backend.allreva.chatting.chat.integration.model.chat_room;
+package com.backend.allreva.chatting.chat.integration.model;
+
+import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
-public class ChatRoomComparator implements Comparator<ChatRoomSummary> {
+public class ChatComparator implements Comparator<ChatSummary> {
 
     @Override
-    public int compare(ChatRoomSummary o1, ChatRoomSummary o2) {
+    public int compare(ChatSummary o1, ChatSummary o2) {
         LocalDateTime o1SentAt = o1.getPreviewMessage().getSentAt();
         LocalDateTime o2SentAt = o2.getPreviewMessage().getSentAt();
 
@@ -19,6 +21,6 @@ public class ChatRoomComparator implements Comparator<ChatRoomSummary> {
         if (comparedValue != 0) {
             return comparedValue;
         }
-        return o1.getRoomType().compareTo(o2.getRoomType());
+        return o1.getChatType().compareTo(o2.getChatType());
     }
 }

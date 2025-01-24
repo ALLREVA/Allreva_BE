@@ -3,36 +3,48 @@ package com.backend.allreva.chatting.chat.single.command.domain;
 import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class OtherMember {
 
-    private Long otherMemberId;
-    private String otherMemberNickname;
+    private Long id;
+    private String nickname;
 
-    private Image otherMemberThumbnail;
+    private Image thumbnail;
 
     public OtherMember(
-            final Long otherMemberId,
-            final String otherMemberNickname,
+            final Long id,
+            final String nickname,
             final String otherMemberThumbnailUrl
     ) {
         this(
-                otherMemberId,
-                otherMemberNickname,
+                id,
+                nickname,
                 new Image(otherMemberThumbnailUrl)
         );
     }
 
     public OtherMember(
-            final Long otherMemberId,
-            final String otherMemberNickname,
-            final Image otherMemberThumbnail
+            final Long id,
+            final String nickname,
+            final Image thumbnail
     ) {
-        this.otherMemberId = otherMemberId;
-        this.otherMemberNickname = otherMemberNickname;
-        this.otherMemberThumbnail = otherMemberThumbnail;
+        this.id = id;
+        this.nickname = nickname;
+        this.thumbnail = thumbnail;
     }
+
+    public OtherMember(final OtherMember otherMember) {
+        this.id = otherMember.id;
+        this.nickname = otherMember.nickname;
+        this.thumbnail = otherMember.thumbnail;
+    }
+
+
+
+
 }

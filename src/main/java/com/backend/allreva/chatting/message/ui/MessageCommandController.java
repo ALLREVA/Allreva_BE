@@ -1,9 +1,9 @@
 package com.backend.allreva.chatting.message.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.chatting.chat.integration.model.chat_room.PreviewMessage;
-import com.backend.allreva.chatting.chat.integration.model.chat_room.PreviewMessageUpdater;
-import com.backend.allreva.chatting.chat.integration.model.chat_room.RoomType;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
+import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
 import com.backend.allreva.chatting.message.command.MessageCommandService;
 import com.backend.allreva.chatting.message.domain.GroupMessage;
 import com.backend.allreva.chatting.message.domain.SingleMessage;
@@ -26,7 +26,7 @@ public class MessageCommandController {
     private final MessageCommandService messageCommandService;
     private final MessageSseService messageSseService;
 
-    private final PreviewMessageUpdater previewMessageUpdater;
+    private final ChatParticipantService chatParticipantService;
 
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -48,10 +48,10 @@ public class MessageCommandController {
                 content.getPayload(),
                 singleMessage.getSentAt()
         ));
-        previewMessageUpdater.update(
+        chatParticipantService.update(
                 member.getId(),
                 singleChatId,
-                RoomType.SINGLE,
+                ChatType.SINGLE,
                 singleMessage.getMessageNumber(),
                 content.getPayload(),
                 singleMessage.getSentAt()
@@ -59,7 +59,7 @@ public class MessageCommandController {
     }
 
 
-    @MessageMapping("/group/connection/{groupChatId}")
+    @MessageMapping("/group/connection/{id}")
     public void sendGroupMessage(
             @DestinationVariable final Long groupChatId,
             @AuthMember final Member member,
@@ -76,10 +76,10 @@ public class MessageCommandController {
                 content.getPayload(),
                 groupMessage.getSentAt()
         ));
-        previewMessageUpdater.update(
+        chatParticipantService.update(
                 member.getId(),
                 groupChatId,
-                RoomType.GROUP,
+                ChatType.GROUP,
                 groupMessage.getMessageNumber(),
                 content.getPayload(),
                 groupMessage.getSentAt()

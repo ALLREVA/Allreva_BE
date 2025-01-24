@@ -23,7 +23,7 @@ public class GroupMessageCustomRepositoryImpl implements GroupMessageCustomRepos
             final long toNumber
     ) {
         Criteria criteria = Criteria
-                .where("groupChatId").is(groupChatId)
+                .where("id").is(groupChatId)
                 .and("messageNumber").gte(fromNumber).lte(toNumber);
 
         return getMessageResponsesByCriteria(criteria);
@@ -35,7 +35,7 @@ public class GroupMessageCustomRepositoryImpl implements GroupMessageCustomRepos
         Query query = new Query(criteria);
         query.fields()
                 .exclude("_id")
-                .exclude("groupChatId");
+                .exclude("id");
 
         List<GroupMessage> messages = mongoTemplate
                 .find(query, GroupMessage.class);

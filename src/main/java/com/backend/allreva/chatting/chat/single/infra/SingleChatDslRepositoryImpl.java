@@ -1,7 +1,9 @@
 package com.backend.allreva.chatting.chat.single.infra;
 
-import com.backend.allreva.chatting.chat.integration.model.Participant;
+import com.backend.allreva.chatting.chat.integration.model.value.Participant;
+import com.backend.allreva.chatting.chat.single.command.domain.OtherMember;
 import com.backend.allreva.chatting.chat.single.query.SingleChatDetailResponse;
+import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.ConstructorExpression;
@@ -18,6 +20,26 @@ import static com.backend.allreva.chatting.member_chatting.member_chat.command.d
 public class SingleChatDslRepositoryImpl implements SingleChatDslRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public OtherMember findOtherMemberInfo(
+            final Long memberId,
+            final Long singleChatId
+    ) {
+        OtherMember otherMember = queryFactory
+                .select(
+                        Projections.constructor(OtherMember.class, memberChat.otherMember)
+                )
+                .from(memberChat)
+                .where(memberChat.chatId.eq(singleChatId)
+                        .and(memberChat.memberId.eq(memberId))
+                )
+                .fetchFirst();
+        if (otherMember != null) {
+            return otherMember;
+        }
+        throw new NotFoundException();
+    }
 
     @Override
     public SingleChatDetailResponse findSingleChatInfo(

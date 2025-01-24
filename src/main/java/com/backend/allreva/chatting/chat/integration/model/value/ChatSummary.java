@@ -1,4 +1,4 @@
-package com.backend.allreva.chatting.chat.integration.model.chat_room;
+package com.backend.allreva.chatting.chat.integration.model.value;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -8,38 +8,38 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@EqualsAndHashCode(of = {"roomId", "roomType"})
+@EqualsAndHashCode(of = {"roomId", "chatType"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatRoomSummary {
+public class ChatSummary {
 
     private Long roomId;
-    private RoomType roomType;
+    private ChatType chatType;
 
-    private RoomInfoSummary roomInfoSummary; // title, thumbnail, headcount
+    private ChatInfoSummary chatInfoSummary; // title, thumbnail, headcount
     private PreviewMessage previewMessage;
 
     private long lastReadMessageNumber;
 
-    public ChatRoomSummary(
+    public ChatSummary(
             final Long roomId,
-            final RoomType roomType,
-            final RoomInfoSummary roomInfoSummary,
+            final ChatType chatType,
+            final ChatInfoSummary chatInfoSummary,
             final PreviewMessage previewMessage,
             final long lastReadMessageNumber
     ) {
         this.roomId = roomId;
-        this.roomType = roomType;
-        this.roomInfoSummary = roomInfoSummary;
+        this.chatType = chatType;
+        this.chatInfoSummary = chatInfoSummary;
         this.previewMessage = previewMessage;
         this.lastReadMessageNumber = lastReadMessageNumber;
     }
 
-    public ChatRoomSummary(
-            final RoomInfoSummary roomInfoSummary,
+    public ChatSummary(
+            final ChatInfoSummary chatInfoSummary,
             final PreviewMessage previewMessage,
             final long lastReadMessageNumber
     ) {
-        this.roomInfoSummary = roomInfoSummary;
+        this.chatInfoSummary = chatInfoSummary;
         this.previewMessage = previewMessage;
         this.lastReadMessageNumber = lastReadMessageNumber;
     }
@@ -56,15 +56,29 @@ public class ChatRoomSummary {
                 .build();
     }
 
-    public static ChatRoomSummary of(
+    public static ChatSummary of(
             final Long roomId,
-            final RoomType roomType
+            final ChatType chatType
     ) {
-        ChatRoomSummary chatRoomSummary = new ChatRoomSummary();
-        chatRoomSummary.roomId = roomId;
-        chatRoomSummary.roomType = roomType;
+        ChatSummary chatSummary = new ChatSummary();
+        chatSummary.roomId = roomId;
+        chatSummary.chatType = chatType;
 
-        return chatRoomSummary;
+        return chatSummary;
+    }
+
+    public static ChatSummary of(
+            final Long roomId,
+            final ChatType chatType,
+            final ChatInfoSummary chatInfoSummary
+    ) {
+        ChatSummary chatSummary = new ChatSummary();
+
+        chatSummary.roomId = roomId;
+        chatSummary.chatType = chatType;
+        chatSummary.chatInfoSummary = chatInfoSummary;
+
+        return chatSummary;
     }
 
     public void updatePreviewMessage(final PreviewMessage previewMessage) {

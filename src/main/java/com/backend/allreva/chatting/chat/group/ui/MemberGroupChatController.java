@@ -2,6 +2,8 @@ package com.backend.allreva.chatting.chat.group.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.chatting.chat.group.command.application.MemberGroupChatCommandService;
+import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberGroupChatController {
 
     private final MemberGroupChatCommandService memberGroupChatCommandService;
+    private final ChatParticipantService chatParticipantService;
 
     @PostMapping("/join")
     public Response<Long> joinGroupChat(
@@ -22,6 +25,7 @@ public class MemberGroupChatController {
         Long memberGroupChatId = memberGroupChatCommandService
                 .add(request.uuid(), member.getId());
 
+        chatParticipantService.addGroupChatSummary(member.getId(), request.uuid());
         return Response.onSuccess(memberGroupChatId);
     }
 
@@ -32,6 +36,12 @@ public class MemberGroupChatController {
     ) {
         memberGroupChatCommandService
                 .leave(request.groupChatId(), member.getId());
+
+        chatParticipantService.leaveChat(
+                member.getId(),
+                request.groupChatId(),
+                ChatType.GROUP
+        );
         return Response.onSuccess();
     }
 

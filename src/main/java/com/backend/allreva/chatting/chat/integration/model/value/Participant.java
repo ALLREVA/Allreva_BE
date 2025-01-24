@@ -1,4 +1,4 @@
-package com.backend.allreva.chatting.chat.integration.model;
+package com.backend.allreva.chatting.chat.integration.model.value;
 
 import com.backend.allreva.common.model.Image;
 import lombok.AccessLevel;

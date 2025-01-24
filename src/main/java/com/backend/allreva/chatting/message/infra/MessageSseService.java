@@ -1,6 +1,6 @@
 package com.backend.allreva.chatting.message.infra;
 
-import com.backend.allreva.chatting.chat.integration.model.chat_room.PreviewMessage;
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

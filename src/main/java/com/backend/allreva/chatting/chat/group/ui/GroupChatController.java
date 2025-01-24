@@ -7,6 +7,7 @@ import com.backend.allreva.chatting.chat.group.command.application.request.Delet
 import com.backend.allreva.chatting.chat.group.command.application.request.UpdateGroupChatRequest;
 import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
 import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
+import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;

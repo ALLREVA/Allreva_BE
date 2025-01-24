@@ -1,4 +1,4 @@
-package com.backend.allreva.chatting.chat.integration.model.chat_room;
+package com.backend.allreva.chatting.chat.integration.model.value;
 
 import com.backend.allreva.common.model.Image;
 import lombok.AccessLevel;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class RoomInfoSummary {
+public class ChatInfoSummary {
 
     private String title;
     private Image thumbnail;
 
     private int headcount;
 
-    public RoomInfoSummary(
+    public ChatInfoSummary(
             final String title,
             final Image thumbnail,
             final int headcount
@@ -24,7 +24,7 @@ public class RoomInfoSummary {
         this.headcount = headcount;
     }
 
-    public RoomInfoSummary(
+    public ChatInfoSummary(
             final String title,
             final Image thumbnail
     ) {
