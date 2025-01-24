@@ -1,6 +1,6 @@
 package com.backend.allreva.chatting.message.query;
 
-import com.backend.allreva.chatting.Participant;
+import com.backend.allreva.chatting.chat.integration.model.Participant;
 import com.backend.allreva.chatting.message.domain.GroupMessage;
 import com.backend.allreva.chatting.message.domain.SingleMessage;
 import com.backend.allreva.chatting.message.domain.value.Content;

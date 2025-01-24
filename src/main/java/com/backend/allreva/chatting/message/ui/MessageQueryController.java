@@ -18,7 +18,7 @@ public class MessageQueryController {
 
     private final MessageQueryService messageQueryService;
 
-    @GetMapping("/single")
+    @GetMapping("/single/enter")
     public Response<List<MessageResponse>> enterSingleChat(
             @RequestParam("singleChatId") final Long singleChatId,
             @RequestParam("lastReadMessageNumber") final long lastReadMessageNumber
@@ -28,7 +28,7 @@ public class MessageQueryController {
         return Response.onSuccess(responses);
     }
 
-    @GetMapping("/single")
+    @GetMapping("/single/read")
     public Response<List<MessageResponse>> findReadSingleMessages(
             @RequestParam("singleChatId") final Long singleChatId,
             @RequestParam("criteriaNumber") final long criteriaNumber
@@ -37,7 +37,7 @@ public class MessageQueryController {
                 .findReadSingleMessages(singleChatId, criteriaNumber);
         return Response.onSuccess(responses);
     }
-    @GetMapping("/single")
+    @GetMapping("/single/unread")
     public Response<List<MessageResponse>> findUnreadSingleMessages(
             @RequestParam("singleChatId") final Long singleChatId,
             @RequestParam("criteriaNumber") final long criteriaNumber
@@ -48,7 +48,7 @@ public class MessageQueryController {
     }
 
 
-    @GetMapping("/group")
+    @GetMapping("/group/enter")
     public Response<List<MessageResponse>> enterGroupChat(
             @RequestParam("groupChatId") final Long groupChatId,
             @RequestParam("lastReadMessageNumber") final long lastReadMessageNumber
@@ -58,7 +58,7 @@ public class MessageQueryController {
         return Response.onSuccess(responses);
     }
 
-    @GetMapping("/group")
+    @GetMapping("/group/read")
     public Response<List<MessageResponse>> findReadGroupMessages(
             @RequestParam("groupChatId") final Long groupChatId,
             @RequestParam("criteriaNumber") final long criteriaNumber
@@ -68,7 +68,7 @@ public class MessageQueryController {
         return Response.onSuccess(responses);
     }
 
-    @GetMapping("/group")
+    @GetMapping("/group/unread")
     public Response<List<MessageResponse>> findUnreadGroupMessages(
             @RequestParam("groupChatId") final Long groupChatId,
             @RequestParam("criteriaNumber") final long criteriaNumber

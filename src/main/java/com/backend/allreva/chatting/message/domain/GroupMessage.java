@@ -1,6 +1,6 @@
 package com.backend.allreva.chatting.message.domain;
 
-import com.backend.allreva.chatting.Participant;
+import com.backend.allreva.chatting.chat.integration.model.Participant;
 import com.backend.allreva.chatting.message.domain.value.Content;
 import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Id;

@@ -1,6 +1,6 @@
 package com.backend.allreva.member.infra;
 
-import com.backend.allreva.chatting.member_chatting.member_chat.command.domain.OtherMember;
+import com.backend.allreva.chatting.chat.single.command.domain.OtherMember;
 import com.backend.allreva.member.exception.MemberNotFoundException;
 import com.backend.allreva.member.query.application.MemberDetailRepository;
 import com.backend.allreva.member.query.application.response.MemberDetailResponse;

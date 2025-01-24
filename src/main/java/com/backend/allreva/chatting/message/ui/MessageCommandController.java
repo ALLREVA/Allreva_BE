@@ -1,9 +1,9 @@
 package com.backend.allreva.chatting.message.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.chatting.chat.query.model.chat_room.PreviewMessage;
-import com.backend.allreva.chatting.chat.query.model.chat_room.PreviewMessageUpdater;
-import com.backend.allreva.chatting.chat.query.model.chat_room.RoomType;
+import com.backend.allreva.chatting.chat.integration.model.chat_room.PreviewMessage;
+import com.backend.allreva.chatting.chat.integration.model.chat_room.PreviewMessageUpdater;
+import com.backend.allreva.chatting.chat.integration.model.chat_room.RoomType;
 import com.backend.allreva.chatting.message.command.MessageCommandService;
 import com.backend.allreva.chatting.message.domain.GroupMessage;
 import com.backend.allreva.chatting.message.domain.SingleMessage;
@@ -15,8 +15,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,26 +31,26 @@ public class MessageCommandController {
     private final SimpMessagingTemplate messagingTemplate;
 
 
-    @MessageMapping("/single/{chatId}")
+    @MessageMapping("/single/connection/{singleChatId}")
     public void sendSingleMessage(
-            @DestinationVariable final Long chatId,
+            @DestinationVariable final Long singleChatId,
             @AuthMember final Member member,
             final Content content
     ) {
-        String destination = SUB_PERSONAL_DESTINATION + chatId;
+        String destination = SUB_PERSONAL_DESTINATION + singleChatId;
         SingleMessage singleMessage = messageCommandService
-                .saveSingleMessage(chatId, content, member);
+                .saveSingleMessage(singleChatId, content, member);
 
         messagingTemplate.convertAndSend(destination, singleMessage);
 
-        messageSseService.sendSummaryToSingleChat(chatId, new PreviewMessage(
+        messageSseService.sendSummaryToSingleChat(singleChatId, new PreviewMessage(
                 singleMessage.getMessageNumber(),
                 content.getPayload(),
                 singleMessage.getSentAt()
         ));
         previewMessageUpdater.update(
                 member.getId(),
-                chatId,
+                singleChatId,
                 RoomType.SINGLE,
                 singleMessage.getMessageNumber(),
                 content.getPayload(),
@@ -61,7 +59,7 @@ public class MessageCommandController {
     }
 
 
-    @MessageMapping("/group/{groupChatId}")
+    @MessageMapping("/group/connection/{groupChatId}")
     public void sendGroupMessage(
             @DestinationVariable final Long groupChatId,
             @AuthMember final Member member,
