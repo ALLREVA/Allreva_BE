@@ -1,9 +1,12 @@
 package com.backend.allreva.keyword.integration;
 
-import com.backend.allreva.concert.query.application.ConcertSearchService;
-import com.backend.allreva.concert.query.application.response.ConcertThumbnail;
 import com.backend.allreva.concert.exception.search.SearchResultNotFoundException;
+import com.backend.allreva.concert.infra.elasticsearch.SortDirection;
+import com.backend.allreva.concert.query.application.ConcertQueryService;
+import com.backend.allreva.concert.query.application.ConcertSearchService;
+import com.backend.allreva.concert.query.application.response.ConcertMainResponse;
 import com.backend.allreva.concert.query.application.response.ConcertSearchListResponse;
+import com.backend.allreva.concert.query.application.response.ConcertThumbnail;
 import com.backend.allreva.support.IntegrationTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -19,14 +22,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ConcertSearchServiceTest extends IntegrationTestSupport {
     @Autowired
     ConcertSearchService concertSearchService;
-
+    @Autowired
+    ConcertQueryService concertQueryService;
 
     @Test
     @DisplayName("정상적인 검색")
     void successTest() {
         //give
+        ConcertMainResponse concertMain = concertQueryService.getConcertMain("", null, 1, SortDirection.DATE);
+        String query = concertMain.concertThumbnails().get(0).title();
+
         //when
-        List<ConcertThumbnail> result = concertSearchService.searchConcertThumbnails("영탁");
+        List<ConcertThumbnail> result = concertSearchService.searchConcertThumbnails(query);
 
         //then
         assertThat(result).isNotEmpty();
@@ -46,19 +53,20 @@ class ConcertSearchServiceTest extends IntegrationTestSupport {
     void ConcertSearchListTest(){
         // given
         List<Object> searchAfter = new ArrayList<>();
-        String query = "서울";
+        ConcertMainResponse concertMain = concertQueryService.getConcertMain("", null, 2, SortDirection.DATE);
+        String query = concertMain.concertThumbnails().get(0).title() + concertMain.concertThumbnails().get(1).title();
 
         // when
-        ConcertSearchListResponse response1 = concertSearchService.searchConcertList(query, searchAfter, 2);
+        ConcertSearchListResponse response1 = concertSearchService.searchConcertList(query, searchAfter, 1);
         log.info("response1: {}", response1);
-        ConcertSearchListResponse response2 = concertSearchService.searchConcertList(query, response1.searchAfter(), 2);
+        ConcertSearchListResponse response2 = concertSearchService.searchConcertList(query, response1.searchAfter(), 1);
         log.info("response2: {}", response2);
-        ConcertSearchListResponse response3 = concertSearchService.searchConcertList(query, searchAfter, 4);
+        ConcertSearchListResponse response3 = concertSearchService.searchConcertList(query, searchAfter, 2);
         log.info("response3: {}", response3);
         // then
         assertThat(response2.concertThumbnails().get(0))
                 .usingRecursiveComparison()
-                .isEqualTo(response3.concertThumbnails().get(2));
+                .isEqualTo(response3.concertThumbnails().get(1));
 
     }
 

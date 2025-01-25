@@ -2,27 +2,28 @@ package com.backend.allreva.seat_review.command.domain;
 
 import com.backend.allreva.common.model.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
+@Builder
+@Getter
 @SQLRestriction("deleted_at IS NULL")
-@SQLDelete(sql = "UPDATE seat_review_like set deleted_at = NOW() WHERE id = ?")
-public class SeatReviewLike extends BaseEntity {
+@SQLDelete(sql = "UPDATE seat_review_image SET deleted_at = NOW() WHERE id = ?")
+public class SeatReviewImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Long memberId;
+    private String url;
 
     @Column(nullable = false)
-    private Long reviewId;
+    private Long seatReviewId;
+
+    @Column(nullable = false)
+    private Integer orderNum;
 }

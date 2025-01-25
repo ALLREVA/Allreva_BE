@@ -8,6 +8,7 @@ import com.backend.allreva.hall.query.application.response.ConcertHallMainRespon
 import com.backend.allreva.hall.query.application.response.ConcertHallThumbnail;
 import com.backend.allreva.hall.query.domain.ConcertHallDocument;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class ConcertHallQueryService {
 
     private final ConcertHallRepository concertHallRepository;
@@ -44,6 +46,7 @@ public class ConcertHallQueryService {
                 searchAfter,
                 size + 1
         );
+        log.info("searchHits count : {}", searchHits.getTotalHits());
         List<ConcertHallThumbnail> concertHall = searchHits.getSearchHits().stream()
                 .map(SearchHit::getContent)
                 .map(ConcertHallThumbnail::from)

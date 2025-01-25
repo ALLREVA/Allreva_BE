@@ -2,7 +2,9 @@ package com.backend.allreva.hall.query.application.response;
 
 import com.backend.allreva.hall.command.domain.value.ConvenienceInfo;
 import com.backend.allreva.hall.query.domain.ConcertHallDocument;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public record ConcertHallThumbnail(
         String id,
         String name,
@@ -12,6 +14,7 @@ public record ConcertHallThumbnail(
 
 ) {
     public static ConcertHallThumbnail from(final ConcertHallDocument document) {
+        log.info("document: {}", document.toString());
         ConvenienceInfo convenienceInfo = ConvenienceInfo.builder()
                 .hasParkingLot(document.getParking())
                 .hasRestaurant(document.getRestaurant())

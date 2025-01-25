@@ -4,6 +4,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.elasticsearch.annotations.*;
 
 @Document(indexName = "concerts_hall")
@@ -11,6 +12,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @Mapping(mappingPath = "elasticsearch/mappings/concert_hall-mapping.json")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class ConcertHallDocument {
     @Id
     private String id;
