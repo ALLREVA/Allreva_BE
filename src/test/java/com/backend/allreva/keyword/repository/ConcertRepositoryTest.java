@@ -2,6 +2,8 @@ package com.backend.allreva.keyword.repository;
 
 import com.backend.allreva.concert.infra.elasticsearch.ConcertSearchRepository;
 import com.backend.allreva.concert.infra.elasticsearch.ConcertDocument;
+import com.backend.allreva.concert.infra.elasticsearch.SortDirection;
+import com.backend.allreva.concert.query.application.ConcertQueryService;
 import com.backend.allreva.support.IntegrationTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -18,17 +20,20 @@ import static org.hamcrest.Matchers.is;
 class ConcertRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
-    private ConcertSearchRepository concertSearchRepository;
-
+    ConcertSearchRepository concertSearchRepository;
+    @Autowired
+    ConcertQueryService concertQueryService;
 
     @Test
     @DisplayName("검색어 에 따라 연관성 상위 2개가 출력")
     void findByTitleMixedTest() {
         //given
         PageRequest pageRequest = PageRequest.of(0, 2);
+        String query = concertQueryService.getConcertMain("", null, 1, SortDirection.DATE)
+                .concertThumbnails().get(0).title();
 
         //when
-        List<ConcertDocument> day6 = concertSearchRepository.findByTitleMixed("영탁", pageRequest).getContent();
+        List<ConcertDocument> day6 = concertSearchRepository.findByTitleMixed(query, pageRequest).getContent();
 
         //then
         assertThat(day6.size(), is(2));
