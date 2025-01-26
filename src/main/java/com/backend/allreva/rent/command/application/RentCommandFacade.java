@@ -1,5 +1,7 @@
 package com.backend.allreva.rent.command.application;
 
+import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
+import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
 import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
@@ -18,13 +20,27 @@ public class RentCommandFacade {
     private final RentCommandService rentCommandService;
     private final S3ImageService s3ImageService;
 
+    private final GroupChatCommandService groupChatCommandService;
+
     public Long registerRent(
             final RentRegisterRequest rentRegisterRequest,
             final MultipartFile image,
             final Long memberId
     ) {
         Image uploadedImage = s3ImageService.upload(image);
-        return rentCommandService.registerRent(rentRegisterRequest, uploadedImage, memberId);
+        Long rentId = rentCommandService.registerRent(rentRegisterRequest, uploadedImage, memberId);
+
+        groupChatCommandService.add(
+                new AddGroupChatRequest(
+                        rentRegisterRequest.title(),
+                        rentRegisterRequest.information(),
+                        rentRegisterRequest.maxPassenger()
+                ),
+                uploadedImage,
+                memberId
+        );
+
+        return rentId;
     }
 
     public void updateRent(

@@ -47,6 +47,28 @@ public class GroupChatCommandService {
         return groupChat.getId();
     }
 
+    public Long add(
+            final AddGroupChatRequest request,
+            final Image uploadedImage,
+            final Long memberId
+    ) {
+        GroupChat groupChat = GroupChat.builder()
+                .title(request.title())
+                .description(request.description())
+                .managerId(memberId)
+                .thumbnail(uploadedImage)
+                .capacity(request.capacity())
+                .build();
+
+        groupChatRepository.save(groupChat);
+        AddedGroupChatEvent addedEvent = new AddedGroupChatEvent(
+                groupChat.getId(),
+                memberId
+        );
+        Events.raise(addedEvent);
+        return groupChat.getId();
+    }
+
     public void update(
             final UpdateGroupChatRequest request,
             final MultipartFile imageFile,
