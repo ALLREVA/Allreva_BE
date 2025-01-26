@@ -1,8 +1,8 @@
 package com.backend.allreva.chatting.chat.group.infra;
 
+import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
 import com.backend.allreva.chatting.chat.group.query.GroupChatSummaryResponse;
 import com.backend.allreva.chatting.chat.integration.model.value.Participant;
-import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
 import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.QMember;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 import static com.backend.allreva.chatting.chat.group.command.domain.QGroupChat.groupChat;
-import static com.backend.allreva.chatting.member_chatting.member_groupchat.command.domain.QMemberGroupChat.memberGroupChat;
+import static com.backend.allreva.chatting.chat.group.command.domain.QMemberGroupChat.memberGroupChat;
 
 @RequiredArgsConstructor
 @Repository

@@ -1,6 +1,8 @@
 package com.backend.allreva.chatting.message.infra;
 
+import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
 import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@RequiredArgsConstructor
 @Component
 public class MessageSseService {
 
@@ -17,6 +20,8 @@ public class MessageSseService {
 
     private final Map<Long, Set<SseEmitter>> chatConnections = new ConcurrentHashMap<>();
     private final Map<Long, Set<SseEmitter>> groupChatConnections = new ConcurrentHashMap<>();
+
+    private final ChatParticipantService chatParticipantService;
 
     public SseEmitter subscribeSingleChat(
             final Long chatId,
@@ -26,7 +31,11 @@ public class MessageSseService {
                 .computeIfAbsent(chatId, id -> ConcurrentHashMap.newKeySet())
                 .add(emitter);
 
-        emitter.onCompletion(() -> unsubscribeSingleChat(chatId, emitter));
+        // 해당 Map 에서 지우는 이유가 뭐였더라?
+        // 어떻게 previewMessage 를 가져오지?
+        emitter.onCompletion(() -> {
+            unsubscribeSingleChat(chatId, emitter);
+        });
         emitter.onError(e -> unsubscribeSingleChat(chatId, emitter));
 
         sendSse(emitter, "init", new PreviewMessage(

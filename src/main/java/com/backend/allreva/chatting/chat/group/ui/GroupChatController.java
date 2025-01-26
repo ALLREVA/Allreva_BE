@@ -9,6 +9,7 @@ import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
 import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
 import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ public class GroupChatController {
 
     private final GroupChatCommandService groupChatCommandService;
     private final GroupChatQueryService groupChatQueryService;
+    private final ChatParticipantService chatParticipantService;
 
     @GetMapping("/{groupChatId}")
     public Response<GroupChatDetailResponse> findGroupChatInformation(
@@ -66,6 +68,12 @@ public class GroupChatController {
                 request,
                 imageFile,
                 member.getId()
+        );
+        chatParticipantService.updateGroupChatInfoSummary(
+                member.getId(),
+                request.groupChatId(),
+                request.title(),
+                new Image("")
         );
         return Response.onSuccess();
     }

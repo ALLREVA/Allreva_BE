@@ -27,7 +27,7 @@ public class ChatController {
     private final MessageSseService messageSseService;
 
     @GetMapping(value = "/single/stream/{chatId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribeChatForSummaries(
+    public SseEmitter subscribeSingleChatForSummaries(
             @PathVariable("chatId") final Long chatId,
             @AuthMember final Member member
     ) {
@@ -41,7 +41,7 @@ public class ChatController {
             @AuthMember final Member member
     ) {
         SseEmitter emitter = new SseEmitter();
-        return messageSseService.subscribeSingleChat(groupChatId, emitter);
+        return messageSseService.subscribeGroupChat(groupChatId, emitter);
     }
 
     @GetMapping("/list")

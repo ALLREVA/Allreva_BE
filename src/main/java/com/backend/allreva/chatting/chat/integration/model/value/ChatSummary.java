@@ -84,4 +84,8 @@ public class ChatSummary {
     public void updatePreviewMessage(final PreviewMessage previewMessage) {
         this.previewMessage = previewMessage;
     }
+
+    public void updateChatInfoSummary(final ChatInfoSummary chatInfoSummary) {
+        this.chatInfoSummary = chatInfoSummary;
+    }
 }

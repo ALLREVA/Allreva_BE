@@ -1,6 +1,7 @@
 package com.backend.allreva.chatting.chat.single.command.domain;
 
 import com.backend.allreva.common.model.Image;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class OtherMember {
 
+    @Column(name = "other_member_id")
     private Long id;
     private String nickname;
 

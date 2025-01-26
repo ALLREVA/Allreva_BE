@@ -2,6 +2,7 @@ package com.backend.allreva.chatting.chat.integration.model;
 
 import com.backend.allreva.chatting.chat.integration.model.value.*;
 import com.backend.allreva.chatting.exception.ChatRoomNotFoundException;
+import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -72,6 +73,28 @@ public class ChatParticipantDoc {
 
         chatSummaries.remove(chatSummary);
         chatSummary.updatePreviewMessage(previewMessage);
+        chatSummaries.add(chatSummary);
+    }
+
+    public void updateChatInfoSummary(
+            final Long roomId,
+            final ChatType chatType,
+            final String title,
+            final Image thumbnail
+    ) {
+        ChatSummary chatSummary = chatSummaries.stream()
+                .filter(room -> room.getRoomId().equals(roomId) && room.getChatType().equals(chatType))
+                .findFirst()
+                .orElseThrow(ChatRoomNotFoundException::new);
+
+        ChatInfoSummary chatInfoSummary = new ChatInfoSummary(
+                title,
+                thumbnail,
+                chatSummary.getChatInfoSummary().getHeadcount()
+        );
+
+        chatSummaries.remove(chatSummary);
+        chatSummary.updateChatInfoSummary(chatInfoSummary);
         chatSummaries.add(chatSummary);
     }
 }

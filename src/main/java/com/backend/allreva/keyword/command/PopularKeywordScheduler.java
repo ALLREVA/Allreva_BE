@@ -23,9 +23,9 @@ public class PopularKeywordScheduler {
             String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss"));
             popularKeywordCommandService.decreaseAllKeywordCount();
             popularKeywordCommandService.updatePopularKeywordRank();
-            log.info(" {} : popular keyword rank update complete", formattedDate);
+            log.info(" {} : popular keyword rank updatePreviewMessage complete", formattedDate);
         } catch (Exception e) {
-            log.error("can't update popular keyword rank . Message: {}", e.getMessage());
+            log.error("can't updatePreviewMessage popular keyword rank . Message: {}", e.getMessage());
         }
     }
 }

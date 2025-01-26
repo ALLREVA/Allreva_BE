@@ -48,7 +48,7 @@ public class MessageCommandController {
                 content.getPayload(),
                 singleMessage.getSentAt()
         ));
-        chatParticipantService.update(
+        chatParticipantService.updatePreviewMessage(
                 member.getId(),
                 singleChatId,
                 ChatType.SINGLE,
@@ -76,7 +76,7 @@ public class MessageCommandController {
                 content.getPayload(),
                 groupMessage.getSentAt()
         ));
-        chatParticipantService.update(
+        chatParticipantService.updatePreviewMessage(
                 member.getId(),
                 groupChatId,
                 ChatType.GROUP,

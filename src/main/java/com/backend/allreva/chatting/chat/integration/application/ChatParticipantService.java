@@ -8,12 +8,14 @@ import com.backend.allreva.chatting.chat.integration.model.value.ChatInfoSummary
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.chatting.chat.single.command.domain.OtherMember;
 import com.backend.allreva.chatting.chat.single.command.domain.SingleChatRepository;
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -25,8 +27,28 @@ public class ChatParticipantService {
     private final SingleChatRepository singleChatRepository;
     private final GroupChatRepository groupChatRepository;
 
+    public void updateGroupChatInfoSummary(
+            final Long memberId,
+            final Long groupChatId,
+            final String title,
+            final Image thumbnail
+    ) {
+        ChatParticipantDoc document = chatParticipantRepository.findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        if (document.existsInSummaries(groupChatId, ChatType.GROUP)) {
+            document.updateChatInfoSummary(
+                    groupChatId,
+                    ChatType.GROUP,
+                    title,
+                    thumbnail
+            );
+            chatParticipantRepository.save(document);
+        }
+    }
+
     @Transactional
-    public void update(
+    public void updatePreviewMessage(
             final Long memberId,
             final Long roomId,
             final ChatType chatType,
@@ -118,7 +140,7 @@ public class ChatParticipantService {
     ) {
         ChatParticipantDoc document = chatParticipantRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
-        document.removeChatRoom(roomId,chatType);
+        document.removeChatRoom(roomId, chatType);
         chatParticipantRepository.save(document);
     }
 }

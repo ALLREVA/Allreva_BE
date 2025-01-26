@@ -19,7 +19,7 @@ public class PopularKeywordCommandService {
     public static final Integer NOT_EXIST_RANK = -1;
 
     /**
-     * 검색어 count update
+     * 검색어 count updatePreviewMessage
      */
     public void updateKeywordCount(final String keyword) {
         popularKeywordRepository.updateKeywordCount(keyword, 1.0);

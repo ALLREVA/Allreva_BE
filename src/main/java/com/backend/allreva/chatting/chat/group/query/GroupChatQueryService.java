@@ -16,7 +16,7 @@ public class GroupChatQueryService {
             final Long memberId,
             final Long groupChatId
     ) {
-        return groupChatRepository.findGroupChatInfo(memberId, groupChatId);
+        return groupChatRepository.findGroupChatDetail(memberId, groupChatId);
     }
 
     public String findInviteCode(

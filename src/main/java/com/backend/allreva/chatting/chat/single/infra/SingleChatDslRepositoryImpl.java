@@ -13,7 +13,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.backend.allreva.chatting.member_chatting.member_chat.command.domain.QMemberChat.memberChat;
+import static com.backend.allreva.chatting.chat.single.command.domain.QMemberSingleChat.memberSingleChat;
+
 
 @RequiredArgsConstructor
 @Repository
@@ -28,11 +29,11 @@ public class SingleChatDslRepositoryImpl implements SingleChatDslRepository {
     ) {
         OtherMember otherMember = queryFactory
                 .select(
-                        Projections.constructor(OtherMember.class, memberChat.otherMember)
+                        Projections.constructor(OtherMember.class, memberSingleChat.otherMember)
                 )
-                .from(memberChat)
-                .where(memberChat.chatId.eq(singleChatId)
-                        .and(memberChat.memberId.eq(memberId))
+                .from(memberSingleChat)
+                .where(memberSingleChat.singleChatId.eq(singleChatId)
+                        .and(memberSingleChat.memberId.eq(memberId))
                 )
                 .fetchFirst();
         if (otherMember != null) {
@@ -49,11 +50,11 @@ public class SingleChatDslRepositoryImpl implements SingleChatDslRepository {
             final Long singleChatId
     ) {
         return queryFactory
-                .from(memberChat)
-                .where(memberChat.chatId.eq(singleChatId)
-                        .and(memberChat.memberId.eq(memberId))
+                .from(memberSingleChat)
+                .where(memberSingleChat.singleChatId.eq(singleChatId)
+                        .and(memberSingleChat.memberId.eq(memberId))
                 )
-                .transform(GroupBy.groupBy(memberChat.chatId)
+                .transform(GroupBy.groupBy(memberSingleChat.singleChatId)
                         .as(singleChatInfoProjections(memberId, memberNickname, memberProfileUrl)))
                 .get(singleChatId);
     }
@@ -64,8 +65,8 @@ public class SingleChatDslRepositoryImpl implements SingleChatDslRepository {
             final String memberProfileUrl
     ) {
         return Projections.constructor(SingleChatDetailResponse.class,
-                memberChat.otherMember.otherMemberThumbnail,
-                memberChat.otherMember.otherMemberNickname,
+                memberSingleChat.otherMember.thumbnail,
+                memberSingleChat.otherMember.nickname,
 
                 Projections.constructor(Participant.class,
                         Expressions.constant(memberId),
@@ -76,9 +77,9 @@ public class SingleChatDslRepositoryImpl implements SingleChatDslRepository {
                 ),
 
                 Projections.constructor(Participant.class,
-                        memberChat.otherMember.otherMemberId,
-                        memberChat.otherMember.otherMemberNickname,
-                        memberChat.otherMember.otherMemberThumbnail
+                        memberSingleChat.otherMember.id,
+                        memberSingleChat.otherMember.nickname,
+                        memberSingleChat.otherMember.thumbnail
                 )
         );
     }
