@@ -1,11 +1,12 @@
 package com.backend.allreva.concert.infra.rdb;
 
-import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.concert.query.application.response.ConcertDetailResponse;
 import com.backend.allreva.concert.query.application.response.ConcertThumbnail;
+import com.backend.allreva.hall.query.application.response.RelatedConcertResponse;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -62,6 +63,27 @@ public class ConcertDslRepositoryImpl implements ConcertDslRepository {
                 .fetch();
     }
 
+    @Override
+    public List<RelatedConcertResponse> findRelatedConcertsByHall(
+            final String hallCode, final Long lastId, final int pageSize
+    ) {
+        return queryFactory
+                .select(Projections.constructor(RelatedConcertResponse.class,
+                        concert.id,
+                        concert.concertInfo.title,
+                        concert.concertInfo.dateInfo.startDate,
+                        concert.concertInfo.dateInfo.endDate,
+                        concert.poster.url
+                ))
+                .from(concert)
+                .where(eqHallCode(hallCode),
+                        ltConcertId(lastId)
+                )
+                .orderBy(concert.id.desc())
+                .limit(pageSize)
+                .fetch();
+    }
+
     private ConstructorExpression<ConcertDetailResponse> concertDetailProjection() {
         return Projections.constructor(ConcertDetailResponse.class,
                 concert.poster,
@@ -75,5 +97,17 @@ public class ConcertDslRepositoryImpl implements ConcertDslRepository {
                 concertHall.location.address
         );
     }
+    private BooleanExpression eqHallCode(String hallCode) {
+        return hallCode != null ? concert.code.hallCode.eq(hallCode) : null;
+    }
+
+    private BooleanExpression gtEndDate(LocalDate today) {
+        return today != null ? concert.concertInfo.dateInfo.endDate.goe(today) : null;
+    }
+
+    private BooleanExpression ltConcertId(Long lastId) {
+        return lastId != null ? concert.id.lt(lastId) : null;
+    }
+
 }
 

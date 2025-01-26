@@ -19,4 +19,8 @@ public class SeatReviewQueryService {
             final SeatReviewSearchCondition condition,
             final Long currentMemberId) {
         return seatReviewRepository.findReviewsWithNoOffset(condition, currentMemberId);
-    }}
+    }
+
+
+}
+
