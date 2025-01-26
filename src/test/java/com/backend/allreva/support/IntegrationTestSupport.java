@@ -1,25 +1,16 @@
 package com.backend.allreva.support;
 
-import static java.util.List.of;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-
 import com.backend.allreva.common.config.JpaAuditingConfig;
 import com.backend.allreva.common.model.Email;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.concert.command.domain.Concert;
-import com.backend.allreva.concert.command.domain.value.Code;
-import com.backend.allreva.concert.command.domain.value.ConcertInfo;
-import com.backend.allreva.concert.command.domain.value.ConcertStatus;
-import com.backend.allreva.concert.command.domain.value.DateInfo;
-import com.backend.allreva.concert.command.domain.value.Seller;
+import com.backend.allreva.concert.command.domain.value.*;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.command.domain.value.LoginProvider;
 import com.backend.allreva.member.command.domain.value.MemberRole;
 import com.backend.allreva.survey.command.application.request.OpenSurveyRequest;
 import com.backend.allreva.survey.command.domain.value.Region;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +18,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
+import static java.util.List.of;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -75,7 +73,7 @@ public abstract class IntegrationTestSupport {
                                 .build())
                         .build())
                 .poster(new Image("http://example.com/poster.jpg"))
-                .detailImages(Set.of(new Image("http://example.com/detail1.jpg"), new Image("http://example.com/detail2.jpg")))
+                .detailImages(List.of(new Image("http://example.com/detail1.jpg"), new Image("http://example.com/detail2.jpg")))
                 .sellers(Set.of(Seller.builder()
                         .name("Sample Seller")
                         .salesUrl("http://seller.com")

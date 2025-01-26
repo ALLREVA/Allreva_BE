@@ -46,7 +46,7 @@ public class DiaryDslRepositoryImpl implements DiaryDslRepository {
                 concertDiary.diaryDate,
                 concertDiary.episode,
                 concertDiary.seatName,
-                GroupBy.set(image),
+                GroupBy.list(image),
                 concertDiary.content
                 );
     }

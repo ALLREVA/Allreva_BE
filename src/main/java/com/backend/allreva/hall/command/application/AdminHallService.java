@@ -6,6 +6,7 @@ import com.backend.allreva.hall.infra.dto.KopisHallResponse;
 import com.backend.allreva.hall.infra.dto.KopisHallResponse.Mt13;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class AdminHallService {
     private final ConcertHallRepository concertHallRepository;
 
     //공연장 정보 받아오기
+    @CacheEvict(cacheNames = "concertHallMain", allEntries = true)
     public void fetchConcertHallInfoList() {
         List<String> hallCodes = CsvUtil.readConcertHallCodes();
         hallCodes.parallelStream()

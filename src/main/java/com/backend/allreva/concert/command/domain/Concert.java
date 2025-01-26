@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -38,7 +39,7 @@ public class Concert extends BaseEntity {
             joinColumns = @JoinColumn(name = "id")
     )
     @Column(name = "episode")
-    private Set<String> episodes;
+    private List<String> episodes;
 
 
     @Embedded
@@ -50,7 +51,7 @@ public class Concert extends BaseEntity {
             name = "concert_image",
             joinColumns = @JoinColumn(name = "id")
     )
-    private Set<Image> detailImages;
+    private List<Image> detailImages;
 
 
     @ElementCollection
@@ -81,9 +82,9 @@ public class Concert extends BaseEntity {
     private Concert(
             final Code code,
             final ConcertInfo concertInfo,
-            final Set<String> episodes,
+            final List<String> episodes,
             final Image poster,
-            final Set<Image> detailImages,
+            final List<Image> detailImages,
             final Set<Seller> sellers
     ) {
         this.code = code;

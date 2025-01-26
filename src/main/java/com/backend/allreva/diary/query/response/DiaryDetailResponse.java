@@ -3,6 +3,7 @@ package com.backend.allreva.diary.query.response;
 import com.backend.allreva.common.model.Image;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public record DiaryDetailResponse(
@@ -13,7 +14,7 @@ public record DiaryDetailResponse(
         LocalDate diaryDate,
         String episode,
         String seatName,
-        Set<Image> diaryImages,
+        List<Image> diaryImages,
         String content
 ) {
 

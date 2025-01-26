@@ -13,8 +13,8 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@SQLRestriction("deleted_ad IS NULL")
-@SQLDelete(sql = "UPDATE seat_review_like set deleted_ad = NOW() WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE seat_review_like set deleted_at = NOW() WHERE id = ?")
 public class SeatReviewLike extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

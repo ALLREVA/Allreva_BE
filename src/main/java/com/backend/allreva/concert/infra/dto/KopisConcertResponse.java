@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -110,8 +111,8 @@ public class KopisConcertResponse {
                 .build();
     }
 
-    public static Set<String> toEpisodes(final String timeTable) {
-        Set<String> episodes = new HashSet<>();
+    public static List<String> toEpisodes(final String timeTable) {
+        List<String> episodes = new ArrayList<>();
         Pattern pattern = Pattern.compile("\\(([^)]+)\\)");
         Matcher matcher = pattern.matcher(timeTable);
 
@@ -141,8 +142,8 @@ public class KopisConcertResponse {
         return new Image(image);
     }
 
-    public static Set<Image> toDetailImages(final List<String> styurls) {
-        return styurls.stream().map(KopisConcertResponse::toIntroduceImage).collect(Collectors.toSet());
+    public static List<Image> toDetailImages(final List<String> styurls) {
+        return styurls.stream().map(KopisConcertResponse::toIntroduceImage).toList();
     }
 
 }

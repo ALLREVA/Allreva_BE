@@ -8,13 +8,14 @@ import com.backend.allreva.hall.command.domain.value.ConvenienceInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 
+import java.util.List;
 import java.util.Set;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record ConcertDetailResponse(
 
         Image poster,
-        Set<Image> detailImages,
+        List<Image> detailImages,
         ConcertInfo concertInfo,
         Set<Seller> sellers,
 

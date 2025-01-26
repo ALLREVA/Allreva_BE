@@ -1,0 +1,41 @@
+{
+  "properties": {
+    "id": { "type": "keyword" },
+    "cafe": { "type": "boolean" },
+    "park_barrier": { "type": "boolean" },
+    "rest_barrier": { "type": "boolean" },
+    "elev_barrier": { "type": "boolean" },
+    "parking": { "type": "boolean" },
+    "restaurant": { "type": "boolean" },
+    "runw_barrier": { "type": "boolean" },
+    "store": { "type": "boolean" },
+    "address": {
+      "type": "text",
+      "fields": {
+        "mixed": {
+          "type": "text",
+          "analyzer": "korean_mixed"
+        },
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "latitude": { "type": "double" },
+    "longitude": { "type": "double" },
+    "name": {
+      "type": "text",
+      "fields": {
+        "mixed": {
+          "type": "text",
+          "analyzer": "korean_mixed"
+        },
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "seat_scale": { "type": "integer" },
+    "star": { "type": "double" }
+  }
+}

@@ -65,7 +65,7 @@ public class ConcertDslRepositoryImpl implements ConcertDslRepository {
     private ConstructorExpression<ConcertDetailResponse> concertDetailProjection() {
         return Projections.constructor(ConcertDetailResponse.class,
                 concert.poster,
-                GroupBy.set(image),
+                GroupBy.list(image),
                 concert.concertInfo,
                 GroupBy.set(seller),
                 concertHall.id,

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 class ConcertQueryTest extends IntegrationTestSupport {
@@ -104,7 +105,7 @@ class ConcertQueryTest extends IntegrationTestSupport {
                 .concertInfo(concertInfo)
                 .sellers(sellers)
                 .poster(new Image("posterUrl"))
-                .detailImages(Set.of(new Image("detailImageUrl"), new Image("detailImageUrl22")))
+                .detailImages(List.of(new Image("detailImageUrl"), new Image("detailImageUrl22")))
                 .build();
         concertRepository.save(savedConcert);
 

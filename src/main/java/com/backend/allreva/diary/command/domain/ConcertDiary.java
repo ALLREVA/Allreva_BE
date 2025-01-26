@@ -12,9 +12,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,7 +49,7 @@ public class ConcertDiary extends BaseEntity {
             name = "diary_image",
             joinColumns = @JoinColumn(name = "id")
     )
-    private Set<Image> diaryImages = new HashSet<>();
+    private List<Image> diaryImages = new ArrayList<>();
 
 
     @Builder

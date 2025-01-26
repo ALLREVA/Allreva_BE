@@ -9,6 +9,7 @@ import com.backend.allreva.concert.command.domain.value.DateInfo;
 import com.backend.allreva.concert.command.domain.value.Seller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public final class ConcertFixture {
                                 .build())
                         .build())
                 .poster(new Image("http://example.com/poster.jpg"))
-                .detailImages(Set.of(new Image("http://example.com/detail1.jpg"), new Image("http://example.com/detail2.jpg")))
+                .detailImages(List.of(new Image("http://example.com/detail1.jpg"), new Image("http://example.com/detail2.jpg")))
                 .sellers(Set.of(Seller
                         .builder()
                         .name("Sample Seller")
