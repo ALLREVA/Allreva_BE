@@ -9,6 +9,7 @@ import com.backend.allreva.rent_join.command.domain.RentJoinRepository;
 import com.backend.allreva.rent.infra.rdb.RentJpaRepository;
 import com.backend.allreva.rent.query.application.RentQueryService;
 import com.backend.allreva.support.IntegrationTestSupport;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +30,26 @@ class RentAdminPageTest extends IntegrationTestSupport {
         // given
         var registerId = 1L;
         var savedRent = rentJpaRepository.save(createRentFixture(registerId, 1L));
-        var savedRentJoin = rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), registerId));
+        var userA = 2L;
+        var userB = 3L;
+        var rentJoinByUserA = rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), userA));
+        var rentJoinByUserB = rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), userB));
 
         // when
         var rentAdminSummaries = rentQueryService.getRentAdminSummariesByMemberId(registerId);
 
         // then
         assertThat(rentAdminSummaries).hasSize(1);
-        assertThat(rentAdminSummaries.get(0).recruitmentCount()).isEqualTo(savedRent.getAdditionalInfo().getRecruitmentCount());
-        assertThat(rentAdminSummaries.get(0).participationCount()).isEqualTo(savedRentJoin.getPassengerNum());
+        SoftAssertions.assertSoftly(softly -> {
+            // 총 모집 인원 테스트
+            var recruitmentCountByQuery = rentAdminSummaries.get(0).recruitmentCount();
+            var recruitmentCount = savedRent.getAdditionalInfo().getRecruitmentCount();
+            softly.assertThat(recruitmentCountByQuery).isEqualTo(recruitmentCount);
+            // 현재 모집 인원 테스트
+            var participationCountByQuery = rentAdminSummaries.get(0).participationCount();
+            var participationCount = rentJoinByUserA.getPassengerNum() + rentJoinByUserB.getPassengerNum();
+            softly.assertThat(participationCountByQuery).isEqualTo(participationCount);
+        });
     }
 
     @Test
