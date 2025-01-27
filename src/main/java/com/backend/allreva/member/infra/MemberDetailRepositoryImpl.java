@@ -1,5 +1,7 @@
 package com.backend.allreva.member.infra;
 
+import com.backend.allreva.chatting.chat.single.command.domain.OtherMember;
+import com.backend.allreva.member.exception.MemberNotFoundException;
 import com.backend.allreva.member.query.application.MemberDetailRepository;
 import com.backend.allreva.member.query.application.response.MemberDetailResponse;
 import com.querydsl.core.types.ConstructorExpression;
@@ -41,5 +43,23 @@ public class MemberDetailRepositoryImpl implements MemberDetailRepository {
                 )),
                 member.refundAccount
         );
+    }
+
+    @Override
+    public OtherMember findMemberSummary(Long memberId) {
+        OtherMember otherMember = queryFactory
+                .select(Projections.constructor(OtherMember.class,
+                        member.id,
+                        member.memberInfo.nickname,
+                        member.memberInfo.profileImageUrl
+                ))
+                .from(member)
+                .where(member.id.eq(memberId))
+                .fetchFirst();
+
+        if (otherMember == null) {
+            throw new MemberNotFoundException();
+        }
+        return otherMember;
     }
 }

@@ -44,7 +44,7 @@ public class PopularKeywordCommandTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("키워드 Count를 update 한다.")
+    @DisplayName("키워드 Count를 updatePreviewMessage 한다.")
     void updateKeywordCount() {
         //given
         String keyword = "하현상";
@@ -57,7 +57,7 @@ public class PopularKeywordCommandTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("랭킹을 update 하고 목록을 조회한다.")
+    @DisplayName("랭킹을 updatePreviewMessage 하고 목록을 조회한다.")
     void updatePopularKeywordRank() {
 
         List<PopularKeywordResponse> keywordRankList = List.of(

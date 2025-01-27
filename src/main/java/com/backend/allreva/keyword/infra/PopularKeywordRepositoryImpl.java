@@ -39,7 +39,7 @@ public class PopularKeywordRepositoryImpl implements PopularKeywordRepository {
 
 
     /**
-     * 키워드 count update
+     * 키워드 count updatePreviewMessage
      */
     @Override
     public void updateKeywordCount(final String keyword, final Double count) {

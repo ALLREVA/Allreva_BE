@@ -1,6 +1,7 @@
 package com.backend.allreva.rent.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
+import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.rent.command.application.RentCommandFacade;
@@ -41,6 +42,7 @@ public class RentController implements RentControllerSwagger {
 
     private final RentCommandFacade rentCommandFacade;
     private final RentQueryService rentQueryService;
+
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Response<Long> createRent(

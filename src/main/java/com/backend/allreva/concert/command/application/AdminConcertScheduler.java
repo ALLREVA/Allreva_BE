@@ -22,9 +22,9 @@ public class AdminConcertScheduler {
             LocalDate today = LocalDate.now();
             String formattedDate = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             adminConcertService.fetchDailyConcertInfoList(formattedDate);
-            log.info(" {} :daily concert info update complete", formattedDate);
+            log.info(" {} :daily concert info updatePreviewMessage complete", formattedDate);
         } catch (Exception e) {
-            log.error("can't update daily concert info. Message: {}", e.getMessage());
+            log.error("can't updatePreviewMessage daily concert info. Message: {}", e.getMessage());
         }
     }
 }
