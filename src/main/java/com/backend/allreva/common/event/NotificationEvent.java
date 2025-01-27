@@ -1,13 +1,13 @@
-package com.backend.allreva.notification.command.dto;
+package com.backend.allreva.common.event;
 
 import java.util.List;
 import lombok.Builder;
 
 @Builder
-public record NotificationRequest(
+public record NotificationEvent(
         List<Long> recipientIds,
         String title,
-        String body
+        String message
 ) {
 
 }
