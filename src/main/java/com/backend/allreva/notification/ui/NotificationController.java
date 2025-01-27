@@ -2,12 +2,11 @@ package com.backend.allreva.notification.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.notification.command.dto.DeviceTokenRequest;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.notification.command.NotificationService;
 import com.backend.allreva.notification.command.domain.Notification;
+import com.backend.allreva.notification.command.dto.DeviceTokenRequest;
 import com.backend.allreva.notification.command.dto.NotificationIdRequest;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -31,11 +30,10 @@ public class NotificationController implements NotificationSwagger {
     @GetMapping
     public Response<List<Notification>> getNotifications(
             @AuthMember final Member member,
-            @RequestParam final Long lastId,
-            @RequestParam final LocalDate lastEndDate,
-            @RequestParam final int pageSize
+            @RequestParam(required = false) final Long lastId,
+            @RequestParam(defaultValue = "10") final int pageSize
     ) {
-        return Response.onSuccess(notificationService.getNotificationsByRecipientId(member));
+        return Response.onSuccess(notificationService.getNotificationsByRecipientId(member, lastId, pageSize));
     }
 
     @PatchMapping("/read")
