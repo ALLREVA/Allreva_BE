@@ -1,13 +1,12 @@
 package com.backend.allreva.notification.ui;
 
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.notification.command.dto.DeviceTokenRequest;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.notification.command.domain.Notification;
+import com.backend.allreva.notification.command.dto.DeviceTokenRequest;
 import com.backend.allreva.notification.command.dto.NotificationIdRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "알림 조회 API")
@@ -22,7 +21,6 @@ public interface NotificationSwagger {
     Response<List<Notification>> getNotifications(
             Member member,
             Long lastId,
-            LocalDate lastEndDate,
             int pageSize
     );
 

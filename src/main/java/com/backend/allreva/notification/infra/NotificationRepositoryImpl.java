@@ -13,6 +13,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     private final NotificationJpaRepository notificationJpaRepository;
     private final NotificationJdbcRepository notificationJdbcRepository;
+    private final NotificationDslRepository notificationDslRepository;
 
     @Override
     public Optional<Notification> findById(final Long id) {
@@ -25,8 +26,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
-    public List<Notification> findNotificationsByRecipientId(final Long recipientId) {
-        return notificationJpaRepository.findNotificationsByRecipientId(recipientId);
+    public List<Notification> findNotificationsByRecipientId(final Long recipientId, final Long lastId, final int pageSize) {
+        return notificationDslRepository.findNotificationsByRecipientId(recipientId, lastId, pageSize);
     }
 
     @Override

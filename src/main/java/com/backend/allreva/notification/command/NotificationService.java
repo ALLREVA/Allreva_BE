@@ -25,8 +25,8 @@ public class NotificationService {
     private final DeviceTokenRepository deviceTokenRepository;
 
     @Transactional(readOnly = true)
-    public List<Notification> getNotificationsByRecipientId(final Member member) {
-        return notificationRepository.findNotificationsByRecipientId(member.getId());
+    public List<Notification> getNotificationsByRecipientId(final Member member, final Long lastId, final int pageSize) {
+        return notificationRepository.findNotificationsByRecipientId(member.getId(), lastId, pageSize);
     }
 
     @Transactional

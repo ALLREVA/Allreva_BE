@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface NotificationRepository {
     Optional<Notification> findById(Long id);
     Optional<Notification> findByIdAndRecipientId(Long id, Long recipientId);
-    List<Notification> findNotificationsByRecipientId(Long recipientId);
+    List<Notification> findNotificationsByRecipientId(Long recipientId, Long lastId, int pageSize);
     List<Notification> findAll();
 
     void saveAll(List<Notification> notifications);
