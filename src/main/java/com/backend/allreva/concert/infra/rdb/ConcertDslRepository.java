@@ -12,5 +12,5 @@ public interface ConcertDslRepository {
 
     List<ConcertThumbnail> getConcertMainThumbnails();
 
-    List<RelatedConcertResponse> findRelatedConcertsByHall(String hallCode, Long lastId, int pageSize);
+    List<RelatedConcertResponse> findRelatedConcertsByHall(String hallCode, Long lastId, Long lastViewCount, int pageSize);
 }

@@ -52,9 +52,10 @@ public class ConcertHallController implements ConcertHallControllerSwagger {
     public Response<List<RelatedConcertResponse>> findRelatedConcertList(
             final String hallCode,
             final Long lastId,
+            final Long lastViewCount,
             final int pageSize) {
         return Response.onSuccess(
-                concertHallQueryService.getRelatedConcert(hallCode, lastId, pageSize)
+                concertHallQueryService.getRelatedConcert(hallCode, lastId, lastViewCount, pageSize)
         );
     }
 }

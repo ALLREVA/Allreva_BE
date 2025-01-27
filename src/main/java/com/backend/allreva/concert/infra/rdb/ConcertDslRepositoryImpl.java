@@ -65,7 +65,7 @@ public class ConcertDslRepositoryImpl implements ConcertDslRepository {
 
     @Override
     public List<RelatedConcertResponse> findRelatedConcertsByHall(
-            final String hallCode, final Long lastId, final int pageSize
+            final String hallCode, final Long lastId,final Long lastViewCount, final int pageSize
     ) {
         return queryFactory
                 .select(Projections.constructor(RelatedConcertResponse.class,
@@ -73,13 +73,14 @@ public class ConcertDslRepositoryImpl implements ConcertDslRepository {
                         concert.concertInfo.title,
                         concert.concertInfo.dateInfo.startDate,
                         concert.concertInfo.dateInfo.endDate,
-                        concert.poster.url
+                        concert.poster.url,
+                        concert.viewCount
                 ))
                 .from(concert)
                 .where(eqHallCode(hallCode),
-                        ltConcertId(lastId)
+                        ltCursor(lastId, lastViewCount)
                 )
-                .orderBy(concert.id.desc())
+                .orderBy(concert.viewCount.desc(), concert.id.desc()) // viewCount와 id로 정렬
                 .limit(pageSize)
                 .fetch();
     }
@@ -108,6 +109,12 @@ public class ConcertDslRepositoryImpl implements ConcertDslRepository {
     private BooleanExpression ltConcertId(Long lastId) {
         return lastId != null ? concert.id.lt(lastId) : null;
     }
-
+    private BooleanExpression ltCursor(Long lastId, Long lastViewCount) {
+        if (lastViewCount == null || lastId == null) {
+            return null; // 첫 페이지 요청 시 조건 없음
+        }
+        return concert.viewCount.lt(lastViewCount)
+                .or(concert.viewCount.eq(lastViewCount).and(concert.id.lt(lastId)));
+    }
 }
 

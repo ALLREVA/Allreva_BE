@@ -7,6 +7,7 @@ public record RelatedConcertResponse(
         String title,
         LocalDate startDate,
         LocalDate endDate,
-        String imageUrl
+        String imageUrl,
+        Long viewCount
 ) {
 }

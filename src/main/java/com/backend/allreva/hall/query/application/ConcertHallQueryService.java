@@ -73,8 +73,8 @@ public class ConcertHallQueryService {
             cacheManager = "relatedConcertCacheManager"
     )
     public List<RelatedConcertResponse> getRelatedConcert(
-            final String hallCode, final Long lastId, final int pageSize
+            final String hallCode, final Long lastId, final Long lastViewCount, final int pageSize
     ) {
-        return concertJpaRepository.findRelatedConcertsByHall(hallCode, lastId, pageSize);
+        return concertJpaRepository.findRelatedConcertsByHall(hallCode, lastId,lastViewCount, pageSize);
     }
 }

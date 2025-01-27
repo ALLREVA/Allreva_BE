@@ -43,6 +43,7 @@ public interface ConcertHallControllerSwagger {
     Response<List<RelatedConcertResponse>> findRelatedConcertList(
             @RequestParam(required = true) String hallCode,
             @RequestParam(required = false) Long lastId,
+            @RequestParam(required = false) Long lastViewCount,
             @RequestParam(defaultValue = "3") int pageSize
     );
 }
