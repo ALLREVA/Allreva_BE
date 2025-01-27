@@ -2,8 +2,9 @@ package com.backend.allreva.notification.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.notification.command.dto.DeviceTokenRequest;
+import com.backend.allreva.member.command.domain.Member;
+import com.backend.allreva.notification.command.NotificationService;
 import com.backend.allreva.notification.command.domain.Notification;
 import com.backend.allreva.notification.command.dto.NotificationIdRequest;
 import java.time.LocalDate;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Validated
@@ -23,40 +26,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/notifications")
 public class NotificationController implements NotificationSwagger {
 
-    @Override
+    private final NotificationService notificationService;
+
     @GetMapping
     public Response<List<Notification>> getNotifications(
             @AuthMember final Member member,
-            final Long lastId,
-            final LocalDate lastEndDate,
-            final int pageSize
+            @RequestParam final Long lastId,
+            @RequestParam final LocalDate lastEndDate,
+            @RequestParam final int pageSize
     ) {
-        return null;
+        return Response.onSuccess(notificationService.getNotificationsByRecipientId(member));
     }
 
-    @Override
-    @PostMapping("/device-token")
-    public Response<Void> registerDeviceToken(
-            @AuthMember final Member member,
-            final DeviceTokenRequest deviceToken
-    ) {
-        return null;
-    }
-
-    @Override
-    @DeleteMapping("/device-token")
-    public Response<Void> deleteDeviceToken(
-            @AuthMember final Member member
-    ) {
-        return null;
-    }
-
-    @Override
     @PatchMapping("/read")
     public Response<Void> markAsRead(
             @AuthMember final Member member,
-            final NotificationIdRequest notificationIdRequest
+            @RequestBody final NotificationIdRequest notificationIdRequest
     ) {
-        return null;
+        notificationService.markAsRead(member, notificationIdRequest);
+        return Response.onSuccess();
+    }
+
+    @PostMapping("/device-token")
+    public Response<Void> registerDeviceToken(
+            @AuthMember final Member member,
+            @RequestBody final DeviceTokenRequest deviceTokenRequest
+    ) {
+        notificationService.registerDeviceToken(member, deviceTokenRequest);
+        return Response.onSuccess();
+    }
+
+    @DeleteMapping("/device-token")
+    public Response<Void> deleteDeviceToken(
+            @RequestBody final Member member
+    ) {
+        notificationService.deleteDeviceToken(member);
+        return Response.onSuccess();
     }
 }
