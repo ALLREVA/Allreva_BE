@@ -3,6 +3,7 @@ package com.backend.allreva.hall.query.application;
 import com.backend.allreva.concert.infra.rdb.ConcertJpaRepository;
 import com.backend.allreva.hall.command.domain.ConcertHallRepository;
 import com.backend.allreva.hall.exception.ConcertHallNotFoundException;
+import com.backend.allreva.hall.exception.RelatedConcertException;
 import com.backend.allreva.hall.infra.elasticcsearch.ConcertHallSearchRepository;
 import com.backend.allreva.hall.query.application.response.ConcertHallDetailResponse;
 import com.backend.allreva.hall.query.application.response.ConcertHallMainResponse;
@@ -75,6 +76,11 @@ public class ConcertHallQueryService {
     public List<RelatedConcertResponse> getRelatedConcert(
             final String hallCode, final Long lastId, final Long lastViewCount, final int pageSize
     ) {
-        return concertJpaRepository.findRelatedConcertsByHall(hallCode, lastId,lastViewCount, pageSize);
+        try{
+            return concertJpaRepository.findRelatedConcertsByHall(hallCode, lastId,lastViewCount, pageSize);
+        }catch (Exception e){
+            throw new RelatedConcertException();
+        }
+
     }
 }
