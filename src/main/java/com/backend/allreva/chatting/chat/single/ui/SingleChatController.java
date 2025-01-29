@@ -1,9 +1,9 @@
 package com.backend.allreva.chatting.chat.single.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.chatting.chat.single.command.application.LeaveSingleChatRequest;
+import com.backend.allreva.chatting.chat.single.command.application.request.LeaveSingleChatRequest;
 import com.backend.allreva.chatting.chat.single.command.application.SingleChatCommandService;
-import com.backend.allreva.chatting.chat.single.command.application.StartSingleChattingRequest;
+import com.backend.allreva.chatting.chat.single.command.application.request.StartSingleChattingRequest;
 import com.backend.allreva.chatting.chat.single.query.SingleChatDetailResponse;
 import com.backend.allreva.chatting.chat.single.query.SingleChatQueryService;
 import com.backend.allreva.common.dto.Response;
