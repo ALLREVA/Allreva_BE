@@ -27,10 +27,6 @@ public class MemberSingleChat {
     @Embedded
     private OtherMember otherMember;
 
-    /**
-     * currentMessageId - lastMessageId 를 뺄셈해야함
-     * mongoDB 가 가지고 있느냐
-     */
     private String lastMessageId;
 
     public MemberSingleChat(
