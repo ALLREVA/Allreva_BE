@@ -1,6 +1,9 @@
 package com.backend.allreva.chatting.chat.integration.model;
 
-import com.backend.allreva.chatting.chat.integration.model.value.*;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatInfoSummary;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.exception.ChatRoomNotFoundException;
 import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Id;

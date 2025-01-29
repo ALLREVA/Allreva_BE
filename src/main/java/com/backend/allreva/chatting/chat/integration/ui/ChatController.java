@@ -1,9 +1,9 @@
 package com.backend.allreva.chatting.chat.integration.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantDoc;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.message.infra.MessageSseService;
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;

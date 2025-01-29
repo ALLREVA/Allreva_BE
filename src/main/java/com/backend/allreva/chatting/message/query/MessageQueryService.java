@@ -1,5 +1,7 @@
 package com.backend.allreva.chatting.message.query;
 
+import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.message.domain.GroupMessageRepository;
 import com.backend.allreva.chatting.message.domain.SingleMessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ public class MessageQueryService {
 
     private final SingleMessageRepository singleMessageRepository;
     private final GroupMessageRepository groupMessageRepository;
+
 
     public List<MessageResponse> findDefaultSingleMessages(
             final Long singleChatId,
@@ -37,6 +40,7 @@ public class MessageQueryService {
                 criteriaNumber
         );
     }
+
     public List<MessageResponse> findUnreadSingleMessages(
             final Long singleChatId,
             final long criteriaNumber
@@ -47,7 +51,6 @@ public class MessageQueryService {
                 criteriaNumber + PAGING_UNIT
         );
     }
-
 
 
     public List<MessageResponse> findDefaultGroupMessages(
@@ -71,6 +74,7 @@ public class MessageQueryService {
                 criteriaNumber
         );
     }
+
     public List<MessageResponse> findUnreadGroupMessages(
             final Long groupChatId,
             final long criteriaNumber

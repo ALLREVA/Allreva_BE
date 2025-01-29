@@ -1,28 +1,30 @@
 package com.backend.allreva.chatting.chat.group.command.application;
 
-import com.backend.allreva.chatting.exception.GroupChatNotFoundException;
 import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
 import com.backend.allreva.chatting.chat.group.command.application.request.UpdateGroupChatRequest;
-import com.backend.allreva.chatting.chat.group.command.domain.AddedGroupChatEvent;
-import com.backend.allreva.chatting.chat.group.command.domain.DeletedGroupChatEvent;
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChat;
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepository;
+import com.backend.allreva.chatting.chat.group.command.domain.event.AddedGroupChatEvent;
+import com.backend.allreva.chatting.exception.GroupChatNotFoundException;
 import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.event.Events;
+import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class GroupChatCommandService {
 
     private final GroupChatRepository groupChatRepository;
     private final S3ImageService s3ImageService;
 
+    @Transactional
     public Long add(
             final AddGroupChatRequest request,
             final MultipartFile imageFile,
@@ -47,6 +49,7 @@ public class GroupChatCommandService {
         return groupChat.getId();
     }
 
+    @Transactional
     public Long add(
             final AddGroupChatRequest request,
             final Image uploadedImage,
@@ -69,6 +72,7 @@ public class GroupChatCommandService {
         return groupChat.getId();
     }
 
+    @Transactional
     public void update(
             final UpdateGroupChatRequest request,
             final MultipartFile imageFile,
@@ -87,13 +91,34 @@ public class GroupChatCommandService {
         );
     }
 
+    @Transactional
+    public Long join(
+            final String uuid,
+            final Long memberId
+    ) {
+        GroupChat groupChat = groupChatRepository.findByUuid(UUID.fromString(uuid))
+                .orElseThrow(NotFoundException::new);
+        groupChat.addHeadcount(memberId);
+
+        return groupChat.getId();
+    }
+
+    @Transactional
+    public void leave(
+            final Long groupChatId,
+            final Long memberId
+    ) {
+        GroupChat groupChat = groupChatRepository.findById(groupChatId)
+                .orElseThrow(NotFoundException::new);
+        groupChat.subtractHeadcount(memberId);
+    }
+
     public void delete(final Long groupChatId, final Long memberId) {
         GroupChat groupChat = groupChatRepository.findById(groupChatId)
                 .orElseThrow(GroupChatNotFoundException::new);
 
         groupChat.validateForDelete(memberId);
         groupChatRepository.deleteById(groupChatId);
-        Events.raise(new DeletedGroupChatEvent(groupChatId, memberId));
     }
 
 

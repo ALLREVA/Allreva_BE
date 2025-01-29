@@ -1,6 +1,6 @@
 package com.backend.allreva.chatting.chat.single.infra;
 
-import com.backend.allreva.chatting.chat.single.command.domain.OtherMember;
+import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
 import com.backend.allreva.chatting.chat.single.query.SingleChatDetailResponse;
 
 public interface SingleChatDslRepository {
