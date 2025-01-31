@@ -28,11 +28,12 @@ class ConcertSearchServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("정상적인 검색")
     void successTest() {
-        //give
+        //given
         ConcertMainResponse concertMain = concertQueryService.getConcertMain("", null, 1, SortDirection.DATE);
         String query = concertMain.concertThumbnails().get(0).title();
 
         //when
+        log.info("query: {}", query);
         List<ConcertThumbnail> result = concertSearchService.searchConcertThumbnails(query);
 
         //then

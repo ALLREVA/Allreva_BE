@@ -40,7 +40,7 @@ public class CustomConcertSearchRepoImpl implements CustomConcertSearchRepo {
             final String query,
             final List<Object> searchAfter,
             final int size) {
-        return searchByTitleList(query, searchAfter, size, true);
+        return searchByTitleList(query, searchAfter, size, false);
     }
 
     @Override

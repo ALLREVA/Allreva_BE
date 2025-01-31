@@ -5,6 +5,9 @@ import com.backend.allreva.common.model.Email;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.concert.command.domain.Concert;
 import com.backend.allreva.concert.command.domain.value.*;
+import com.backend.allreva.hall.command.domain.ConcertHall;
+import com.backend.allreva.hall.command.domain.value.ConvenienceInfo;
+import com.backend.allreva.hall.command.domain.value.Location;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.command.domain.value.LoginProvider;
 import com.backend.allreva.member.command.domain.value.MemberRole;
@@ -79,6 +82,30 @@ public abstract class IntegrationTestSupport {
                         .salesUrl("http://seller.com")
                         .build()))
                 .build();
+    }
+
+    protected ConcertHall createTestConcertHall() {
+        return ConcertHall.builder()
+                .id("hall-001")
+                .name("서울 예술의전당")
+                .seatScale(2500)
+                .convenienceInfo(
+                        ConvenienceInfo.builder()
+                                .hasParkingLot(true)
+                                .hasRestaurant(true)
+                                .hasCafe(true)
+                                .hasDisabledParking(true)
+                                .build()
+                )
+                .location(
+                        Location.builder()
+                                .longitude(127.013079)
+                                .latitude(37.518486)
+                                .address("서울특별시 송파구 올림픽로 424")
+                                .build()
+                )
+                .build();
+
     }
 
     protected OpenSurveyRequest createOpenSurveyRequest(Long concertId, LocalDate endDate, Region region) {
