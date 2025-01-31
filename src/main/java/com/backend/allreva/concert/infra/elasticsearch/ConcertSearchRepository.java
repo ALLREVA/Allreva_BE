@@ -24,15 +24,6 @@ public interface ConcertSearchRepository extends
               }
             }
           }
-        ],
-        "filter": [
-          {
-            "range": {
-              "eddate": {
-                "gte": "now/d"
-              }
-            }
-          }
         ]
       }
     }

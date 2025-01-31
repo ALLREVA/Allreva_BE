@@ -1,5 +1,6 @@
 package com.backend.allreva.keyword.repository;
 
+import com.backend.allreva.concert.command.domain.Concert;
 import com.backend.allreva.concert.infra.elasticsearch.ConcertSearchRepository;
 import com.backend.allreva.concert.infra.elasticsearch.ConcertDocument;
 import com.backend.allreva.concert.infra.elasticsearch.SortDirection;
@@ -33,17 +34,18 @@ class ConcertRepositoryTest extends IntegrationTestSupport {
                 .concertThumbnails().get(0).title();
 
         //when
-        List<ConcertDocument> day6 = concertSearchRepository.findByTitleMixed(query, pageRequest).getContent();
+        List<ConcertDocument> concertDocuments = concertSearchRepository.findByTitleMixed(query, pageRequest).getContent();
 
         //then
-        assertThat(day6.size(), is(2));
+        assertThat(concertDocuments.size(), is(2));
     }
 
     @Test
     @DisplayName("콘서트 코드로 검색")
     void findByConcertCodeTest() {
         //given
-        String concertCode = "PF246277";
+        Concert testConcert = createTestConcert();
+        String concertCode = testConcert.getCode().getConcertCode();
 
         //when
         ConcertDocument concertDocument = concertSearchRepository.findByConcertCode(concertCode).get();
@@ -57,7 +59,8 @@ class ConcertRepositoryTest extends IntegrationTestSupport {
     @DisplayName("조회수 올라감 테스트")
     void increaseViewCountTest() {
         //given
-        String concertCode = "PF246277";
+        Concert testConcert = createTestConcert();
+        String concertCode = testConcert.getCode().getConcertCode();
         ConcertDocument concertDocument = concertSearchRepository.findByConcertCode(concertCode).get();
         concertDocument.intiViewCount();
         concertSearchRepository.save(concertDocument);

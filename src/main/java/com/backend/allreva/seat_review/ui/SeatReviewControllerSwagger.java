@@ -34,7 +34,7 @@ public interface SeatReviewControllerSwagger {
             Member member
     );
 
-    @Operation(summary = "좌석리뷰 삭제 API", description = "좌석리뷰 삭제 API")
+    @Operation(summary = "좌석리뷰 조회 API", description = "좌석리뷰 조회 API")
     Response<List<SeatReviewResponse>> getReviews(
             Long lastId,
             int size,
