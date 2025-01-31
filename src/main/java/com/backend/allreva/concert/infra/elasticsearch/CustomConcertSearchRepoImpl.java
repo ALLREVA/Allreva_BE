@@ -27,7 +27,8 @@ public class CustomConcertSearchRepoImpl implements CustomConcertSearchRepo {
             final int size,
             final SortDirection sortDirection) {
         try {
-            NativeQuery searchQuery = getNativeQuery(SearchField.ADDRESS,address, searchAfter, size, sortDirection, true);
+            NativeQuery searchQuery = getNativeQuery(SearchField.ADDRESS, address, searchAfter, size, sortDirection, false);
+            //System.out.println("searchQuery.getQuery() = " + searchQuery.getQuery());
             return elasticsearchOperations.search(searchQuery, ConcertDocument.class);
         }catch (ElasticSearchException e){
             throw new ElasticSearchException();
@@ -57,7 +58,7 @@ public class CustomConcertSearchRepoImpl implements CustomConcertSearchRepo {
             final boolean filterByDate) {
         try{
             NativeQuery searchQuery = getNativeQuery(SearchField.TITLE, query, searchAfter, size, SortDirection.SCORE, filterByDate);
-            System.out.println(searchQuery.getQuery());
+            //System.out.println("searchQuery.getQuery() = " + searchQuery.getQuery());
             return elasticsearchOperations.search(searchQuery, ConcertDocument.class);
         }catch (ElasticSearchException e){
             throw new ElasticSearchException();
