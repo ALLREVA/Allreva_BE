@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -64,12 +65,13 @@ public class SeatReviewController implements SeatReviewControllerSwagger {
     @GetMapping
     public Response<List<SeatReviewResponse>> getReviews(
             @RequestParam(required = false) final Long lastId,
+            @RequestParam(required = false) final LocalDateTime lastCreatedAt,
             @RequestParam(defaultValue = "20") final int size,
-            @RequestParam(defaultValue = "CREATED_AT") final SortType sortType,
+            @RequestParam(defaultValue = "CREATED_DESC") final SortType sortType,
             @RequestParam final String hallId,
             @AuthMember final Member member
     ) {
-        SeatReviewSearchCondition condition = new SeatReviewSearchCondition(lastId, size, sortType, hallId);
+        SeatReviewSearchCondition condition = new SeatReviewSearchCondition(lastId, lastCreatedAt, size, sortType, hallId);
         List<SeatReviewResponse> reviews = seatReviewQueryService.getReviews(condition, member.getId());
         return Response.onSuccess(reviews);
     }

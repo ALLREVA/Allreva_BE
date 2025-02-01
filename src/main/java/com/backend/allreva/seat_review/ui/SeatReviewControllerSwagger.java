@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "좌석리뷰 API", description = "좌석리뷰 API")
@@ -37,6 +38,7 @@ public interface SeatReviewControllerSwagger {
     @Operation(summary = "좌석리뷰 조회 API", description = "좌석리뷰 조회 API")
     Response<List<SeatReviewResponse>> getReviews(
             Long lastId,
+            LocalDateTime lastCreatedAt,
             int size,
             SortType sortType,
             String hallId,
