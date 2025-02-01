@@ -9,18 +9,18 @@ import java.util.List;
 
 @Getter
 public class SeatReviewResponse{
-    private Long reviewId;
-    private String seat;
-    private String content;
-    private int star;
-    private Long memberId;
-    private String hallId;
-    private LocalDate viewDate;
-    private LocalDateTime createdAt;
-    private List<String> imageUrls;
-    private String profileImageUrl;
-    private String nickname;
-    private boolean isWriter;
+    private final Long reviewId;
+    private final String seat;
+    private final String content;
+    private final int star;
+    private final Long memberId;
+    private final String hallId;
+    private final LocalDate viewDate;
+    private final LocalDateTime createdAt;
+    private final List<String> imageUrls;
+    private final String profileImageUrl;
+    private final String nickname;
+    private final boolean isWriter;
 
     @QueryProjection
     public SeatReviewResponse(
