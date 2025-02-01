@@ -7,5 +7,6 @@ public record SeatReviewSearchCondition(
         LocalDateTime lastCreatedAt,
         int size,
         SortType sortType,
-        String hallId
+        String hallId,
+        Long memberId
 ) {}

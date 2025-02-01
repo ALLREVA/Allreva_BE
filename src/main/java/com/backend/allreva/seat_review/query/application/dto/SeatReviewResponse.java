@@ -18,11 +18,25 @@ public class SeatReviewResponse{
     private LocalDate viewDate;
     private LocalDateTime createdAt;
     private List<String> imageUrls;
-    private Long likeCount;
-    private boolean isLiked;
+    private String profileImageUrl;
+    private String nickname;
+    private boolean isWriter;
 
     @QueryProjection
-    public SeatReviewResponse(Long reviewId, String seat, String content, int star, Long memberId, String hallId, LocalDate viewDate, LocalDateTime createdAt, List<String> imageUrls, Long likeCount, boolean isLiked) {
+    public SeatReviewResponse(
+            Long reviewId,
+            String seat,
+            String content,
+            int star,
+            Long memberId,
+            String hallId,
+            LocalDate viewDate,
+            LocalDateTime createdAt,
+            List<String> imageUrls,
+            String profileImageUrl,
+            String nickname,
+            boolean isWriter
+    ) {
         this.reviewId = reviewId;
         this.seat = seat;
         this.content = content;
@@ -32,7 +46,8 @@ public class SeatReviewResponse{
         this.viewDate = viewDate;
         this.createdAt = createdAt;
         this.imageUrls = imageUrls;
-        this.likeCount = likeCount;
-        this.isLiked = isLiked;
+        this.profileImageUrl = profileImageUrl;
+        this.nickname = nickname;
+        this.isWriter = isWriter;
     }
 }

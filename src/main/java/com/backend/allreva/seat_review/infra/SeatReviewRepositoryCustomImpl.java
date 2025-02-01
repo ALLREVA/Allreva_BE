@@ -1,8 +1,8 @@
 package com.backend.allreva.seat_review.infra;
 
+import com.backend.allreva.member.command.domain.QMember;
 import com.backend.allreva.seat_review.command.domain.QSeatReview;
 import com.backend.allreva.seat_review.command.domain.QSeatReviewImage;
-import com.backend.allreva.seat_review.command.domain.QSeatReviewLike;
 import com.backend.allreva.seat_review.query.application.dto.SeatReviewResponse;
 import com.backend.allreva.seat_review.ui.SeatReviewSearchCondition;
 import com.backend.allreva.seat_review.ui.SortType;
@@ -26,7 +26,7 @@ public class SeatReviewRepositoryCustomImpl implements SeatReviewRepositoryCusto
     private final JPAQueryFactory queryFactory;
     private static final QSeatReview review = QSeatReview.seatReview;
     private static final QSeatReviewImage reviewImage = QSeatReviewImage.seatReviewImage;
-    private static final QSeatReviewLike reviewLike = QSeatReviewLike.seatReviewLike;
+    private static final QMember member = QMember.member;
 
     @Override
     public List<SeatReviewResponse> findReviewsWithNoOffset(SeatReviewSearchCondition condition, Long currentMemberId) {
@@ -45,19 +45,12 @@ public class SeatReviewRepositoryCustomImpl implements SeatReviewRepositoryCusto
                                 .from(reviewImage)
                                 .where(reviewImage.seatReviewId.eq(review.id))
                                 .orderBy(reviewImage.orderNum.asc())),
-                        JPAExpressions
-                                .select(reviewLike.count())
-                                .from(reviewLike)
-                                .where(reviewLike.reviewId.eq(review.id)),
-                        JPAExpressions
-                                .select(reviewLike.count().gt(0))
-                                .from(reviewLike)
-                                .where(
-                                        reviewLike.reviewId.eq(review.id),
-                                        reviewLike.memberId.eq(currentMemberId)
-                                )
+                        member.memberInfo.profileImageUrl,
+                        member.memberInfo.nickname,
+                        review.memberId.eq(condition.memberId())
                 ))
                 .from(review)
+                .join(member).on(review.memberId.eq(member.id))
                 .where(
                         createPaginationCondition(
                                 condition.lastId(),

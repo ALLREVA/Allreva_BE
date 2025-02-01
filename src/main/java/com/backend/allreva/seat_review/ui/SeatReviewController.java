@@ -71,7 +71,7 @@ public class SeatReviewController implements SeatReviewControllerSwagger {
             @RequestParam final String hallId,
             @AuthMember final Member member
     ) {
-        SeatReviewSearchCondition condition = new SeatReviewSearchCondition(lastId, lastCreatedAt, size, sortType, hallId);
+        SeatReviewSearchCondition condition = new SeatReviewSearchCondition(lastId, lastCreatedAt, size, sortType, hallId, member.getId());
         List<SeatReviewResponse> reviews = seatReviewQueryService.getReviews(condition, member.getId());
         return Response.onSuccess(reviews);
     }
