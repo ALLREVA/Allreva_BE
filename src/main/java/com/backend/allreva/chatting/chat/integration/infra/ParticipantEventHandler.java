@@ -13,6 +13,7 @@ import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember
 import com.backend.allreva.chatting.chat.single.command.domain.SingleChatRepository;
 import com.backend.allreva.chatting.chat.single.command.domain.event.StartedSingleChatEvent;
 import com.backend.allreva.common.exception.NotFoundException;
+import com.backend.allreva.member.command.domain.AddedMemberEvent;
 import com.backend.allreva.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -34,6 +35,14 @@ public class ParticipantEventHandler {
     private final MemberGroupChatRepository memberGroupChatRepository;
 
     private final ChatParticipantRepository participantRepository;
+
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+    public void onMessage(final AddedMemberEvent event) {
+        ChatParticipantDoc participantDoc = new ChatParticipantDoc(event.getMemberId());
+        participantRepository.save(participantDoc);
+    }
 
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -96,7 +105,7 @@ public class ParticipantEventHandler {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
     public void onMessage(final LeavedSingleChatEvent event) {
-        ChatParticipantDoc participantDoc = participantRepository.findByMemberId(event.getMemberId())
+        ChatParticipantDoc participantDoc = participantRepository.findChatParticipantDocByMemberId(event.getMemberId())
                 .orElseThrow(NotFoundException::new);
 
         participantDoc.removeChatRoom(event.getSingleChatId(), ChatType.SINGLE);
@@ -116,7 +125,7 @@ public class ParticipantEventHandler {
             final Long memberId,
             final Long groupChatId
     ) {
-        ChatParticipantDoc participantDoc = participantRepository.findByMemberId(memberId)
+        ChatParticipantDoc participantDoc = participantRepository.findChatParticipantDocByMemberId(memberId)
                 .orElseThrow(NotFoundException::new);
 
         GroupChat groupChat = groupChatRepository.findById(groupChatId)
@@ -164,7 +173,7 @@ public class ParticipantEventHandler {
             final Long memberId,
             final Long groupChatId
     ) {
-        ChatParticipantDoc participantDoc = participantRepository.findByMemberId(memberId)
+        ChatParticipantDoc participantDoc = participantRepository.findChatParticipantDocByMemberId(memberId)
                 .orElseThrow(NotFoundException::new);
 
         participantDoc.removeChatRoom(groupChatId, ChatType.GROUP);

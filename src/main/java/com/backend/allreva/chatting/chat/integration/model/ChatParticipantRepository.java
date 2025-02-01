@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ChatParticipantRepository extends MongoRepository<ChatParticipantDoc, Long> {
 
-    Optional<ChatParticipantDoc> findByMemberId(Long memberId);
+    Optional<ChatParticipantDoc> findChatParticipantDocByMemberId(Long memberId);
 
     Set<ChatParticipantDoc> findByMemberIdIn(Set<Long> memberIds);
 }

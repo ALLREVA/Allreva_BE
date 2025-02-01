@@ -31,7 +31,7 @@ public class ChatController {
             @PathVariable("chatId") final Long chatId,
             @AuthMember final Member member
     ) {
-        SseEmitter emitter = new SseEmitter();
+        SseEmitter emitter = new SseEmitter(60000 * 60 * 24L); // 1h 연결
         return messageSseService.subscribeSingleChat(chatId, emitter);
     }
 

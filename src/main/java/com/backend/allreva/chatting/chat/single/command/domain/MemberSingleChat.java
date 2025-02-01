@@ -10,9 +10,8 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "member_id"),
-        @Index(columnList = "single_chat_id")
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"member_id", "other_member_id"})
 })
 @Entity
 public class MemberSingleChat {

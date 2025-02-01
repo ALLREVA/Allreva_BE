@@ -28,7 +28,7 @@ public class MessageSseService {
                 .computeIfAbsent(chatId, id -> ConcurrentHashMap.newKeySet())
                 .add(emitter);
 
-
+        
         emitter.onCompletion(() -> {
             unsubscribeSingleChat(chatId, emitter);
         });

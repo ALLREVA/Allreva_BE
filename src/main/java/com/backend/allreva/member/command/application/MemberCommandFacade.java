@@ -1,9 +1,11 @@
 package com.backend.allreva.member.command.application;
 
 import com.backend.allreva.common.application.S3ImageService;
+import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
 import com.backend.allreva.member.command.application.request.RefundAccountRequest;
+import com.backend.allreva.member.command.domain.AddedMemberEvent;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class MemberCommandFacade {
     ) {
         Image uploadedImage = s3ImageService.upload(image);
         Member registeredMember = memberInfoCommandService.registerMember(memberRegisterRequest, uploadedImage);
+
+        AddedMemberEvent addedEvent = new AddedMemberEvent(registeredMember.getId());
+        Events.raise(addedEvent);
+
         memberArtistCommandService.updateMemberArtist(memberRegisterRequest.memberArtistRequests(), registeredMember);
     }
 

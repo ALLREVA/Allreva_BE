@@ -1,8 +1,11 @@
 package com.backend.allreva.chatting.message.ui;
 
+import com.backend.allreva.auth.security.AuthMember;
+import com.backend.allreva.chatting.message.query.EnterChatResponse;
 import com.backend.allreva.chatting.message.query.MessageQueryService;
 import com.backend.allreva.chatting.message.query.MessageResponse;
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +22,19 @@ public class MessageQueryController {
     private final MessageQueryService messageQueryService;
 
     @GetMapping("/single/enter")
-    public Response<List<MessageResponse>> enterSingleChat(
+    public Response<EnterChatResponse> enterSingleChat(
             @RequestParam("singleChatId") final Long singleChatId,
-            @RequestParam("lastReadMessageNumber") final long lastReadMessageNumber
+            @RequestParam("lastReadMessageNumber") final Long lastReadMessageNumber,
+            @AuthMember final Member member
     ) {
-        List<MessageResponse> responses = messageQueryService
+        List<MessageResponse> messages = messageQueryService
                 .findDefaultSingleMessages(singleChatId, lastReadMessageNumber);
-        return Response.onSuccess(responses);
+
+        EnterChatResponse response = new EnterChatResponse(
+                member.getId(),
+                messages
+        );
+        return Response.onSuccess(response);
     }
 
     @GetMapping("/single/read")
@@ -37,6 +46,7 @@ public class MessageQueryController {
                 .findReadSingleMessages(singleChatId, criteriaNumber);
         return Response.onSuccess(responses);
     }
+
     @GetMapping("/single/unread")
     public Response<List<MessageResponse>> findUnreadSingleMessages(
             @RequestParam("singleChatId") final Long singleChatId,
@@ -49,13 +59,19 @@ public class MessageQueryController {
 
 
     @GetMapping("/group/enter")
-    public Response<List<MessageResponse>> enterGroupChat(
+    public Response<EnterChatResponse> enterGroupChat(
             @RequestParam("groupChatId") final Long groupChatId,
-            @RequestParam("lastReadMessageNumber") final long lastReadMessageNumber
+            @RequestParam("lastReadMessageNumber") final Long lastReadMessageNumber,
+            @AuthMember final Member member
     ) {
-        List<MessageResponse> responses = messageQueryService
+        List<MessageResponse> messages = messageQueryService
                 .findDefaultGroupMessages(groupChatId, lastReadMessageNumber);
-        return Response.onSuccess(responses);
+
+        EnterChatResponse response = new EnterChatResponse(
+                member.getId(),
+                messages
+        );
+        return Response.onSuccess(response);
     }
 
     @GetMapping("/group/read")

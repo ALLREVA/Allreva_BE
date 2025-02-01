@@ -59,7 +59,7 @@ public class MessageCommandController {
     }
 
 
-    @MessageMapping("/group/connection/{id}")
+    @MessageMapping("/group/connection/{groupChatId}")
     public void sendGroupMessage(
             @DestinationVariable final Long groupChatId,
             @AuthMember final Member member,

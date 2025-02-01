@@ -1,5 +1,6 @@
 package com.backend.allreva.chatting.chat.single.command.application;
 
+import com.backend.allreva.chatting.chat.single.command.application.dto.StartSingleChattingResponse;
 import com.backend.allreva.chatting.chat.single.command.domain.*;
 import com.backend.allreva.chatting.chat.single.command.domain.event.LeavedSingleChatEvent;
 import com.backend.allreva.chatting.chat.single.command.domain.event.StartedSingleChatEvent;
@@ -13,12 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class SingleChatCommandService {
 
     private final SingleChatRepository singleChatRepository;
+    private final MemberSingleChatRepository memberSingleChatRepository;
 
     @Transactional
-    public Long startSingleChatting(
+    public StartSingleChattingResponse startSingleChatting(
             final Long memberId,
             final Long otherMemberId
     ) {
+
+        // 이미 참여중인지 확인을 해줘야해..
+//        memberSingleChatRepository
+
         SingleChat generatedSingleChat = singleChatRepository
                 .save(new SingleChat());
         Long singleChatId = generatedSingleChat.getId();
@@ -29,7 +35,8 @@ public class SingleChatCommandService {
                 otherMemberId
         );
         Events.raise(startedEvent);
-        return singleChatId;
+
+        return new StartSingleChattingResponse(singleChatId);
     }
 
     public void leaveSingleChatting(

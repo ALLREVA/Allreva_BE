@@ -6,10 +6,10 @@ import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.exception.ChatRoomNotFoundException;
 import com.backend.allreva.common.model.Image;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -25,6 +25,9 @@ public class ChatParticipantDoc {
     private Long memberId;
     private SortedSet<ChatSummary> chatSummaries = new ConcurrentSkipListSet<>(new ChatComparator());
 
+    public ChatParticipantDoc(final Long memberId) {
+        this.memberId = memberId;
+    }
 
     public void addChatSummary(
             final Long roomId,
