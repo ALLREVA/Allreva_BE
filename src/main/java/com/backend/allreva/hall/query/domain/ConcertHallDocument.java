@@ -59,4 +59,7 @@ public class ConcertHallDocument {
     @Field(type = FieldType.Double, name = "star")
     private Double star;
 
+    public void updateStar(Double newStart) {
+        this.star = newStart;
+    }
 }

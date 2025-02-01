@@ -1,12 +1,15 @@
 package com.backend.allreva.hall.query.application;
 
+import com.backend.allreva.concert.infra.rdb.ConcertJpaRepository;
 import com.backend.allreva.hall.command.domain.ConcertHallRepository;
 import com.backend.allreva.hall.exception.ConcertHallNotFoundException;
+import com.backend.allreva.hall.exception.RelatedConcertException;
 import com.backend.allreva.hall.infra.elasticcsearch.ConcertHallSearchRepository;
 import com.backend.allreva.hall.query.application.response.ConcertHallDetailResponse;
 import com.backend.allreva.hall.query.application.response.ConcertHallMainResponse;
 import com.backend.allreva.hall.query.application.response.ConcertHallThumbnail;
 import com.backend.allreva.hall.query.domain.ConcertHallDocument;
+import com.backend.allreva.hall.query.application.response.RelatedConcertResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +26,7 @@ public class ConcertHallQueryService {
 
     private final ConcertHallRepository concertHallRepository;
     private final ConcertHallSearchRepository concertHallSearchRepository;
+    private final ConcertJpaRepository concertJpaRepository;
 
     public ConcertHallDetailResponse findDetailByHallCode(final String hallCode) {
         return concertHallRepository.findDetailByHallCode(hallCode);
@@ -61,7 +65,22 @@ public class ConcertHallQueryService {
         List<Object> nextSearchAfter = hasNext ?
                 searchHits.getSearchHits().get(size -1).getSortValues() : null;
         return ConcertHallMainResponse.from(concertHall, nextSearchAfter);
+    }
 
+    @Cacheable(
+            cacheNames = "relatedConcert",
+            key = "#hallCode + '_' + #lastId + '_' + #pageSize",
+            unless = "#result == null",
+            cacheManager = "relatedConcertCacheManager"
+    )
+    public List<RelatedConcertResponse> getRelatedConcert(
+            final String hallCode, final Long lastId, final Long lastViewCount, final int pageSize
+    ) {
+        try{
+            return concertJpaRepository.findRelatedConcertsByHall(hallCode, lastId,lastViewCount, pageSize);
+        }catch (Exception e){
+            throw new RelatedConcertException();
+        }
 
     }
 }

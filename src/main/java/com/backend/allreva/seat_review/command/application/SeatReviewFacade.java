@@ -3,6 +3,7 @@ package com.backend.allreva.seat_review.command.application;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.seat_review.command.application.dto.ReviewCreateRequest;
 import com.backend.allreva.seat_review.command.application.dto.ReviewUpdateRequest;
+import com.backend.allreva.seat_review.command.domain.SeatReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,6 @@ public class SeatReviewFacade {
             final Member member
     ) {
         Long seatReviewId = seatReviewService.createSeatReview(request, member);
-
         // 비동기로 이미지 업로드 및 저장 처리
         seatReviewImageService.uploadAndSaveImages(seatReviewId, images);
 
@@ -36,7 +36,7 @@ public class SeatReviewFacade {
             final List<MultipartFile> images,
             final Member member
     ) {
-        Long updatedSeatReviewId = seatReviewService.updateSeatReview(request, member);
+        SeatReview seatReview = seatReviewService.updateSeatReview(request, member);
 
         // 기존 이미지 삭제 비동기 처리
         seatReviewImageService.deleteImages(request.seatReviewId());
@@ -44,7 +44,7 @@ public class SeatReviewFacade {
         // 새로운 이미지 업로드 및 저장 비동기 처리
         seatReviewImageService.uploadAndSaveImages(request.seatReviewId(), images);
 
-        return updatedSeatReviewId;
+        return seatReview.getId();
     }
 
     public void deleteSeatReview(

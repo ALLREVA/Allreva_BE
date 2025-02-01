@@ -1,5 +1,10 @@
 package com.backend.allreva.seat_review.command.application;
 
+import com.backend.allreva.hall.command.ConcertHallService;
+import com.backend.allreva.hall.command.domain.ConcertHall;
+import com.backend.allreva.hall.exception.ConcertHallNotFoundException;
+import com.backend.allreva.hall.infra.elasticcsearch.ConcertHallSearchRepository;
+import com.backend.allreva.hall.query.domain.ConcertHallDocument;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.seat_review.command.application.dto.ReviewCreateRequest;
 import com.backend.allreva.seat_review.command.application.dto.ReviewUpdateRequest;
@@ -17,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SeatReviewService {
     private final SeatReviewRepository seatReviewRepository;
+    private final ConcertHallService concertHallService;
+    private final ConcertHallSearchRepository concertHallSearchRepository;
 
     public Long createSeatReview(
             final ReviewCreateRequest request,
@@ -30,24 +37,53 @@ public class SeatReviewService {
                     .hallId(request.hallId())
                     .viewDate(request.viewDate())
                     .build());
+
+            ConcertHall concertHall = concertHallService.updateConcertHallStar(savedSeatReview.getHallId(), savedSeatReview.getStar(), 1);
+
+            ConcertHallDocument concertHallDocument = concertHallSearchRepository.findById(concertHall.getId()).orElseThrow(
+                    ConcertHallNotFoundException::new
+            );
+            concertHallDocument.updateStar(concertHall.getStar());
+            concertHallSearchRepository.save(concertHallDocument);
+
             return savedSeatReview.getId();
         }catch (Exception e){
             throw new SeatReviewSaveFailedException();
         }
     }
 
-    public Long updateSeatReview(
+    public SeatReview updateSeatReview(
             final ReviewUpdateRequest request,
             final Member member) {
         SeatReview seatReview = seatReviewRepository.findById(request.seatReviewId()).orElseThrow(SeatReviewNotFoundException::new);
+        int starDelta = request.star() - seatReview.getStar();
         validateWriter(seatReview.getMemberId(), member.getId());
         seatReview.updateSeatReview(request);
-        return seatReviewRepository.save(seatReview).getId();
+
+        ConcertHall concertHall = concertHallService.updateConcertHallStar(seatReview.getHallId(), starDelta, 0);
+
+        ConcertHallDocument concertHallDocument = concertHallSearchRepository.findById(concertHall.getId()).orElseThrow(
+                ConcertHallNotFoundException::new
+        );
+
+        concertHallDocument.updateStar(concertHall.getStar());
+        concertHallSearchRepository.save(concertHallDocument);
+
+        return seatReviewRepository.save(seatReview);
     }
 
     public void deleteSeatReview(final Long id, final Member member) {
         SeatReview seatReview = seatReviewRepository.findById(id).orElseThrow(SeatReviewNotFoundException::new);
         validateWriter(seatReview.getMemberId(), member.getId());
+
+        ConcertHall concertHall = concertHallService.updateConcertHallStar(seatReview.getHallId(), -seatReview.getStar(), -1);
+
+        ConcertHallDocument concertHallDocument = concertHallSearchRepository.findById(concertHall.getId()).orElseThrow(
+                ConcertHallNotFoundException::new
+        );
+        concertHallDocument.updateStar(concertHall.getStar());
+        concertHallSearchRepository.save(concertHallDocument);
+
         seatReviewRepository.delete(seatReview);
     }
 
