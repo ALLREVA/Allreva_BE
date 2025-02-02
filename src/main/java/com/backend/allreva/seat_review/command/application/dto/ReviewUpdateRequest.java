@@ -1,11 +1,13 @@
 package com.backend.allreva.seat_review.command.application.dto;
 
+import com.backend.allreva.common.model.Image;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record ReviewUpdateRequest(
 
@@ -30,6 +32,8 @@ public record ReviewUpdateRequest(
         String content,
 
         @NotNull(message = "hallId는 필수입니다.")
-        String hallId
+        String hallId,
+
+        List<Image> imageUrls
 ) {
 }
