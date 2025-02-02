@@ -283,7 +283,8 @@ public class DummyController {
                     5,
                     i + "번째 좌석",
                     "즐거워따...",
-                    concert.getCode().getHallCode()
+                    concert.getCode().getHallCode(),
+                    List.of(new Image("dummy.image.url"))
             );
             seatReviewService.createSeatReview(request, member);
         }
