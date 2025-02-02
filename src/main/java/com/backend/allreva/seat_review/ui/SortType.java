@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SortType {
-    CREATED_AT("생성일순"),
-    LIKE_COUNT("좋아요순");
+    CREATED_ASC("오래된순"),
+    CREATED_DESC("최신순");
 
     private final String description;
 }

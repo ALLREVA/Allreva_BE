@@ -9,20 +9,34 @@ import java.util.List;
 
 @Getter
 public class SeatReviewResponse{
-    private Long reviewId;
-    private String seat;
-    private String content;
-    private int star;
-    private Long memberId;
-    private String hallId;
-    private LocalDate viewDate;
-    private LocalDateTime createdAt;
-    private List<String> imageUrls;
-    private Long likeCount;
-    private boolean isLiked;
+    private final Long reviewId;
+    private final String seat;
+    private final String content;
+    private final int star;
+    private final Long memberId;
+    private final String hallId;
+    private final LocalDate viewDate;
+    private final LocalDateTime createdAt;
+    private final List<String> imageUrls;
+    private final String profileImageUrl;
+    private final String nickname;
+    private final boolean isWriter;
 
     @QueryProjection
-    public SeatReviewResponse(Long reviewId, String seat, String content, int star, Long memberId, String hallId, LocalDate viewDate, LocalDateTime createdAt, List<String> imageUrls, Long likeCount, boolean isLiked) {
+    public SeatReviewResponse(
+            Long reviewId,
+            String seat,
+            String content,
+            int star,
+            Long memberId,
+            String hallId,
+            LocalDate viewDate,
+            LocalDateTime createdAt,
+            List<String> imageUrls,
+            String profileImageUrl,
+            String nickname,
+            boolean isWriter
+    ) {
         this.reviewId = reviewId;
         this.seat = seat;
         this.content = content;
@@ -32,7 +46,8 @@ public class SeatReviewResponse{
         this.viewDate = viewDate;
         this.createdAt = createdAt;
         this.imageUrls = imageUrls;
-        this.likeCount = likeCount;
-        this.isLiked = isLiked;
+        this.profileImageUrl = profileImageUrl;
+        this.nickname = nickname;
+        this.isWriter = isWriter;
     }
 }
