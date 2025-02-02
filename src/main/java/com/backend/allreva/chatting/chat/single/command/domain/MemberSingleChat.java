@@ -26,7 +26,6 @@ public class MemberSingleChat {
     @Embedded
     private OtherMember otherMember;
 
-    private String lastMessageId;
 
     public MemberSingleChat(
             final Long memberId,

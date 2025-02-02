@@ -12,6 +12,7 @@ import com.backend.allreva.chatting.chat.single.command.domain.event.LeavedSingl
 import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
 import com.backend.allreva.chatting.chat.single.command.domain.SingleChatRepository;
 import com.backend.allreva.chatting.chat.single.command.domain.event.StartedSingleChatEvent;
+import com.backend.allreva.chatting.notification.TimedOutEvent;
 import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.member.command.domain.AddedMemberEvent;
 import com.backend.allreva.member.exception.MemberNotFoundException;
@@ -42,6 +43,15 @@ public class ParticipantEventHandler {
     public void onMessage(final AddedMemberEvent event) {
         ChatParticipantDoc participantDoc = new ChatParticipantDoc(event.getMemberId());
         participantRepository.save(participantDoc);
+    }
+
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+    public void onMessage(final TimedOutEvent event) {
+
+        //TODO: PreviewMessage upsert() 로직 추가
+        asdjaoi;sjiowaj
     }
 
     @Async

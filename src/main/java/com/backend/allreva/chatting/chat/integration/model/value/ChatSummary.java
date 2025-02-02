@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@EqualsAndHashCode(of = {"roomId", "chatType"})
+@EqualsAndHashCode(of = {"chatId", "chatType"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatSummary {
 
-    private Long roomId;
+    private Long chatId;
     private ChatType chatType;
 
     private ChatInfoSummary chatInfoSummary; // title, thumbnail, headcount
@@ -21,13 +21,13 @@ public class ChatSummary {
     private long lastReadMessageNumber;
 
     public ChatSummary(
-            final Long roomId,
+            final Long chatId,
             final ChatType chatType,
             final ChatInfoSummary chatInfoSummary,
             final PreviewMessage previewMessage,
             final long lastReadMessageNumber
     ) {
-        this.roomId = roomId;
+        this.chatId = chatId;
         this.chatType = chatType;
         this.chatInfoSummary = chatInfoSummary;
         this.previewMessage = previewMessage;
@@ -61,7 +61,7 @@ public class ChatSummary {
             final ChatType chatType
     ) {
         ChatSummary chatSummary = new ChatSummary();
-        chatSummary.roomId = roomId;
+        chatSummary.chatId = roomId;
         chatSummary.chatType = chatType;
 
         return chatSummary;
@@ -74,7 +74,7 @@ public class ChatSummary {
     ) {
         ChatSummary chatSummary = new ChatSummary();
 
-        chatSummary.roomId = roomId;
+        chatSummary.chatId = roomId;
         chatSummary.chatType = chatType;
         chatSummary.chatInfoSummary = chatInfoSummary;
 

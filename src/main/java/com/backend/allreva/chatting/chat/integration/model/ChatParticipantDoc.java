@@ -67,7 +67,7 @@ public class ChatParticipantDoc {
             final LocalDateTime sentAt
     ) {
         ChatSummary chatSummary = chatSummaries.stream()
-                .filter(room -> room.getRoomId().equals(roomId) && room.getChatType().equals(chatType))
+                .filter(room -> room.getChatId().equals(roomId) && room.getChatType().equals(chatType))
                 .findFirst()
                 .orElseThrow(ChatRoomNotFoundException::new);
 
@@ -82,6 +82,23 @@ public class ChatParticipantDoc {
         chatSummaries.add(chatSummary);
     }
 
+    public void updatePreviewMessage(
+            final Long roomId,
+            final ChatType chatType,
+            final PreviewMessage previewMessage
+    ) {
+        ChatSummary chatSummary = chatSummaries.stream()
+                .filter(room -> room.getChatId().equals(roomId) && room.getChatType().equals(chatType))
+                .findFirst()
+                .orElseThrow(ChatRoomNotFoundException::new);
+
+        PreviewMessage updatedPreviewMessage = previewMessage;
+
+        chatSummaries.remove(chatSummary);
+        chatSummary.updatePreviewMessage(updatedPreviewMessage);
+        chatSummaries.add(chatSummary);
+    }
+
     public void updateChatInfoSummary(
             final Long roomId,
             final ChatType chatType,
@@ -89,7 +106,7 @@ public class ChatParticipantDoc {
             final Image thumbnail
     ) {
         ChatSummary chatSummary = chatSummaries.stream()
-                .filter(room -> room.getRoomId().equals(roomId) && room.getChatType().equals(chatType))
+                .filter(room -> room.getChatId().equals(roomId) && room.getChatType().equals(chatType))
                 .findFirst()
                 .orElseThrow(ChatRoomNotFoundException::new);
 

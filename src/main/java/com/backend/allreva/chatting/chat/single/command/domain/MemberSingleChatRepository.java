@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface MemberSingleChatRepository extends JpaRepository<MemberSingleChat, Long> {
 
@@ -18,4 +19,9 @@ public interface MemberSingleChatRepository extends JpaRepository<MemberSingleCh
     @Query("SELECT m FROM MemberSingleChat m " +
             "WHERE m.singleChatId = :singleChatId AND m.memberId = :memberId")
     Optional<MemberSingleChat> findBySingleChatIdAndMemberId(Long singleChatId, Long memberId);
+
+    @Query("SELECT m.memberId " +
+            "FROM MemberSingleChat m " +
+            "WHERE m.singleChatId = :singleChatId")
+    Set<Long> findMemberIdBySingleChatId(Long singleChatId);
 }

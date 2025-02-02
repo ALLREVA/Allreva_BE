@@ -17,7 +17,7 @@ public class ChatComparator implements Comparator<ChatSummary> {
             return comparedValue;
         }
 
-        comparedValue = o1.getRoomId().compareTo(o2.getRoomId());
+        comparedValue = o1.getChatId().compareTo(o2.getChatId());
         if (comparedValue != 0) {
             return comparedValue;
         }
