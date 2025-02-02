@@ -1,7 +1,7 @@
 package com.backend.allreva.chatting.chat.group.infra;
 
-import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
-import com.backend.allreva.chatting.chat.group.query.GroupChatSummaryResponse;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatSummaryResponse;
 import com.backend.allreva.chatting.chat.integration.model.value.Participant;
 import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;

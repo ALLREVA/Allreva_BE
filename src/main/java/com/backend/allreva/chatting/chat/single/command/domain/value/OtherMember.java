@@ -1,4 +1,4 @@
-package com.backend.allreva.chatting.chat.single.command.domain;
+package com.backend.allreva.chatting.chat.single.command.domain.value;
 
 import com.backend.allreva.common.model.Image;
 import jakarta.persistence.Column;

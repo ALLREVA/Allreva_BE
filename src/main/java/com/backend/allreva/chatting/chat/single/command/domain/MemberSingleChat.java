@@ -1,15 +1,17 @@
 package com.backend.allreva.chatting.chat.single.command.domain;
 
+import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(indexes = {
-        @Index(columnList = "member_id"),
-        @Index(columnList = "single_chat_id")
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"member_id", "other_member_id"})
 })
 @Entity
 public class MemberSingleChat {
@@ -24,11 +26,6 @@ public class MemberSingleChat {
     @Embedded
     private OtherMember otherMember;
 
-    /**
-     * currentMessageId - lastMessageId 를 뺄셈해야함
-     * mongoDB 가 가지고 있느냐
-     */
-    private String lastMessageId;
 
     public MemberSingleChat(
             final Long memberId,
@@ -39,5 +36,23 @@ public class MemberSingleChat {
         this.singleChatId = singleChatId;
 
         this.otherMember = otherMember;
+    }
+
+    public static Set<MemberSingleChat> startFirstChat(
+            final Long singleChatId,
+            final OtherMember member,
+            final OtherMember otherMember
+    ) {
+        MemberSingleChat chat = new MemberSingleChat(
+                member.getId(),
+                singleChatId,
+                otherMember
+        );
+        MemberSingleChat otherChat = new MemberSingleChat(
+                otherMember.getId(),
+                singleChatId,
+                member
+        );
+        return Set.of(chat, otherChat);
     }
 }

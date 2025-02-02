@@ -1,6 +1,7 @@
 package com.backend.allreva.chatting.chat.group.query;
 
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepository;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

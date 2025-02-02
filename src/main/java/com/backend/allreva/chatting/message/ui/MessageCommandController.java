@@ -8,7 +8,7 @@ import com.backend.allreva.chatting.message.command.MessageCommandService;
 import com.backend.allreva.chatting.message.domain.GroupMessage;
 import com.backend.allreva.chatting.message.domain.SingleMessage;
 import com.backend.allreva.chatting.message.domain.value.Content;
-import com.backend.allreva.chatting.message.infra.MessageSseService;
+import com.backend.allreva.chatting.notification.MessageSseService;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -43,23 +43,26 @@ public class MessageCommandController {
 
         messagingTemplate.convertAndSend(destination, singleMessage);
 
-        messageSseService.sendSummaryToSingleChat(singleChatId, new PreviewMessage(
-                singleMessage.getMessageNumber(),
-                content.getPayload(),
-                singleMessage.getSentAt()
-        ));
-        chatParticipantService.updatePreviewMessage(
-                member.getId(),
-                singleChatId,
-                ChatType.SINGLE,
+        PreviewMessage previewMessage = new PreviewMessage(
                 singleMessage.getMessageNumber(),
                 content.getPayload(),
                 singleMessage.getSentAt()
         );
+        messageSseService.sendSummaryNotification(
+                singleChatId,
+                ChatType.SINGLE,
+                previewMessage
+        );
+        chatParticipantService.updatePreviewMessage(
+                member.getId(),
+                singleChatId,
+                ChatType.SINGLE,
+                previewMessage
+        );
     }
 
 
-    @MessageMapping("/group/connection/{id}")
+    @MessageMapping("/group/connection/{groupChatId}")
     public void sendGroupMessage(
             @DestinationVariable final Long groupChatId,
             @AuthMember final Member member,
@@ -71,18 +74,21 @@ public class MessageCommandController {
 
         messagingTemplate.convertAndSend(destination, groupMessage);
 
-        messageSseService.sendSummaryToGroupChat(groupChatId, new PreviewMessage(
+        PreviewMessage previewMessage = new PreviewMessage(
                 groupMessage.getMessageNumber(),
                 content.getPayload(),
                 groupMessage.getSentAt()
-        ));
+        );
+        messageSseService.sendSummaryNotification(
+                groupChatId,
+                ChatType.GROUP,
+                previewMessage
+        );
         chatParticipantService.updatePreviewMessage(
                 member.getId(),
                 groupChatId,
                 ChatType.GROUP,
-                groupMessage.getMessageNumber(),
-                content.getPayload(),
-                groupMessage.getSentAt()
+                previewMessage
         );
     }
 

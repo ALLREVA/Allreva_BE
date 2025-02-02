@@ -3,13 +3,14 @@ package com.backend.allreva.chatting.chat.integration.model;
 import com.backend.allreva.chatting.chat.integration.model.value.*;
 import com.backend.allreva.chatting.exception.ChatRoomNotFoundException;
 import com.backend.allreva.common.model.Image;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -20,8 +21,11 @@ public class ChatParticipantDoc {
 
     @Id
     private Long memberId;
-    private SortedSet<ChatSummary> chatSummaries = new ConcurrentSkipListSet<>(new ChatComparator());
+    private SortedSet<ChatSummary> chatSummaries = new ConcurrentSkipListSet<>();
 
+    public ChatParticipantDoc(final Long memberId) {
+        this.memberId = memberId;
+    }
 
     public void addChatSummary(
             final Long roomId,
@@ -61,7 +65,7 @@ public class ChatParticipantDoc {
             final LocalDateTime sentAt
     ) {
         ChatSummary chatSummary = chatSummaries.stream()
-                .filter(room -> room.getRoomId().equals(roomId) && room.getChatType().equals(chatType))
+                .filter(room -> room.getChatId().equals(roomId) && room.getChatType().equals(chatType))
                 .findFirst()
                 .orElseThrow(ChatRoomNotFoundException::new);
 
@@ -76,6 +80,23 @@ public class ChatParticipantDoc {
         chatSummaries.add(chatSummary);
     }
 
+    public void updatePreviewMessage(
+            final Long roomId,
+            final ChatType chatType,
+            final PreviewMessage previewMessage
+    ) {
+        ChatSummary chatSummary = chatSummaries.stream()
+                .filter(room -> room.getChatId().equals(roomId) && room.getChatType().equals(chatType))
+                .findFirst()
+                .orElseThrow(ChatRoomNotFoundException::new);
+
+        PreviewMessage updatedPreviewMessage = previewMessage;
+
+        chatSummaries.remove(chatSummary);
+        chatSummary.updatePreviewMessage(updatedPreviewMessage);
+        chatSummaries.add(chatSummary);
+    }
+
     public void updateChatInfoSummary(
             final Long roomId,
             final ChatType chatType,
@@ -83,7 +104,7 @@ public class ChatParticipantDoc {
             final Image thumbnail
     ) {
         ChatSummary chatSummary = chatSummaries.stream()
-                .filter(room -> room.getRoomId().equals(roomId) && room.getChatType().equals(chatType))
+                .filter(room -> room.getChatId().equals(roomId) && room.getChatType().equals(chatType))
                 .findFirst()
                 .orElseThrow(ChatRoomNotFoundException::new);
 

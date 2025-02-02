@@ -1,15 +1,11 @@
 package com.backend.allreva.chatting.chat.group.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
 import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
-import com.backend.allreva.chatting.chat.group.command.application.request.DeleteGroupChatRequest;
-import com.backend.allreva.chatting.chat.group.command.application.request.UpdateGroupChatRequest;
-import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
+import com.backend.allreva.chatting.chat.group.command.application.request.*;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
 import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
-import com.backend.allreva.chatting.chat.integration.application.ChatParticipantService;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -23,7 +19,6 @@ public class GroupChatController {
 
     private final GroupChatCommandService groupChatCommandService;
     private final GroupChatQueryService groupChatQueryService;
-    private final ChatParticipantService chatParticipantService;
 
     @GetMapping("/{groupChatId}")
     public Response<GroupChatDetailResponse> findGroupChatInformation(
@@ -69,12 +64,26 @@ public class GroupChatController {
                 imageFile,
                 member.getId()
         );
-        chatParticipantService.updateGroupChatInfoSummary(
-                member.getId(),
-                request.groupChatId(),
-                request.title(),
-                new Image("")
-        );
+        return Response.onSuccess();
+    }
+
+    @PostMapping("/join")
+    public Response<Long> joinGroupChat(
+            @RequestBody final JoinGroupChatRequest request,
+            @AuthMember final Member member
+    ) {
+        Long memberGroupChatId = groupChatCommandService
+                .join(request.uuid(), member.getId());
+        return Response.onSuccess(memberGroupChatId);
+    }
+
+    @DeleteMapping("/leave")
+    public Response<Void> leaveGroupChat(
+            @RequestBody final LeaveGroupChatRequest request,
+            @AuthMember final Member member
+    ) {
+        groupChatCommandService
+                .leave(request.groupChatId(), member.getId());
         return Response.onSuccess();
     }
 

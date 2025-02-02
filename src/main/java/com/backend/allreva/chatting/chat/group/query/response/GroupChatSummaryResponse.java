@@ -1,4 +1,4 @@
-package com.backend.allreva.chatting.chat.group.query;
+package com.backend.allreva.chatting.chat.group.query.response;
 
 import com.backend.allreva.chatting.chat.group.command.domain.value.Title;
 import com.backend.allreva.common.model.Image;

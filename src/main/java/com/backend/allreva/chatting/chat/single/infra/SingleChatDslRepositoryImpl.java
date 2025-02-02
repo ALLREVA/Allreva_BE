@@ -1,7 +1,7 @@
 package com.backend.allreva.chatting.chat.single.infra;
 
 import com.backend.allreva.chatting.chat.integration.model.value.Participant;
-import com.backend.allreva.chatting.chat.single.command.domain.OtherMember;
+import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
 import com.backend.allreva.chatting.chat.single.query.SingleChatDetailResponse;
 import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;

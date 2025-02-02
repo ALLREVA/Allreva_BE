@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@EqualsAndHashCode(of = {"roomId", "chatType"})
+@EqualsAndHashCode(of = {"chatId", "chatType"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatSummary {
+public class ChatSummary implements Comparable<ChatSummary> {
 
-    private Long roomId;
+    private Long chatId;
     private ChatType chatType;
 
     private ChatInfoSummary chatInfoSummary; // title, thumbnail, headcount
@@ -21,13 +21,13 @@ public class ChatSummary {
     private long lastReadMessageNumber;
 
     public ChatSummary(
-            final Long roomId,
+            final Long chatId,
             final ChatType chatType,
             final ChatInfoSummary chatInfoSummary,
             final PreviewMessage previewMessage,
             final long lastReadMessageNumber
     ) {
-        this.roomId = roomId;
+        this.chatId = chatId;
         this.chatType = chatType;
         this.chatInfoSummary = chatInfoSummary;
         this.previewMessage = previewMessage;
@@ -61,7 +61,7 @@ public class ChatSummary {
             final ChatType chatType
     ) {
         ChatSummary chatSummary = new ChatSummary();
-        chatSummary.roomId = roomId;
+        chatSummary.chatId = roomId;
         chatSummary.chatType = chatType;
 
         return chatSummary;
@@ -74,7 +74,7 @@ public class ChatSummary {
     ) {
         ChatSummary chatSummary = new ChatSummary();
 
-        chatSummary.roomId = roomId;
+        chatSummary.chatId = roomId;
         chatSummary.chatType = chatType;
         chatSummary.chatInfoSummary = chatInfoSummary;
 
@@ -87,5 +87,29 @@ public class ChatSummary {
 
     public void updateChatInfoSummary(final ChatInfoSummary chatInfoSummary) {
         this.chatInfoSummary = chatInfoSummary;
+    }
+
+    @Override
+    public int compareTo(ChatSummary o) {
+        LocalDateTime sentAt = getSentAt(this.previewMessage);
+        LocalDateTime otherSentAt = getSentAt(o.getPreviewMessage());
+
+        int comparedValue = otherSentAt.compareTo(sentAt);
+        if (comparedValue != 0) {
+            return comparedValue;
+        }
+
+        comparedValue = this.getChatId().compareTo(o.getChatId());
+        if (comparedValue != 0) {
+            return comparedValue;
+        }
+        return this.getChatType().compareTo(o.getChatType());
+    }
+
+    private LocalDateTime getSentAt(final PreviewMessage previewMessage) {
+        if (previewMessage == null) {
+            return LocalDateTime.MIN;
+        }
+        return previewMessage.getSentAt();
     }
 }

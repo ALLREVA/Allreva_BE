@@ -1,9 +1,14 @@
 package com.backend.allreva.chatting.chat.group.command.domain;
 
-import com.backend.allreva.chatting.exception.CannotDeleteGroupChatException;
-import com.backend.allreva.chatting.exception.InvalidWriterException;
+import com.backend.allreva.chatting.chat.group.command.domain.event.DeletedGroupChatEvent;
+import com.backend.allreva.chatting.chat.group.command.domain.event.JoinedGroupChatEvent;
+import com.backend.allreva.chatting.chat.group.command.domain.event.LeavedGroupChatEvent;
+import com.backend.allreva.chatting.chat.group.command.domain.event.UpdatedGroupChatEvent;
 import com.backend.allreva.chatting.chat.group.command.domain.value.Description;
 import com.backend.allreva.chatting.chat.group.command.domain.value.Title;
+import com.backend.allreva.chatting.exception.CannotDeleteGroupChatException;
+import com.backend.allreva.chatting.exception.InvalidWriterException;
+import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.model.Image;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -60,10 +65,19 @@ public class GroupChat {
             final String description,
             final Image thumbnail
     ) {
+        validateManager(managerId);
         this.managerId = managerId;
         this.title = new Title(title);
         this.description = new Description(description);
         this.thumbnail = thumbnail;
+
+        UpdatedGroupChatEvent updatedEvent = new UpdatedGroupChatEvent(
+                managerId,
+                this.id,
+                title,
+                thumbnail
+        );
+        Events.raise(updatedEvent);
     }
 
     public void validateForDelete(final Long memberId) {
@@ -71,6 +85,10 @@ public class GroupChat {
         if (this.headcount != 1) {
             throw new CannotDeleteGroupChatException();
         }
+
+        DeletedGroupChatEvent deletedEvent
+                = new DeletedGroupChatEvent(this.id, memberId);
+        Events.raise(deletedEvent);
     }
 
     public void validateManager(final Long memberId) {
@@ -78,6 +96,22 @@ public class GroupChat {
             return;
         }
             throw new InvalidWriterException();
+    }
+
+    public void addHeadcount(final Long memberId) {
+        this.headcount++;
+
+        JoinedGroupChatEvent joinedEvent
+                = new JoinedGroupChatEvent(memberId, this.id);
+        Events.raise(joinedEvent);
+    }
+
+    public void subtractHeadcount(final Long memberId) {
+        this.headcount--;
+
+        LeavedGroupChatEvent leavedEvent
+                = new LeavedGroupChatEvent(memberId, this.id);
+        Events.raise(leavedEvent);
     }
 
 

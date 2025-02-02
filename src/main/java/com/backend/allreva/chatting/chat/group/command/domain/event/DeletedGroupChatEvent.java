@@ -1,15 +1,15 @@
-package com.backend.allreva.chatting.chat.group.command.domain;
+package com.backend.allreva.chatting.chat.group.command.domain.event;
 
 import com.backend.allreva.common.event.Event;
 import lombok.Getter;
 
 @Getter
-public class AddedGroupChatEvent extends Event {
+public class DeletedGroupChatEvent extends Event {
 
-    private Long groupChatId;
-    private Long memberId;
+    private final Long groupChatId;
+    private final Long memberId;
 
-    public AddedGroupChatEvent(
+    public DeletedGroupChatEvent(
             final Long groupChatId,
             final Long memberId
     ) {

@@ -1,7 +1,7 @@
 package com.backend.allreva.chatting.chat.group.infra;
 
-import com.backend.allreva.chatting.chat.group.query.GroupChatDetailResponse;
-import com.backend.allreva.chatting.chat.group.query.GroupChatSummaryResponse;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatSummaryResponse;
 
 import java.util.UUID;
 

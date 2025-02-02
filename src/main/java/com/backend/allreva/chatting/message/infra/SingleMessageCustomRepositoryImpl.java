@@ -1,8 +1,10 @@
 package com.backend.allreva.chatting.message.infra;
 
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.message.domain.SingleMessage;
 import com.backend.allreva.chatting.message.query.MessageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,6 +17,29 @@ import java.util.List;
 public class SingleMessageCustomRepositoryImpl implements SingleMessageCustomRepository {
 
     private final MongoTemplate mongoTemplate;
+
+    @Override
+    public PreviewMessage findPreviewMessageBySingleChatId(
+            final Long singleChatId
+    ) {
+        Query query = new Query();
+        query.fields()
+                .include("messageNumber")
+                .include("content")
+                .include("sentAt");
+
+        query.addCriteria(Criteria.where("singleChatId").is(singleChatId));
+        query.with(Sort.by(Sort.Direction.DESC, "sentAt"));
+        query.limit(1);
+
+        SingleMessage message = mongoTemplate
+                .findOne(query, SingleMessage.class);
+        return new PreviewMessage(
+                message.getMessageNumber(),
+                message.getContent().getPayload(),
+                message.getSentAt()
+        );
+    }
 
     @Override
     public List<MessageResponse> findMessageResponsesWithinRange(

@@ -1,5 +1,8 @@
 package com.backend.allreva.chatting.message.query;
 
+import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.message.domain.GroupMessageRepository;
 import com.backend.allreva.chatting.message.domain.SingleMessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +19,19 @@ public class MessageQueryService {
     private final SingleMessageRepository singleMessageRepository;
     private final GroupMessageRepository groupMessageRepository;
 
+    private final ChatParticipantRepository participantRepository;
+
+
     public List<MessageResponse> findDefaultSingleMessages(
             final Long singleChatId,
-            final long lastReadMessageNumber
+            final Long memberId
     ) {
+        Long lastReadMessageNumber = participantRepository
+                .findLastReadMessageNumber(
+                        memberId,
+                        singleChatId,
+                        ChatType.SINGLE
+                );
         return singleMessageRepository.findMessageResponsesWithinRange(
                 singleChatId,
                 lastReadMessageNumber - PAGING_UNIT,
@@ -37,6 +49,7 @@ public class MessageQueryService {
                 criteriaNumber
         );
     }
+
     public List<MessageResponse> findUnreadSingleMessages(
             final Long singleChatId,
             final long criteriaNumber
@@ -49,11 +62,16 @@ public class MessageQueryService {
     }
 
 
-
     public List<MessageResponse> findDefaultGroupMessages(
             final Long groupChatId,
-            final long lastReadMessageNumber
+            final long memberId
     ) {
+        Long lastReadMessageNumber = participantRepository
+                .findLastReadMessageNumber(
+                        memberId,
+                        groupChatId,
+                        ChatType.SINGLE
+                );
         return groupMessageRepository.findMessageResponsesWithinRange(
                 groupChatId,
                 lastReadMessageNumber - PAGING_UNIT,
@@ -71,6 +89,7 @@ public class MessageQueryService {
                 criteriaNumber
         );
     }
+
     public List<MessageResponse> findUnreadGroupMessages(
             final Long groupChatId,
             final long criteriaNumber

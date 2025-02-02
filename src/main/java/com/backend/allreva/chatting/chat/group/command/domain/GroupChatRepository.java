@@ -16,6 +16,8 @@ public interface GroupChatRepository extends JpaRepository<GroupChat, Long>, Mem
                     "AND g.id = :groupChatId")
     UUID findGroupChatUuid(Long memberId, Long groupChatId);
 
+    Optional<GroupChat> findByUuid(UUID uuid);
+
     @Query(
             "SELECT g.id " +
                     "FROM GroupChat g " +
