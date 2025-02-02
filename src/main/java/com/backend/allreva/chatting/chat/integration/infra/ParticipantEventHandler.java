@@ -7,12 +7,16 @@ import com.backend.allreva.chatting.chat.group.command.domain.event.*;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantDoc;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatInfoSummary;
+import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
+import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.chat.single.command.domain.event.LeavedSingleChatEvent;
 import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
 import com.backend.allreva.chatting.chat.single.command.domain.SingleChatRepository;
 import com.backend.allreva.chatting.chat.single.command.domain.event.StartedSingleChatEvent;
-import com.backend.allreva.chatting.notification.TimedOutEvent;
+import com.backend.allreva.chatting.message.domain.GroupMessageRepository;
+import com.backend.allreva.chatting.message.domain.SingleMessageRepository;
+import com.backend.allreva.chatting.notification.event.ConnectedEvent;
 import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.member.command.domain.AddedMemberEvent;
 import com.backend.allreva.member.exception.MemberNotFoundException;
@@ -25,6 +29,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 @RequiredArgsConstructor
 @Component
@@ -33,9 +38,14 @@ public class ParticipantEventHandler {
     private final GroupChatRepository groupChatRepository;
     private final SingleChatRepository singleChatRepository;
 
+    private final GroupMessageRepository groupMessageRepository;
+    private final SingleMessageRepository singleMessageRepository;
+
     private final MemberGroupChatRepository memberGroupChatRepository;
 
     private final ChatParticipantRepository participantRepository;
+
+
 
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -48,11 +58,39 @@ public class ParticipantEventHandler {
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
-    public void onMessage(final TimedOutEvent event) {
+    public void onMessage(final ConnectedEvent event) {
+        ChatParticipantDoc participant = participantRepository.findById(event.getMemberId())
+                .orElseThrow(MemberNotFoundException::new);
 
-        //TODO: PreviewMessage upsert() 로직 추가
-        asdjaoi;sjiowaj
+        SortedSet<ChatSummary> chatSummaries = participant.getChatSummaries();
+        chatSummaries.forEach(summary -> {
+            Long chatId = summary.getChatId();
+
+            PreviewMessage previewMessage = findPreviewMessage(
+                    summary.getChatType(),
+                    chatId
+            );
+            participant.updatePreviewMessage(
+                    chatId,
+                    summary.getChatType(),
+                    previewMessage
+            );
+        });
+        participantRepository.save(participant);
     }
+
+    private PreviewMessage findPreviewMessage(
+            final ChatType chatType,
+            final Long chatId
+    ) {
+        if (chatType.equals(ChatType.SINGLE)) {
+            return singleMessageRepository
+                    .findPreviewMessageBySingleChatId(chatId);
+        }
+        return groupMessageRepository
+                .findPreviewMessageByGroupChatId(chatId);
+    }
+
 
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -90,7 +128,7 @@ public class ParticipantEventHandler {
     public void onMessage(final UpdatedGroupChatEvent event) {
 
         Set<Long> memberIds = memberGroupChatRepository
-                .findMemberIdByGroupChatId(event.getGroupChatId());
+                .findAllMemberIdByGroupChatId(event.getGroupChatId());
 
         Set<ChatParticipantDoc> participantDocs = participantRepository
                 .findByMemberIdIn(memberIds);

@@ -24,11 +24,10 @@ public class MessageQueryController {
     @GetMapping("/single/enter")
     public Response<EnterChatResponse> enterSingleChat(
             @RequestParam("singleChatId") final Long singleChatId,
-            @RequestParam("lastReadMessageNumber") final Long lastReadMessageNumber,
             @AuthMember final Member member
     ) {
         List<MessageResponse> messages = messageQueryService
-                .findDefaultSingleMessages(singleChatId, lastReadMessageNumber);
+                .findDefaultSingleMessages(singleChatId, member.getId());
 
         EnterChatResponse response = new EnterChatResponse(
                 member.getId(),
@@ -61,11 +60,10 @@ public class MessageQueryController {
     @GetMapping("/group/enter")
     public Response<EnterChatResponse> enterGroupChat(
             @RequestParam("groupChatId") final Long groupChatId,
-            @RequestParam("lastReadMessageNumber") final Long lastReadMessageNumber,
             @AuthMember final Member member
     ) {
         List<MessageResponse> messages = messageQueryService
-                .findDefaultGroupMessages(groupChatId, lastReadMessageNumber);
+                .findDefaultGroupMessages(groupChatId, member.getId());
 
         EnterChatResponse response = new EnterChatResponse(
                 member.getId(),

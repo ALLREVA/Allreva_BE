@@ -1,9 +1,6 @@
 package com.backend.allreva.chatting.chat.integration.model;
 
-import com.backend.allreva.chatting.chat.integration.model.value.ChatInfoSummary;
-import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
-import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
-import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
+import com.backend.allreva.chatting.chat.integration.model.value.*;
 import com.backend.allreva.chatting.exception.ChatRoomNotFoundException;
 import com.backend.allreva.common.model.Image;
 import lombok.AccessLevel;
@@ -13,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -23,7 +21,7 @@ public class ChatParticipantDoc {
 
     @Id
     private Long memberId;
-    private SortedSet<ChatSummary> chatSummaries = new ConcurrentSkipListSet<>(new ChatComparator());
+    private SortedSet<ChatSummary> chatSummaries = new ConcurrentSkipListSet<>();
 
     public ChatParticipantDoc(final Long memberId) {
         this.memberId = memberId;

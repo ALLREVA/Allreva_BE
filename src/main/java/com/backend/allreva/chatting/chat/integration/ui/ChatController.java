@@ -23,7 +23,7 @@ public class ChatController {
 
 
     @GetMapping("/list")
-    public Response<SortedSet<ChatSummary>> findParticipatingRooms(
+    public Response<SortedSet<ChatSummary>> findParticipatingChats(
             @AuthMember final Member member
     ) {
         ChatParticipantDoc document = chatParticipantRepository.findById(member.getId())

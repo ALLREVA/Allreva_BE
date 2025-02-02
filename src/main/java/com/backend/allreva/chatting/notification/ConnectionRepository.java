@@ -4,6 +4,7 @@ import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRep
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.chat.single.command.domain.MemberSingleChatRepository;
+import com.backend.allreva.chatting.notification.event.TimedOutEvent;
 import com.backend.allreva.common.event.Events;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.backend.allreva.chatting.notification.Emitter.TIME_LIMIT;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,9 +26,7 @@ public class ConnectionRepository {
     public static final String SSE_NAME = "SSE_PreviewMessage";
     public static final String INIT_MESSAGE = "채팅 SSE 연결";
 
-    // 로그인을 한 사람 중 해당 채팅방에 참여중인 사람이 누구누구인지
-    private final Map<Long, Set<Long>> groupChatMembers = new ConcurrentHashMap<>();
-    private final Map<Long, Set<Long>> singleChatMembers = new ConcurrentHashMap<>();
+    public static final Long TIME_LIMIT = 60000 * 60 * 24L;
 
     private final MemberSingleChatRepository memberSingleChatRepository;
     private final MemberGroupChatRepository memberGroupChatRepository;
@@ -69,12 +67,14 @@ public class ConnectionRepository {
             final PreviewMessage payload
     ) {
         if (chatType.equals(ChatType.SINGLE)) {
-            Set<Long> memberIds = singleChatMembers.get(chatId);
+            Set<Long> memberIds = memberSingleChatRepository
+                    .findAllMemberIdBySingleChatId(chatId);
             sendForEachMembers(memberIds, payload);
         }
 
         if (chatType.equals(ChatType.GROUP)) {
-            Set<Long> memberIds = groupChatMembers.get(chatId);
+            Set<Long> memberIds = memberGroupChatRepository
+                    .findAllMemberIdByGroupChatId(chatId);
             sendForEachMembers(memberIds, payload);
         }
     }
@@ -84,8 +84,10 @@ public class ConnectionRepository {
             final PreviewMessage payload
     ) {
         memberIds.forEach(memberId -> {
-            SseEmitter emitter = emitters.get(memberId);
-            sendPreviewMessage(emitter, payload);
+            if (emitters.containsKey(memberId)) {
+                SseEmitter emitter = emitters.get(memberId);
+                sendPreviewMessage(emitter, payload);
+            }
         });
     }
 
@@ -100,6 +102,10 @@ public class ConnectionRepository {
         } catch (IOException e) {
             emitter.completeWithError(e);
         }
+    }
+
+    public void disconnect(final Long memberId) {
+        emitters.remove(memberId);
     }
 
 

@@ -17,11 +17,11 @@ public interface MemberSingleChatRepository extends JpaRepository<MemberSingleCh
     void deleteBySingleChatIdAndMemberId(Long singleChatId, Long memberId);
 
     @Query("SELECT m FROM MemberSingleChat m " +
-            "WHERE m.singleChatId = :singleChatId AND m.memberId = :memberId")
-    Optional<MemberSingleChat> findBySingleChatIdAndMemberId(Long singleChatId, Long memberId);
+            "WHERE m.memberId = :memberId AND m.otherMember.id = :otherMemberId")
+    Optional<MemberSingleChat> findByMemberIdAndOtherMemberId(Long memberId, Long otherMemberId);
 
     @Query("SELECT m.memberId " +
             "FROM MemberSingleChat m " +
             "WHERE m.singleChatId = :singleChatId")
-    Set<Long> findMemberIdBySingleChatId(Long singleChatId);
+    Set<Long> findAllMemberIdBySingleChatId(Long singleChatId);
 }

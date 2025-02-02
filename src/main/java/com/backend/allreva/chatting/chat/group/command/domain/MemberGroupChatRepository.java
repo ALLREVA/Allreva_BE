@@ -12,5 +12,5 @@ public interface MemberGroupChatRepository extends JpaRepository<MemberGroupChat
     @Query("SELECT m.memberId " +
             "FROM MemberGroupChat m " +
             "WHERE m.groupChatId = :groupChatId")
-    Set<Long> findMemberIdByGroupChatId(Long groupChatId);
+    Set<Long> findAllMemberIdByGroupChatId(Long groupChatId);
 }

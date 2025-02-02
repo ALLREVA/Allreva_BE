@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @EqualsAndHashCode(of = {"chatId", "chatType"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ChatSummary {
+public class ChatSummary implements Comparable<ChatSummary> {
 
     private Long chatId;
     private ChatType chatType;
@@ -87,5 +87,29 @@ public class ChatSummary {
 
     public void updateChatInfoSummary(final ChatInfoSummary chatInfoSummary) {
         this.chatInfoSummary = chatInfoSummary;
+    }
+
+    @Override
+    public int compareTo(ChatSummary o) {
+        LocalDateTime sentAt = getSentAt(this.previewMessage);
+        LocalDateTime otherSentAt = getSentAt(o.getPreviewMessage());
+
+        int comparedValue = otherSentAt.compareTo(sentAt);
+        if (comparedValue != 0) {
+            return comparedValue;
+        }
+
+        comparedValue = this.getChatId().compareTo(o.getChatId());
+        if (comparedValue != 0) {
+            return comparedValue;
+        }
+        return this.getChatType().compareTo(o.getChatType());
+    }
+
+    private LocalDateTime getSentAt(final PreviewMessage previewMessage) {
+        if (previewMessage == null) {
+            return LocalDateTime.MIN;
+        }
+        return previewMessage.getSentAt();
     }
 }

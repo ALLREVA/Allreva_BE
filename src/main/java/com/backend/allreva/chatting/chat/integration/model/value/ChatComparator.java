@@ -1,6 +1,4 @@
-package com.backend.allreva.chatting.chat.integration.model;
-
-import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
+package com.backend.allreva.chatting.chat.integration.model.value;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;

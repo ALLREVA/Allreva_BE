@@ -12,6 +12,14 @@ public class AsyncAspect {
 
     private CountDownLatch countDownLatch;
 
+    public AsyncAspect() {
+        this(0);
+    }
+
+    public AsyncAspect(int count) {
+        this.countDownLatch = new CountDownLatch(count);
+    }
+
     public void init() {
         countDownLatch = new CountDownLatch(1);
     }

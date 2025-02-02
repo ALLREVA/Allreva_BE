@@ -1,14 +1,14 @@
-package com.backend.allreva.chatting.notification;
+package com.backend.allreva.chatting.notification.event;
 
 import com.backend.allreva.common.event.Event;
 import lombok.Getter;
 
 @Getter
-public class TimedOutEvent extends Event {
+public class ConnectedEvent extends Event {
 
     private final Long memberId;
 
-    public TimedOutEvent(final Long memberId) {
+    public ConnectedEvent(final Long memberId) {
         this.memberId = memberId;
     }
 }
