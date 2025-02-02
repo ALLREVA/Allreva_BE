@@ -11,15 +11,13 @@ import com.backend.allreva.seat_review.query.application.dto.SeatReviewResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/seat-review")
+@RequestMapping("/api/v1/seat-review")
 @RequiredArgsConstructor
 @Slf4j
 public class SeatReviewController implements SeatReviewControllerSwagger {
@@ -28,25 +26,22 @@ public class SeatReviewController implements SeatReviewControllerSwagger {
     private final SeatReviewQueryService seatReviewQueryService;
 
     @Override
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     public Response<Long> createSeatReview(
-            @RequestPart @Valid final ReviewCreateRequest request,
-            @RequestPart(value = "images", required = false)final List<MultipartFile> images,
+            @RequestBody @Valid final ReviewCreateRequest request,
             @AuthMember final Member member) {
-        log.info("images : {}", images);
         return Response.onSuccess(
-                seatReviewFacade.createSeatReview(request, images, member)
+                seatReviewFacade.createSeatReview(request, member)
         );
     }
 
     @Override
-    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping
     public Response<Long> updateSeatReview(
-            @RequestPart @Valid final ReviewUpdateRequest request,
-            @RequestPart(value = "images", required = false)final List<MultipartFile> images,
+            @RequestBody @Valid final ReviewUpdateRequest request,
             @AuthMember final Member member) {
         return Response.onSuccess(
-                seatReviewFacade.updateSeatReview(request, images, member)
+                seatReviewFacade.updateSeatReview(request, member)
         );
     }
 
