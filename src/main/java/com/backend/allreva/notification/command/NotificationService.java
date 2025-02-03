@@ -54,6 +54,7 @@ public class NotificationService {
             return;
         }
         // 알림 메세지 보내기
+        // TODO: 알림 전송 실패 시 대책 마련
         deviceTokens.forEach(fcmToken ->
                 notificationSender.sendMessage(fcmToken, event.title(), event.message())
         );
