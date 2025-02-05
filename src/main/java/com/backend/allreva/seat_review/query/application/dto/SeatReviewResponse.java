@@ -21,6 +21,7 @@ public class SeatReviewResponse{
     private final String profileImageUrl;
     private final String nickname;
     private final boolean isWriter;
+    private final String concertTitle;
 
     @QueryProjection
     public SeatReviewResponse(
@@ -35,7 +36,8 @@ public class SeatReviewResponse{
             List<String> imageUrls,
             String profileImageUrl,
             String nickname,
-            boolean isWriter
+            boolean isWriter,
+            String concertTitle
     ) {
         this.reviewId = reviewId;
         this.seat = seat;
@@ -49,5 +51,6 @@ public class SeatReviewResponse{
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.isWriter = isWriter;
+        this.concertTitle = concertTitle;
     }
 }

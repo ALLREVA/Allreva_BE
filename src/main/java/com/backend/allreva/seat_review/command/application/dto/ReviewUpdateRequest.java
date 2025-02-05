@@ -34,6 +34,9 @@ public record ReviewUpdateRequest(
         @NotNull(message = "hallId는 필수입니다.")
         String hallId,
 
-        List<Image> imageUrls
+        List<Image> imageUrls,
+
+        @NotNull(message = "concertTitle은 필수입니다.")
+        String concertTitle
 ) {
 }
