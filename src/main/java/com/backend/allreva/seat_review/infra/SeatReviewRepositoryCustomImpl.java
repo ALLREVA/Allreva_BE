@@ -47,7 +47,8 @@ public class SeatReviewRepositoryCustomImpl implements SeatReviewRepositoryCusto
                                 .orderBy(reviewImage.orderNum.asc())),
                         member.memberInfo.profileImageUrl,
                         member.memberInfo.nickname,
-                        review.memberId.eq(condition.memberId())
+                        review.memberId.eq(condition.memberId()),
+                        review.concertTitle
                 ))
                 .from(review)
                 .join(member).on(review.memberId.eq(member.id))
