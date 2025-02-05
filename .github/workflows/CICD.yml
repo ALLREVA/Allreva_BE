@@ -82,7 +82,7 @@ jobs:
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
-          mkdir -o src/main/resources/firebase
+          mkdir -p src/main/resources/firebase
           echo "${{ secrets.CD_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 --decode > src/main/resources/firebase/firebase-service-account.json
 
