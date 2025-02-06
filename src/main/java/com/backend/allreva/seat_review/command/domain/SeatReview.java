@@ -41,11 +41,15 @@ public class SeatReview extends BaseEntity {
     @Column(nullable = false)
     private LocalDate viewDate;
 
+    @Column(nullable = false)
+    private String concertTitle;
+
     public void updateSeatReview(ReviewUpdateRequest request) {
         this.seat = request.seat();
         this.content = request.content();
         this.star = request.star();
         this.viewDate = LocalDate.now();
         this.hallId = request.hallId();
+        this.concertTitle = request.concertTitle();
     }
 }

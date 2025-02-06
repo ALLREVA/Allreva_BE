@@ -36,6 +36,7 @@ public class SeatReviewService {
                     .memberId(member.getId())
                     .hallId(request.hallId())
                     .viewDate(request.viewDate())
+                    .concertTitle(request.concertTitle())
                     .build());
 
             ConcertHall concertHall = concertHallService.updateConcertHallStar(savedSeatReview.getHallId(), savedSeatReview.getStar(), 1);
