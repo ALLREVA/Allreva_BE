@@ -11,6 +11,7 @@ import com.backend.allreva.hall.command.domain.ConcertHall;
 import com.backend.allreva.hall.command.domain.ConcertHallRepository;
 import com.backend.allreva.hall.command.domain.value.ConvenienceInfo;
 import com.backend.allreva.hall.command.domain.value.Location;
+import com.backend.allreva.member.command.application.MemberArtistCommandService;
 import com.backend.allreva.member.command.application.MemberInfoCommandService;
 import com.backend.allreva.member.command.application.request.MemberArtistRequest;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
@@ -283,8 +284,7 @@ public class DummyController {
                     i + "번째 좌석",
                     "즐거워따...",
                     concert.getCode().getHallCode(),
-                    List.of(new Image("dummy.image.url")),
-                    "공연이다."
+                    List.of(new Image("dummy.image.url"))
             );
             seatReviewService.createSeatReview(request, member);
         }

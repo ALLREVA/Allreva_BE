@@ -27,31 +27,6 @@ public class GroupChatCommandService {
     @Transactional
     public Long add(
             final AddGroupChatRequest request,
-            final MultipartFile imageFile,
-            final Long memberId
-    ) {
-        Image uploadedImage = s3ImageService.upload(imageFile);
-
-        GroupChat groupChat = GroupChat.builder()
-                .title(request.title())
-                .description(request.description())
-                .managerId(memberId)
-                .thumbnail(uploadedImage)
-                .capacity(request.capacity())
-                .build();
-
-        groupChatRepository.save(groupChat);
-        AddedGroupChatEvent addedEvent = new AddedGroupChatEvent(
-                groupChat.getId(),
-                memberId
-        );
-        Events.raise(addedEvent);
-        return groupChat.getId();
-    }
-
-    @Transactional
-    public Long add(
-            final AddGroupChatRequest request,
             final Image uploadedImage,
             final Long memberId
     ) {

@@ -2,8 +2,10 @@ package com.backend.allreva.chatting.chat.single.infra;
 
 import com.backend.allreva.chatting.chat.single.command.domain.MemberSingleChat;
 import com.backend.allreva.chatting.chat.single.command.domain.MemberSingleChatRepository;
+import com.backend.allreva.chatting.chat.single.command.domain.event.AddedSingleChatEvent;
 import com.backend.allreva.chatting.chat.single.command.domain.event.StartedSingleChatEvent;
 import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
+import com.backend.allreva.common.event.Events;
 import com.backend.allreva.member.query.application.MemberDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -35,6 +37,9 @@ public class SingleChatEventHandler {
                 otherMember
         );
         memberSingleChatRepository.saveAll(chats);
+
+        AddedSingleChatEvent addedEvent = new AddedSingleChatEvent(event);
+        Events.raise(addedEvent);
     }
 
 }

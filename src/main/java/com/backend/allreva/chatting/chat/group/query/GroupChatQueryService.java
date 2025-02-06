@@ -2,6 +2,7 @@ package com.backend.allreva.chatting.chat.group.query;
 
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepository;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
+import com.backend.allreva.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ public class GroupChatQueryService {
             final Long memberId,
             final Long groupChatId
     ) {
-        return groupChatRepository.findGroupChatDetail(memberId, groupChatId);
+        return groupChatRepository.findGroupChatDetail(memberId, groupChatId)
+                .orElseThrow(NotFoundException::new);
     }
 
     public String findInviteCode(

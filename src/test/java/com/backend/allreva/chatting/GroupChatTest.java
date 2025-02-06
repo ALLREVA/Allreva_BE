@@ -2,32 +2,20 @@ package com.backend.allreva.chatting;
 
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChat;
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepository;
+import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRepository;
 import com.backend.allreva.chatting.chat.group.command.domain.value.Title;
-import com.backend.allreva.chatting.chat.integration.model.ChatParticipantDoc;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
-import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
-import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
-import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.exception.CustomException;
-import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;
-import com.backend.allreva.member.command.domain.AddedMemberEvent;
-import com.backend.allreva.support.AsyncAspect;
 import com.backend.allreva.support.IntegrationTestSupport;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GroupChatTest extends IntegrationTestSupport {
-
-    @Autowired
-    private ChatParticipantRepository participantRepository;
-    @Autowired
-    private GroupChatRepository groupChatRepository;
-
-
 
     @DisplayName("그룹채팅을 수정하면 기존 그룹채팅의 내용이 바뀐다.")
     @Test
@@ -125,46 +113,4 @@ class GroupChatTest extends IntegrationTestSupport {
         assertThat(groupChat.getHeadcount()).isEqualTo(2);
     }
 
-/*    @DisplayName("단체 채팅방에 참가하면 참가한 멤버의 채팅방 목록에 추가된다.")
-    @Test
-    void joinGroupChatListTest() throws InterruptedException {
-
-        // Given
-        Long managerId = 1L;
-        Long memberId = 2L;
-
-        AddedMemberEvent addedEvent = new AddedMemberEvent(memberId);
-        Events.raise(addedEvent);
-
-        GroupChat groupChat = GroupChat.builder()
-                .title("title")
-                .description("description")
-                .managerId(managerId)
-                .capacity(10)
-                .thumbnail(new Image("image"))
-                .build();
-
-        groupChatRepository.save(groupChat);
-
-
-        // When
-        asyncAspect = new AsyncAspect(0);
-        groupChat.addHeadcount(memberId);
-
-
-        *//**
-         * 처음에 Document 가 생성이 되어야해
-         *//*
-        ChatParticipantDoc participantDoc = participantRepository.findChatParticipantDocByMemberId(memberId)
-                .orElseThrow(NotFoundException::new);
-
-
-        // Then
-        asyncAspect.await();
-        ChatSummary chatSummary = ChatSummary.of(groupChat.getId(), ChatType.GROUP);
-        assertThat(participantDoc.getChatSummaries()).contains(chatSummary);
-
-        participantRepository.deleteById(memberId);
-    }
-    */
 }
