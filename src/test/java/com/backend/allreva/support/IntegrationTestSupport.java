@@ -39,10 +39,11 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @AutoConfigureMockMvc(addFilters = false)
 public abstract class IntegrationTestSupport {
 
-    protected AsyncAspect asyncAspect;
-
     @Autowired
     protected MockMvc mockMvc;
+
+    @Autowired
+    protected AsyncAspect asyncAspect;
 
     @Autowired
     protected ObjectMapper objectMapper;

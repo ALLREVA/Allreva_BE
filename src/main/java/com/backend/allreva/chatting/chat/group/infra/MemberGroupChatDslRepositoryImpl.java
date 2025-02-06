@@ -1,9 +1,7 @@
 package com.backend.allreva.chatting.chat.group.infra;
 
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
-import com.backend.allreva.chatting.chat.group.query.response.GroupChatSummaryResponse;
 import com.backend.allreva.chatting.chat.integration.model.value.Participant;
-import com.backend.allreva.common.exception.NotFoundException;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.QMember;
 import com.querydsl.core.group.GroupBy;
@@ -13,7 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
+import java.util.Optional;
 
 import static com.backend.allreva.chatting.chat.group.command.domain.QGroupChat.groupChat;
 import static com.backend.allreva.chatting.chat.group.command.domain.QMemberGroupChat.memberGroupChat;
@@ -29,11 +27,11 @@ public class MemberGroupChatDslRepositoryImpl implements MemberGroupChatDslRepos
     private final QMember participant = new QMember("participant");
 
     @Override
-    public GroupChatDetailResponse findGroupChatDetail(
+    public Optional<GroupChatDetailResponse> findGroupChatDetail(
             final Long memberId,
             final Long groupChatId
     ) {
-        return queryFactory
+        return Optional.ofNullable(queryFactory
                 .from(memberGroupChat)
                 .join(groupChat).on(groupChat.id.eq(memberGroupChat.groupChatId))
                 .join(me).on(me.id.eq(memberId))
@@ -42,14 +40,14 @@ public class MemberGroupChatDslRepositoryImpl implements MemberGroupChatDslRepos
                 .where(memberGroupChat.groupChatId.eq(groupChatId))
                 .transform(GroupBy.groupBy(memberGroupChat.groupChatId)
                         .as(groupChatInfoProjections()))
-                .get(groupChatId);
+                .get(groupChatId));
     }
 
     private ConstructorExpression<GroupChatDetailResponse> groupChatInfoProjections() {
         return Projections.constructor(GroupChatDetailResponse.class,
                 groupChat.thumbnail,
-                groupChat.title,
-                groupChat.description,
+                groupChat.title.value,
+                groupChat.description.value,
                 Projections.constructor(Participant.class,
                         me.id,
                         me.memberInfo.nickname,
@@ -63,30 +61,8 @@ public class MemberGroupChatDslRepositoryImpl implements MemberGroupChatDslRepos
                 GroupBy.list(Projections.constructor(Participant.class,
                         participant.id,
                         participant.memberInfo.nickname,
-                        participant.memberInfo.profileImageUrl
-
+                        Projections.constructor(Image.class,participant.memberInfo.profileImageUrl)
                 ))
         );
-    }
-
-    @Override
-    public GroupChatSummaryResponse findGroupChatSummary(UUID uuid) {
-        GroupChatSummaryResponse response = queryFactory
-                .select(
-                        Projections.constructor(
-                                GroupChatSummaryResponse.class,
-                                groupChat.id,
-                                groupChat.title,
-                                groupChat.thumbnail,
-                                groupChat.headcount
-                        )
-                ).from(groupChat)
-                .where(groupChat.uuid.eq(uuid))
-                .fetchFirst();
-
-        if (response != null) {
-            return response;
-        }
-        throw new NotFoundException();
     }
 }

@@ -2,9 +2,12 @@ package com.backend.allreva.chatting.chat.group.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
-import com.backend.allreva.chatting.chat.group.command.application.request.*;
-import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
+import com.backend.allreva.chatting.chat.group.command.application.request.DeleteGroupChatRequest;
+import com.backend.allreva.chatting.chat.group.command.application.request.JoinGroupChatRequest;
+import com.backend.allreva.chatting.chat.group.command.application.request.LeaveGroupChatRequest;
+import com.backend.allreva.chatting.chat.group.command.application.request.UpdateGroupChatRequest;
 import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
 import com.backend.allreva.common.dto.Response;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -37,20 +40,6 @@ public class GroupChatController {
         String inviteCode = groupChatQueryService
                 .findInviteCode(member.getId(), groupChatId);
         return Response.onSuccess(inviteCode);
-    }
-
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Response<Long> addGroupChat(
-            @RequestPart("request") final AddGroupChatRequest request,
-            @RequestPart(value = "imageFile", required = false) final MultipartFile imageFile,
-            @AuthMember final Member member
-    ) {
-        Long groupChatId = groupChatCommandService.add(
-                request,
-                imageFile,
-                member.getId()
-        );
-        return Response.onSuccess(groupChatId);
     }
 
     @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

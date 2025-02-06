@@ -2,6 +2,8 @@ package com.backend.allreva.support;
 
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CountDownLatch;
@@ -10,18 +12,10 @@ import java.util.concurrent.CountDownLatch;
 @Component
 public class AsyncAspect {
 
-    private CountDownLatch countDownLatch;
-
-    public AsyncAspect() {
-        this(0);
-    }
-
-    public AsyncAspect(int count) {
-        this.countDownLatch = new CountDownLatch(count);
-    }
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
 
     public void init() {
-        countDownLatch = new CountDownLatch(1);
+        init(1);
     }
 
     public void init(int count) {

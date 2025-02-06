@@ -10,6 +10,7 @@ import com.backend.allreva.chatting.chat.integration.model.value.ChatInfoSummary
 import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
+import com.backend.allreva.chatting.chat.single.command.domain.event.AddedSingleChatEvent;
 import com.backend.allreva.chatting.chat.single.command.domain.event.LeavedSingleChatEvent;
 import com.backend.allreva.chatting.chat.single.command.domain.value.OtherMember;
 import com.backend.allreva.chatting.chat.single.command.domain.SingleChatRepository;
@@ -109,7 +110,7 @@ public class ParticipantEventHandler {
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
-    public void onMessage(final StartedSingleChatEvent event) {
+    public void onMessage(final AddedSingleChatEvent event) {
         ChatParticipantDoc memberDocument
                 = addSingleChatSummary(event.getSingleChatId(), event.getMemberId());
 
