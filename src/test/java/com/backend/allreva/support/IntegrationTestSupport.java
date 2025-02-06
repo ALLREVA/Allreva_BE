@@ -45,9 +45,6 @@ public abstract class IntegrationTestSupport {
     protected MockMvc mockMvc;
 
     @Autowired
-    protected AsyncAspect asyncAspect;
-
-    @Autowired
     protected ObjectMapper objectMapper;
 
     // 테스트용 Member 객체 생성

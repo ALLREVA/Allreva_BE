@@ -15,7 +15,7 @@ public record ReviewCreateRequest(
         LocalDate viewDate,
 
         @NotBlank(message = "공연 제목은 필수입니다.")
-        String ConcertTitle,
+        String concertTitle,
 
         @NotNull(message = "별점은 필수입니다.")
         @Min(value = 0, message = "별점은 최소 1점 이상이어야 합니다.")
@@ -31,9 +31,6 @@ public record ReviewCreateRequest(
         @NotNull(message = "hallId는 필수입니다.")
         String hallId,
 
-        List<Image> imageUrls,
-
-        @NotNull(message = "concertTitle은 필수입니다.")
-        String concertTitle
+        List<Image> imageUrls
 ) {
 }
