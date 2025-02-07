@@ -26,13 +26,8 @@ public class MessageQueryController {
             @RequestParam("singleChatId") final Long singleChatId,
             @AuthMember final Member member
     ) {
-        List<MessageResponse> messages = messageQueryService
+        EnterChatResponse response = messageQueryService
                 .findDefaultSingleMessages(singleChatId, member.getId());
-
-        EnterChatResponse response = new EnterChatResponse(
-                member.getId(),
-                messages
-        );
         return Response.onSuccess(response);
     }
 
@@ -62,13 +57,8 @@ public class MessageQueryController {
             @RequestParam("groupChatId") final Long groupChatId,
             @AuthMember final Member member
     ) {
-        List<MessageResponse> messages = messageQueryService
+        EnterChatResponse response = messageQueryService
                 .findDefaultGroupMessages(groupChatId, member.getId());
-
-        EnterChatResponse response = new EnterChatResponse(
-                member.getId(),
-                messages
-        );
         return Response.onSuccess(response);
     }
 

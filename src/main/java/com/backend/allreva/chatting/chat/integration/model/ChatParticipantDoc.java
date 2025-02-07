@@ -31,14 +31,20 @@ public class ChatParticipantDoc {
             final Long roomId,
             final ChatType chatType,
             final ChatInfoSummary chatInfoSummary
-            ) {
+    ) {
         ChatSummary chatSummary = ChatSummary.of(roomId, chatType, chatInfoSummary);
         this.chatSummaries.add(chatSummary);
     }
 
-    public void upsertChatRoom(final ChatSummary chatSummary) {
-        this.chatSummaries.remove(chatSummary);
-        this.chatSummaries.add(chatSummary);
+    public void updateLastReadMessageNumber(
+            final Long chatId,
+            final ChatType chatType,
+            final Long lastReadMessageNumber
+    ) {
+        chatSummaries.stream()
+                .filter(summary -> summary.getChatId().equals(chatId))
+                .filter(summary -> summary.getChatType().equals(chatType))
+                .forEach(summary -> summary.updateLastReadMessageNumber(lastReadMessageNumber));
     }
 
     public void removeChatRoom(

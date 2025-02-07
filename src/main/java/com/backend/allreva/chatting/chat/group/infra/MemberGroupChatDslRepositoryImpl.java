@@ -1,6 +1,7 @@
 package com.backend.allreva.chatting.chat.group.infra;
 
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatOverviewResponse;
 import com.backend.allreva.chatting.chat.integration.model.value.Participant;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.QMember;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.backend.allreva.chatting.chat.group.command.domain.QGroupChat.groupChat;
 import static com.backend.allreva.chatting.chat.group.command.domain.QMemberGroupChat.memberGroupChat;
@@ -25,6 +27,22 @@ public class MemberGroupChatDslRepositoryImpl implements MemberGroupChatDslRepos
     private final QMember me = new QMember("me");
     private final QMember manager = new QMember("manager");
     private final QMember participant = new QMember("participant");
+
+    @Override
+    public Optional<GroupChatOverviewResponse> findGroupChatOverview(
+            final UUID uuid
+    ) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(GroupChatOverviewResponse.class,
+                        groupChat.title.value,
+                        groupChat.description.value,
+                        groupChat.headcount,
+                        groupChat.thumbnail
+
+                ))
+                .from(groupChat)
+                .fetchFirst());
+    }
 
     @Override
     public Optional<GroupChatDetailResponse> findGroupChatDetail(
@@ -61,7 +79,7 @@ public class MemberGroupChatDslRepositoryImpl implements MemberGroupChatDslRepos
                 GroupBy.list(Projections.constructor(Participant.class,
                         participant.id,
                         participant.memberInfo.nickname,
-                        Projections.constructor(Image.class,participant.memberInfo.profileImageUrl)
+                        Projections.constructor(Image.class, participant.memberInfo.profileImageUrl)
                 ))
         );
     }

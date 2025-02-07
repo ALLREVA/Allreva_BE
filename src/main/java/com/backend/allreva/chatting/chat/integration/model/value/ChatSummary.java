@@ -44,18 +44,6 @@ public class ChatSummary implements Comparable<ChatSummary> {
         this.lastReadMessageNumber = lastReadMessageNumber;
     }
 
-    public void updatePreviewMessage(
-            final long previewMessageNumber,
-            final String previewMessage,
-            final LocalDateTime sentAt
-    ) {
-        this.previewMessage = PreviewMessage.builder()
-                .previewMessageNumber(previewMessageNumber)
-                .previewText(previewMessage)
-                .sentAt(sentAt)
-                .build();
-    }
-
     public static ChatSummary of(
             final Long roomId,
             final ChatType chatType
@@ -87,6 +75,10 @@ public class ChatSummary implements Comparable<ChatSummary> {
 
     public void updateChatInfoSummary(final ChatInfoSummary chatInfoSummary) {
         this.chatInfoSummary = chatInfoSummary;
+    }
+
+    public void updateLastReadMessageNumber(final Long lastReadMessageNumber) {
+        this.lastReadMessageNumber = lastReadMessageNumber;
     }
 
     @Override
