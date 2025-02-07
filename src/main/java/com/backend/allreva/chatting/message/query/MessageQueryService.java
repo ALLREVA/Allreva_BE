@@ -1,10 +1,11 @@
 package com.backend.allreva.chatting.message.query;
 
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
+import com.backend.allreva.chatting.chat.integration.model.EnteredChatEvent;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
-import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.message.domain.GroupMessageRepository;
 import com.backend.allreva.chatting.message.domain.SingleMessageRepository;
+import com.backend.allreva.common.event.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class MessageQueryService {
     private final ChatParticipantRepository participantRepository;
 
 
-    public List<MessageResponse> findDefaultSingleMessages(
+    public EnterChatResponse findDefaultSingleMessages(
             final Long singleChatId,
             final Long memberId
     ) {
@@ -32,10 +33,24 @@ public class MessageQueryService {
                         singleChatId,
                         ChatType.SINGLE
                 );
-        return singleMessageRepository.findMessageResponsesWithinRange(
+        List<MessageResponse> messageResponses = singleMessageRepository.findMessageResponsesWithinRange(
                 singleChatId,
                 lastReadMessageNumber - PAGING_UNIT,
                 lastReadMessageNumber + PAGING_UNIT
+        );
+
+        EnteredChatEvent enteredEvent = new EnteredChatEvent(
+                singleChatId,
+                ChatType.SINGLE,
+                memberId,
+                lastReadMessageNumber
+        );
+        Events.raise(enteredEvent);
+
+        return new EnterChatResponse(
+                memberId,
+                lastReadMessageNumber,
+                messageResponses
         );
     }
 
@@ -62,7 +77,7 @@ public class MessageQueryService {
     }
 
 
-    public List<MessageResponse> findDefaultGroupMessages(
+    public EnterChatResponse findDefaultGroupMessages(
             final Long groupChatId,
             final long memberId
     ) {
@@ -70,12 +85,17 @@ public class MessageQueryService {
                 .findLastReadMessageNumber(
                         memberId,
                         groupChatId,
-                        ChatType.SINGLE
+                        ChatType.GROUP
                 );
-        return groupMessageRepository.findMessageResponsesWithinRange(
+        List<MessageResponse> messageResponses = groupMessageRepository.findMessageResponsesWithinRange(
                 groupChatId,
                 lastReadMessageNumber - PAGING_UNIT,
                 lastReadMessageNumber + PAGING_UNIT
+        );
+        return new EnterChatResponse(
+                memberId,
+                lastReadMessageNumber,
+                messageResponses
         );
     }
 

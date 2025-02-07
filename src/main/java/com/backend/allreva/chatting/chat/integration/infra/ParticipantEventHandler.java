@@ -6,6 +6,7 @@ import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRep
 import com.backend.allreva.chatting.chat.group.command.domain.event.*;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantDoc;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
+import com.backend.allreva.chatting.chat.integration.model.EnteredChatEvent;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatInfoSummary;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
@@ -47,12 +48,25 @@ public class ParticipantEventHandler {
     private final ChatParticipantRepository participantRepository;
 
 
-
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
     public void onMessage(final AddedMemberEvent event) {
         ChatParticipantDoc participantDoc = new ChatParticipantDoc(event.getMemberId());
+        participantRepository.save(participantDoc);
+    }
+
+    @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+    public void onMessage(final EnteredChatEvent event) {
+        ChatParticipantDoc participantDoc = participantRepository.findById(event.getMemberId())
+                        .orElseThrow(NotFoundException::new);
+        participantDoc.updateLastReadMessageNumber(
+                event.getChatId(),
+                event.getChatType(),
+                event.getLastReadMessageNumber()
+        );
         participantRepository.save(participantDoc);
     }
 
