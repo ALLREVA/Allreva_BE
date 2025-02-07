@@ -7,6 +7,7 @@ import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepositor
 import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRepository;
 import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
+import com.backend.allreva.chatting.chat.group.query.response.GroupChatOverviewResponse;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
@@ -162,6 +163,31 @@ class GroupChatServiceTest extends IntegrationTestSupport {
         // Then
         var chatSummary = ChatSummary.of(groupChat.getId(), ChatType.GROUP);
         assertThat(participantDoc.getChatSummaries()).contains(chatSummary);
+    }
+
+    @DisplayName("단체 채팅방의 uuid 로 단체 채팅의 개요를 조회할 수 있다. ")
+    @Test
+    void overviewTest() {
+
+        // Given
+        GroupChat groupChat = GroupChat.builder()
+                .title("title test")
+                .description("description test")
+                .managerId(savedMember.getId())
+                .capacity(10)
+                .thumbnail(new Image("image test"))
+                .build();
+
+        groupChatRepository.save(groupChat);
+
+        // When
+        var result = groupChatQueryService
+                .findOverview(groupChat.getUuid().toString());
+
+        // Then
+        Assertions.assertThat(result.getTitle())
+                .isEqualTo(groupChat.getTitle().getValue());
+
     }
 
 
