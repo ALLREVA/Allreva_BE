@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,11 +37,7 @@ public class ConnectionRepository {
         SseEmitter emitter = emitters.computeIfAbsent(memberId,
                 id -> createSseEmitter(memberId));
 
-        sendPreviewMessage(emitter, new PreviewMessage(
-                -1,
-                INIT_MESSAGE,
-                LocalDateTime.now()
-        ));
+        sendInitMessage(emitter);
         return emitter;
     }
 
@@ -64,36 +59,61 @@ public class ConnectionRepository {
     public void sendNotification(
             final Long chatId,
             final ChatType chatType,
-            final PreviewMessage payload
+            final PreviewMessage previewMessage
     ) {
         if (chatType.equals(ChatType.SINGLE)) {
             Set<Long> memberIds = memberSingleChatRepository
                     .findAllMemberIdBySingleChatId(chatId);
+
+            PreviewMessageResponse payload = new PreviewMessageResponse(
+                    chatId,
+                    chatType,
+                    previewMessage
+            );
             sendForEachMembers(memberIds, payload);
         }
 
         if (chatType.equals(ChatType.GROUP)) {
             Set<Long> memberIds = memberGroupChatRepository
                     .findAllMemberIdByGroupChatId(chatId);
+
+            PreviewMessageResponse payload = new PreviewMessageResponse(
+                    chatId,
+                    chatType,
+                    previewMessage
+            );
+
             sendForEachMembers(memberIds, payload);
         }
     }
 
     private void sendForEachMembers(
             final Set<Long> memberIds,
-            final PreviewMessage payload
+            final PreviewMessageResponse payload
     ) {
         memberIds.forEach(memberId -> {
             if (emitters.containsKey(memberId)) {
                 SseEmitter emitter = emitters.get(memberId);
-                sendPreviewMessage(emitter, payload);
+                sendPreviewMessageResponse(emitter, payload);
             }
         });
     }
 
-    private void sendPreviewMessage(
+    private void sendInitMessage(
+            final SseEmitter emitter
+    ) {
+        try {
+            emitter.send(SseEmitter.event()
+                    .name(SSE_NAME)
+                    .data(INIT_MESSAGE));
+        } catch (IOException e) {
+            emitter.completeWithError(e);
+        }
+    }
+
+    private void sendPreviewMessageResponse(
             final SseEmitter emitter,
-            final PreviewMessage payload
+            final PreviewMessageResponse payload
     ) {
         try {
             emitter.send(SseEmitter.event()

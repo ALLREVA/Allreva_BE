@@ -7,7 +7,6 @@ import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepositor
 import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRepository;
 import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
-import com.backend.allreva.chatting.chat.group.query.response.GroupChatOverviewResponse;
 import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatSummary;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
@@ -83,7 +82,7 @@ class GroupChatServiceTest extends IntegrationTestSupport {
     void findDetailTest() throws InterruptedException {
 
         // Given
-        AddGroupChatRequest request = new AddGroupChatRequest("title", "description", 10);
+        AddGroupChatRequest request = new AddGroupChatRequest("title", 10);
         asyncAspect.init(2);
         Long groupChatId = groupChatCommandService
                 .add(request, new Image("dummy"), savedMember.getId());
@@ -102,7 +101,7 @@ class GroupChatServiceTest extends IntegrationTestSupport {
     @Test
     void validateDetailTest() throws InterruptedException {
         // Given
-        AddGroupChatRequest request = new AddGroupChatRequest("title", "description", 10);
+        AddGroupChatRequest request = new AddGroupChatRequest("title", 10);
         asyncAspect.init(2);
         Long groupChatId = groupChatCommandService
                 .add(request, new Image("dummy"), savedMember.getId());
@@ -141,7 +140,6 @@ class GroupChatServiceTest extends IntegrationTestSupport {
         // Given
         GroupChat groupChat = GroupChat.builder()
                 .title("title test")
-                .description("description test")
                 .managerId(savedMember.getId())
                 .capacity(10)
                 .thumbnail(new Image("image test"))
@@ -172,7 +170,6 @@ class GroupChatServiceTest extends IntegrationTestSupport {
         // Given
         GroupChat groupChat = GroupChat.builder()
                 .title("title test")
-                .description("description test")
                 .managerId(savedMember.getId())
                 .capacity(10)
                 .thumbnail(new Image("image test"))
