@@ -46,14 +46,13 @@ public class GroupChat {
     public GroupChat(
             final Long managerId,
             final String title,
-            final String description,
             final Image thumbnail,
             final int capacity
     ) {
         this.uuid = UUID.randomUUID();
         this.managerId = managerId;
         this.title = new Title(title);
-        this.description = new Description(description);
+        this.description = new Description("");
         this.thumbnail = thumbnail;
         this.headcount = 1;
         this.capacity = capacity;

@@ -1,16 +1,12 @@
 package com.backend.allreva.chatting;
 
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChat;
-import com.backend.allreva.chatting.chat.group.command.domain.GroupChatRepository;
-import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRepository;
 import com.backend.allreva.chatting.chat.group.command.domain.value.Title;
-import com.backend.allreva.chatting.chat.integration.model.ChatParticipantRepository;
 import com.backend.allreva.common.exception.CustomException;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.support.IntegrationTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,7 +20,6 @@ class GroupChatTest extends IntegrationTestSupport {
         // Given
         GroupChat groupChat = GroupChat.builder()
                 .title("title")
-                .description("description")
                 .managerId(1L)
                 .capacity(10)
                 .thumbnail(new Image("image"))
@@ -52,7 +47,6 @@ class GroupChatTest extends IntegrationTestSupport {
         // Given
         GroupChat groupChat = GroupChat.builder()
                 .title("title")
-                .description("description")
                 .managerId(1L)
                 .capacity(10)
                 .thumbnail(new Image("image"))
@@ -77,7 +71,6 @@ class GroupChatTest extends IntegrationTestSupport {
 
         GroupChat groupChat = GroupChat.builder()
                 .title("title")
-                .description("description")
                 .managerId(managerId)
                 .capacity(10)
                 .thumbnail(new Image("image"))
@@ -100,7 +93,6 @@ class GroupChatTest extends IntegrationTestSupport {
 
         GroupChat groupChat = GroupChat.builder()
                 .title("title")
-                .description("description")
                 .managerId(managerId)
                 .capacity(10)
                 .thumbnail(new Image("image"))

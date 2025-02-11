@@ -32,7 +32,6 @@ public class GroupChatCommandService {
     ) {
         GroupChat groupChat = GroupChat.builder()
                 .title(request.title())
-                .description(request.description())
                 .managerId(memberId)
                 .thumbnail(uploadedImage)
                 .capacity(request.capacity())

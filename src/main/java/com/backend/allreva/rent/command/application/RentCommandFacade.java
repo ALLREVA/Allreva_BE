@@ -33,7 +33,6 @@ public class RentCommandFacade {
         groupChatCommandService.add(
                 new AddGroupChatRequest(
                         rentRegisterRequest.title(),
-                        rentRegisterRequest.information(),
                         rentRegisterRequest.maxPassenger()
                 ),
                 uploadedImage,

@@ -22,9 +22,9 @@ public class MessageSseService {
     public void sendSummaryNotification(
             final Long chatId,
             final ChatType chatType,
-            final PreviewMessage payload
+            final PreviewMessage previewMessage
     ) {
-        connectionRepository.sendNotification(chatId, chatType, payload);
+        connectionRepository.sendNotification(chatId, chatType, previewMessage);
     }
 
 }
