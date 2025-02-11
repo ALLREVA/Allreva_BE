@@ -57,7 +57,7 @@ public class GroupChatController {
         return Response.onSuccess();
     }
 
-    @GetMapping("/{uuid}")
+    @GetMapping("/join/{uuid}")
     public Response<GroupChatOverviewResponse> findGroupChatOverview(
             @PathVariable("uuid") final String uuid
     ) {
