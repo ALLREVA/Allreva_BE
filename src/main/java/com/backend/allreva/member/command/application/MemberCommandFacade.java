@@ -1,6 +1,5 @@
 package com.backend.allreva.member.command.application;
 
-import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
@@ -10,7 +9,6 @@ import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -19,15 +17,14 @@ public class MemberCommandFacade {
 
     private final MemberInfoCommandService memberInfoCommandService;
     private final MemberArtistCommandService memberArtistCommandService;
-    private final S3ImageService s3ImageService;
 
     @Transactional
     public void registerMember(
             final MemberRegisterRequest memberRegisterRequest,
-            final MultipartFile image
+            final Image image
     ) {
-        Image uploadedImage = s3ImageService.upload(image);
-        Member registeredMember = memberInfoCommandService.registerMember(memberRegisterRequest, uploadedImage);
+
+        Member registeredMember = memberInfoCommandService.registerMember(memberRegisterRequest, image);
 
         AddedMemberEvent addedEvent = new AddedMemberEvent(registeredMember.getId());
         Events.raise(addedEvent);
@@ -39,10 +36,10 @@ public class MemberCommandFacade {
     public void updateMemberInfo(
             final MemberRegisterRequest memberRegisterRequest,
             final Member member,
-            final MultipartFile image
+            final Image image
     ) {
-        Image uploadedImage = s3ImageService.upload(image);
-        memberInfoCommandService.updateMemberInfo(memberRegisterRequest, member, uploadedImage);
+
+        memberInfoCommandService.updateMemberInfo(memberRegisterRequest, member, image);
         memberArtistCommandService.updateMemberArtist(memberRegisterRequest.memberArtistRequests(), member);
     }
 

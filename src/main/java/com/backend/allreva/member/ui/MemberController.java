@@ -2,6 +2,7 @@ package com.backend.allreva.member.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.MemberCommandFacade;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
 import com.backend.allreva.member.command.application.request.RefundAccountRequest;
@@ -9,9 +10,7 @@ import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.query.application.MemberQueryService;
 import com.backend.allreva.member.query.application.response.MemberDetailResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,20 +34,20 @@ public class MemberController implements MemberControllerSwagger {
         return Response.onSuccess(memberQueryService.isDuplicatedNickname(nickname).isDuplicated());
     }
 
-    @PostMapping(path = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping("/register")
     public Response<Void> registerMember(
-            @RequestPart final MemberRegisterRequest memberRegisterRequest,
-            @RequestPart(value = "image", required = false) final MultipartFile image
+            @RequestBody final MemberRegisterRequest memberRegisterRequest,
+            @RequestBody final Image image
     ) {
         memberCommandFacade.registerMember(memberRegisterRequest, image);
         return Response.onSuccess();
     }
 
-    @PatchMapping(path = "/info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping("/info")
     public Response<Void> updateMemberInfo(
             @AuthMember final Member member,
-            @RequestPart final MemberRegisterRequest memberRegisterRequest,
-            @RequestPart(value = "image", required = false) final MultipartFile image
+            @RequestBody final MemberRegisterRequest memberRegisterRequest,
+            @RequestBody final Image image
     ) {
         memberCommandFacade.updateMemberInfo(memberRegisterRequest, member, image);
         return Response.onSuccess();
