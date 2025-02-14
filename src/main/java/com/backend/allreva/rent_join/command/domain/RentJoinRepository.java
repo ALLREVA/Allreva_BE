@@ -9,6 +9,8 @@ public interface RentJoinRepository {
 
     Optional<RentJoin> findById(Long id);
 
+    Integer countRentJoin(Long rentId, LocalDate boardingDate);
+
     boolean existsById(Long id);
 
     boolean existsByBoardingDateAndRentIdAndMemberId(LocalDate boardingDate, Long rentId, Long memberId);
