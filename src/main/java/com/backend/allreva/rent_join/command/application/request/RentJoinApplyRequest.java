@@ -40,6 +40,7 @@ public record RentJoinApplyRequest(
                         .phone(phone)
                         .build())
                 .boardingType(boardingType)
+                .passengerNum(passengerNum)
                 .refundType(refundType)
                 .refundAccount(refundAccount)
                 .boardingDate(boardingDate)
