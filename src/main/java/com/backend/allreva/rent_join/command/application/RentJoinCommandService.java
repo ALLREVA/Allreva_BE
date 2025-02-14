@@ -9,6 +9,7 @@ import com.backend.allreva.rent_join.command.application.request.RentJoinUpdateR
 import com.backend.allreva.rent_join.command.domain.RentJoin;
 import com.backend.allreva.rent_join.command.domain.RentJoinRepository;
 import com.backend.allreva.rent_join.exception.PassengersMaximumReachedException;
+import com.backend.allreva.rent_join.exception.RentJoinAlreadyExistsException;
 import com.backend.allreva.rent_join.exception.RentJoinNotFoundException;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,16 @@ public class RentJoinCommandService {
             final RentJoinApplyRequest rentJoinApplyRequest,
             final Long memberId
     ) {
+        // check if the user has already applied
+        if (rentJoinRepository.existsByBoardingDateAndRentIdAndMemberId(
+                rentJoinApplyRequest.boardingDate(),
+                rentJoinApplyRequest.rentId(),
+                memberId
+        )) {
+            throw new RentJoinAlreadyExistsException();
+        }
+
+        // if the number of passengers exceeds
         checkPassengersMaximumReached(
                 rentJoinApplyRequest.rentId(),
                 rentJoinApplyRequest.boardingDate(),
@@ -68,7 +79,6 @@ public class RentJoinCommandService {
             final LocalDate boardingDate,
             final Integer passengerNum
     ) {
-        // if the number of passengers exceeds
         Rent rent = rentRepository.findById(rentId)
                 .orElseThrow(RentNotFoundException::new);
         int maximumCount = rent.getAdditionalInfo().getRecruitmentCount();
