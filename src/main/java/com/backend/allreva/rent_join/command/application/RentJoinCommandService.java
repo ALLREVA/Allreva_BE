@@ -1,6 +1,8 @@
 package com.backend.allreva.rent_join.command.application;
 
+import com.backend.allreva.common.event.Events;
 import com.backend.allreva.rent.command.domain.Rent;
+import com.backend.allreva.rent.command.domain.RentClosedEvent;
 import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.exception.RentNotFoundException;
 import com.backend.allreva.rent_join.command.application.request.RentJoinApplyRequest;
@@ -86,6 +88,10 @@ public class RentJoinCommandService {
         Integer currentPassengerCount = rentJoinRepository.countRentJoin(rentId, boardingDate);
         if (currentPassengerCount + passengerNum > maximumCount) {
             throw new PassengersMaximumReachedException();
+        }
+        // rent close event
+        if (currentPassengerCount + passengerNum == maximumCount) {
+            Events.raise(new RentClosedEvent(rentId));
         }
     }
 }
