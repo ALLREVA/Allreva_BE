@@ -1,16 +1,13 @@
 package com.backend.allreva.rent.ui;
 
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
 import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
 import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
 import com.backend.allreva.rent.command.domain.value.Region;
-import com.backend.allreva.rent.query.application.response.DepositAccountResponse;
-import com.backend.allreva.rent.query.application.response.RentAdminDetailResponse;
-import com.backend.allreva.rent.query.application.response.RentAdminSummaryResponse;
-import com.backend.allreva.rent.query.application.response.RentDetailResponse;
-import com.backend.allreva.rent.query.application.response.RentSummaryResponse;
+import com.backend.allreva.rent.query.application.response.*;
 import com.backend.allreva.survey.query.application.response.SortType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,10 +15,10 @@ import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.MediaType;
+
 import java.time.LocalDate;
 import java.util.List;
-import org.springframework.http.MediaType;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "차량 대절 폼 API")
 public interface RentControllerSwagger {
@@ -33,7 +30,7 @@ public interface RentControllerSwagger {
                             name = "rentRegisterRequest", contentType = MediaType.APPLICATION_JSON_VALUE)))
     Response<Long> createRent(
             RentRegisterRequest rentRegisterRequest,
-            MultipartFile image,
+            Image image,
             Member member
     );
 
@@ -44,7 +41,7 @@ public interface RentControllerSwagger {
                             name = "rentUpdateRequest", contentType = MediaType.APPLICATION_JSON_VALUE)))
     Response<Void> updateRent(
             RentUpdateRequest rentUpdateRequest,
-            MultipartFile image,
+            Image image,
             Member member
     );
 

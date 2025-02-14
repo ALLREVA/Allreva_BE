@@ -10,7 +10,6 @@ import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -24,18 +23,17 @@ public class RentCommandFacade {
 
     public Long registerRent(
             final RentRegisterRequest rentRegisterRequest,
-            final MultipartFile image,
+            final Image image,
             final Long memberId
     ) {
-        Image uploadedImage = s3ImageService.upload(image);
-        Long rentId = rentCommandService.registerRent(rentRegisterRequest, uploadedImage, memberId);
+        Long rentId = rentCommandService.registerRent(rentRegisterRequest, image, memberId);
 
         groupChatCommandService.add(
                 new AddGroupChatRequest(
                         rentRegisterRequest.title(),
                         rentRegisterRequest.maxPassenger()
                 ),
-                uploadedImage,
+                image,
                 memberId
         );
 
@@ -44,11 +42,10 @@ public class RentCommandFacade {
 
     public void updateRent(
             final RentUpdateRequest rentUpdateRequest,
-            final MultipartFile image,
+            final Image image,
             final Long memberId
     ) {
-        Image uploadedImage = s3ImageService.upload(image);
-        rentCommandService.updateRent(rentUpdateRequest, uploadedImage, memberId);
+        rentCommandService.updateRent(rentUpdateRequest, image, memberId);
     }
 
     public void closeRent(

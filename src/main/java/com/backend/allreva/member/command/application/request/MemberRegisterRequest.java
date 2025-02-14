@@ -5,8 +5,9 @@ import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.command.domain.value.LoginProvider;
 import com.backend.allreva.member.command.domain.value.MemberRole;
-import java.util.List;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record MemberRegisterRequest(
