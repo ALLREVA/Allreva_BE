@@ -123,7 +123,7 @@ class GroupChatServiceTest extends IntegrationTestSupport {
 
         // When
         asyncAspect.init(2);
-        rentCommandFacade.registerRent(request, null, savedMember.getId());
+        rentCommandFacade.registerRent(request, new Image("test"), savedMember.getId());
         asyncAspect.await();
 
         // Then
