@@ -10,7 +10,6 @@ import com.backend.allreva.diary.exception.DiaryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,23 +23,22 @@ public class DiaryCommandService {
 
     public Long add(
             final AddDiaryRequest request,
-            final List<MultipartFile> imageFiles,
+            final List<Image> images,
             final Long memberId
     ) {
         ConcertDiary diary = request.to();
-        List<Image> uploadedImages = s3ImageService.upload(imageFiles);
 
-        diary.addImages(uploadedImages);
+
+        diary.addImages(images);
         diary.addMemberId(memberId);
         return diaryRepository.save(diary).getId();
     }
 
     public void update(
             final UpdateDiaryRequest request,
-            final List<MultipartFile> imageFiles,
+            final List<Image> images,
             final Long memberId
     ) {
-        List<Image> uploadedImages = s3ImageService.upload(imageFiles);
         ConcertDiary diary = diaryRepository.findById(request.diaryId())
                 .orElseThrow(DiaryNotFoundException::new);
 
@@ -51,7 +49,7 @@ public class DiaryCommandService {
                 request.episode(),
                 request.content(),
                 request.seatName(),
-                uploadedImages
+                images
         );
     }
 
@@ -59,6 +57,10 @@ public class DiaryCommandService {
         ConcertDiary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(DiaryNotFoundException::new);
         diary.validateWriter(memberId);
+
+        diary.getDiaryImages().forEach(image -> {
+            s3ImageService.delete(image.getUrl());
+        });
 
         diaryRepository.deleteById(diaryId);
     }

@@ -2,6 +2,7 @@ package com.backend.allreva.diary.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.diary.command.application.DiaryCommandService;
 import com.backend.allreva.diary.command.application.request.AddDiaryRequest;
 import com.backend.allreva.diary.command.application.request.UpdateDiaryRequest;
@@ -11,9 +12,7 @@ import com.backend.allreva.diary.query.response.DiarySummaryResponse;
 import com.backend.allreva.member.command.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,22 +24,22 @@ public class DiaryController {
     private final DiaryCommandService diaryCommandService;
     private final DiaryQueryService diaryQueryService;
 
-    @Operation(summary = "공연 기록 등록", description = "multipart/form-data 로 설정하고 넣어주셔야 합니다")
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "공연 기록 등록", description = "이미지 URL 만 넣어주세요")
+    @PostMapping
     public Response<Long> addDiary(
-            @RequestPart(value = "request") final AddDiaryRequest request,
-            @RequestPart(value = "images", required = false) final List<MultipartFile> images,
+            @RequestBody final AddDiaryRequest request,
+            @RequestBody final List<Image> images,
             @AuthMember final Member member
     ) {
         Long diaryId = diaryCommandService.add(request, images, member.getId());
         return Response.onSuccess(diaryId);
     }
 
-    @Operation(summary = "공연 기록 수정", description = "multipart/form-data 로 설정하고 넣어주셔야 합니다")
-    @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "공연 기록 수정", description = "이미지 기존 이미지중에 삭제 된거는 직접 삭제후 유지되는 이미지 + 추가 이미지")
+    @PatchMapping
     public Response<Void> updateDiary(
-            @RequestPart(value = "request") final UpdateDiaryRequest request,
-            @RequestPart(value = "images", required = false) final List<MultipartFile> images,
+            @RequestBody final UpdateDiaryRequest request,
+            @RequestBody final List<Image> images,
             @AuthMember final Member member
     ) {
         diaryCommandService.update(request, images, member.getId());

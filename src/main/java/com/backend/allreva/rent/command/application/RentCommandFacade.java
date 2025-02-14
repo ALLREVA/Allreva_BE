@@ -2,7 +2,6 @@ package com.backend.allreva.rent.command.application;
 
 import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
 import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
-import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
 import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
@@ -17,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RentCommandFacade {
 
     private final RentCommandService rentCommandService;
-    private final S3ImageService s3ImageService;
-
     private final GroupChatCommandService groupChatCommandService;
 
     public Long registerRent(
