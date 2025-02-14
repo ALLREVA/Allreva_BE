@@ -22,6 +22,14 @@ public class RentJoinRepositoryImpl implements RentJoinRepository {
     }
 
     @Override
+    public Integer countRentJoin(
+            final Long rentId,
+            final LocalDate boardingDate
+    ) {
+        return rentJoinDslRepository.countRentJoin(rentId, boardingDate);
+    }
+
+    @Override
     public boolean existsById(final Long id) {
         return rentJoinJpaRepository.existsById(id);
     }
