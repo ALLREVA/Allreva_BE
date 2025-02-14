@@ -10,11 +10,10 @@ import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatOverviewResponse;
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/chat/group")
@@ -43,10 +42,10 @@ public class GroupChatController {
         return Response.onSuccess(inviteCode);
     }
 
-    @PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping
     public Response<Void> updateGroupChat(
-            @RequestPart("request") final UpdateGroupChatRequest request,
-            @RequestPart(value = "imageFile", required = false) final MultipartFile imageFile,
+            @RequestBody final UpdateGroupChatRequest request,
+            @RequestBody final Image imageFile,
             @AuthMember final Member member
     ) {
         groupChatCommandService.update(
