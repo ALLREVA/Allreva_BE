@@ -11,6 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PreviewMessage {
 
+    public static PreviewMessage EMPTY = new PreviewMessage(
+            -1,
+            "",
+            LocalDateTime.now()
+    );
+
     private long previewMessageNumber;
     private String previewText;
 
