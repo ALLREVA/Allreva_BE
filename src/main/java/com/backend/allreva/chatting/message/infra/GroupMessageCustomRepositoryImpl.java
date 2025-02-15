@@ -34,6 +34,11 @@ public class GroupMessageCustomRepositoryImpl implements GroupMessageCustomRepos
 
         GroupMessage message = mongoTemplate
                 .findOne(query, GroupMessage.class);
+
+        if (message == null) {
+            return PreviewMessage.EMPTY;
+        }
+
         return new PreviewMessage(
                 message.getMessageNumber(),
                 message.getContent().getPayload(),
