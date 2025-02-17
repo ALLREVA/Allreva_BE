@@ -24,7 +24,7 @@ public class NotificationJdbcRepository {
                     ps.setString(1, notification.getTitle());
                     ps.setString(2, notification.getMessage());
                     ps.setLong(3, notification.getRecipientId());
-                    ps.setBoolean(4, false);
+                    ps.setByte(4, (byte) 0);
                     LocalDateTime now = LocalDateTime.now();
                     ps.setObject(5, now);
                     ps.setObject(6, now);
