@@ -3,11 +3,7 @@ package com.backend.allreva.common.dummy;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.concert.command.domain.Concert;
 import com.backend.allreva.concert.command.domain.ConcertRepository;
-import com.backend.allreva.concert.command.domain.value.Code;
-import com.backend.allreva.concert.command.domain.value.ConcertInfo;
-import com.backend.allreva.concert.command.domain.value.ConcertStatus;
-import com.backend.allreva.concert.command.domain.value.DateInfo;
-import com.backend.allreva.concert.command.domain.value.Seller;
+import com.backend.allreva.concert.command.domain.value.*;
 import com.backend.allreva.diary.command.application.request.AddDiaryRequest;
 import com.backend.allreva.diary.command.domain.ConcertDiary;
 import com.backend.allreva.diary.command.domain.DiaryRepository;
@@ -36,14 +32,15 @@ import com.backend.allreva.survey_join.command.application.SurveyJoinCommandServ
 import com.backend.allreva.survey_join.command.application.request.JoinSurveyRequest;
 import com.backend.allreva.survey_join.command.domain.value.BoardingType;
 import io.swagger.v3.oas.annotations.Operation;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RequestMapping("/dummy")
@@ -269,7 +266,8 @@ public class DummyController {
                     LocalDate.now(),
                     "에피소드_" + i,
                     "즐거웠다.." + i,
-                    i + "번째 좌석"
+                    i + "번째 좌석",
+                    List.of()
             );
             ConcertDiary diary = request.to();
             diary.addMemberId(memberId);

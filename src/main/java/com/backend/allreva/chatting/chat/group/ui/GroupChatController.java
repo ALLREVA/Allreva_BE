@@ -10,7 +10,6 @@ import com.backend.allreva.chatting.chat.group.query.GroupChatQueryService;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatDetailResponse;
 import com.backend.allreva.chatting.chat.group.query.response.GroupChatOverviewResponse;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +44,10 @@ public class GroupChatController {
     @PatchMapping
     public Response<Void> updateGroupChat(
             @RequestBody final UpdateGroupChatRequest request,
-            @RequestBody final Image imageFile,
             @AuthMember final Member member
     ) {
         groupChatCommandService.update(
                 request,
-                imageFile,
                 member.getId()
         );
         return Response.onSuccess();
