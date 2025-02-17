@@ -2,8 +2,8 @@ package com.backend.allreva.firebase.util;
 
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
 import lombok.NoArgsConstructor;
@@ -18,12 +18,14 @@ public final class FcmTokenUtils {
     private static AccessToken accessToken;
 
     static {
-        try (FileInputStream serviceAccount = new FileInputStream(KEY_PATH)) {
-            googleCredentials = GoogleCredentials
-                    .fromStream(serviceAccount)
+        try (InputStream serviceAccount = FcmTokenUtils.class.getResourceAsStream(KEY_PATH)) {
+            if (serviceAccount == null) {
+                throw new IOException("Google service account JSON file not found in classpath: " + KEY_PATH);
+            }
+            googleCredentials = GoogleCredentials.fromStream(serviceAccount)
                     .createScoped(List.of("https://www.googleapis.com/auth/firebase.messaging"));
         } catch (IOException e) {
-            log.error("GoogleCredentials 초기화 실패: {0}", e);
+            log.error("GoogleCredentials 초기화 실패");
             throw new RuntimeException(e);
         }
     }
@@ -41,7 +43,7 @@ public final class FcmTokenUtils {
             log.info("새 엑세스 토큰 발급. 만료 시간: {}", accessToken.getExpirationTime());
             return accessToken.getTokenValue();
         } catch (IOException e) {
-            log.error("엑세스 토큰 발급 실패: {0}", e);
+            log.error("엑세스 토큰 발급 실패");
             throw new RuntimeException(e);
         }
     }
