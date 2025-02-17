@@ -13,7 +13,6 @@ import com.backend.allreva.common.model.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -49,10 +48,9 @@ public class GroupChatCommandService {
     @Transactional
     public void update(
             final UpdateGroupChatRequest request,
-            final MultipartFile imageFile,
+            final Image image,
             final Long memberId
     ) {
-        Image uploadedImage = s3ImageService.upload(imageFile);
         GroupChat groupChat = groupChatRepository.findById(request.groupChatId())
                 .orElseThrow(GroupChatNotFoundException::new);
 
@@ -61,7 +59,7 @@ public class GroupChatCommandService {
                 memberId,
                 request.title(),
                 request.description(),
-                uploadedImage
+                image
         );
     }
 
@@ -90,6 +88,8 @@ public class GroupChatCommandService {
     public void delete(final Long groupChatId, final Long memberId) {
         GroupChat groupChat = groupChatRepository.findById(groupChatId)
                 .orElseThrow(GroupChatNotFoundException::new);
+
+        s3ImageService.delete(groupChat.getThumbnail().getUrl());
 
         groupChat.validateForDelete(memberId);
         groupChatRepository.deleteById(groupChatId);

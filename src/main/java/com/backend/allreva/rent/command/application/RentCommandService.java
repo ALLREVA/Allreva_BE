@@ -1,5 +1,6 @@
 package com.backend.allreva.rent.command.application;
 
+import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RentCommandService {
 
     private final RentRepository rentRepository;
+    private final S3ImageService s3ImageService;
 
     public Long registerRent(
             final RentRegisterRequest rentRegisterRequest,
@@ -63,6 +65,7 @@ public class RentCommandService {
         Rent rent = rentRepository.findById(rentIdRequest.rentId())
                 .orElseThrow(RentNotFoundException::new);
 
+        s3ImageService.delete(rent.getDetailInfo().getImage().getUrl());
         rent.validateMine(memberId);
         rentRepository.delete(rent);
     }

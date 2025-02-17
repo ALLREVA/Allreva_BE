@@ -2,7 +2,6 @@ package com.backend.allreva.rent.command.application;
 
 import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
 import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
-import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
 import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
@@ -10,7 +9,6 @@ import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -18,24 +16,21 @@ import org.springframework.web.multipart.MultipartFile;
 public class RentCommandFacade {
 
     private final RentCommandService rentCommandService;
-    private final S3ImageService s3ImageService;
-
     private final GroupChatCommandService groupChatCommandService;
 
     public Long registerRent(
             final RentRegisterRequest rentRegisterRequest,
-            final MultipartFile image,
+            final Image image,
             final Long memberId
     ) {
-        Image uploadedImage = s3ImageService.upload(image);
-        Long rentId = rentCommandService.registerRent(rentRegisterRequest, uploadedImage, memberId);
+        Long rentId = rentCommandService.registerRent(rentRegisterRequest, image, memberId);
 
         groupChatCommandService.add(
                 new AddGroupChatRequest(
                         rentRegisterRequest.title(),
                         rentRegisterRequest.maxPassenger()
                 ),
-                uploadedImage,
+                image,
                 memberId
         );
 
@@ -44,11 +39,10 @@ public class RentCommandFacade {
 
     public void updateRent(
             final RentUpdateRequest rentUpdateRequest,
-            final MultipartFile image,
+            final Image image,
             final Long memberId
     ) {
-        Image uploadedImage = s3ImageService.upload(image);
-        rentCommandService.updateRent(rentUpdateRequest, uploadedImage, memberId);
+        rentCommandService.updateRent(rentUpdateRequest, image, memberId);
     }
 
     public void closeRent(

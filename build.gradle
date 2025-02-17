@@ -79,6 +79,8 @@ dependencies {
 
     // aws s3
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
+    implementation 'software.amazon.awssdk:s3:2.25.67'
+
 
     // csv
     implementation 'com.opencsv:opencsv:5.8'
