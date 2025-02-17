@@ -1,5 +1,6 @@
 package com.backend.allreva.member.fixture;
 
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.request.MemberArtistRequest;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
 import com.backend.allreva.member.command.application.request.RefundAccountRequest;
@@ -17,6 +18,7 @@ public final class MemberRequestFixture {
                 .loginProvider(LoginProvider.GOOGLE)
                 .introduce("introduce")
                 .memberArtistRequests(List.of(new MemberArtistRequest("spotify_1L","name1")))
+                .image(new Image("https://my_picture"))
                 .build();
     }
 

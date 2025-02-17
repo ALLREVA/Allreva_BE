@@ -15,10 +15,11 @@ public record MemberRegisterRequest(
         String nickname,
         String introduce,
         LoginProvider loginProvider,
-        List<MemberArtistRequest> memberArtistRequests
+        List<MemberArtistRequest> memberArtistRequests,
+        Image image
 ) {
 
-    public Member toEntity(final Image image) {
+    public Member toEntity() {
         return Member.builder()
                 .email(Email.builder()
                         .email(email)

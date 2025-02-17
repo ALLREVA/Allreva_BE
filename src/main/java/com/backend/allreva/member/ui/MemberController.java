@@ -2,7 +2,6 @@ package com.backend.allreva.member.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.MemberCommandFacade;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
 import com.backend.allreva.member.command.application.request.RefundAccountRequest;
@@ -10,7 +9,14 @@ import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.query.application.MemberQueryService;
 import com.backend.allreva.member.query.application.response.MemberDetailResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,20 +42,18 @@ public class MemberController implements MemberControllerSwagger {
 
     @PostMapping("/register")
     public Response<Void> registerMember(
-            @RequestBody final MemberRegisterRequest memberRegisterRequest,
-            @RequestBody final Image image
+            @RequestBody final MemberRegisterRequest memberRegisterRequest
     ) {
-        memberCommandFacade.registerMember(memberRegisterRequest, image);
+        memberCommandFacade.registerMember(memberRegisterRequest);
         return Response.onSuccess();
     }
 
     @PatchMapping("/info")
     public Response<Void> updateMemberInfo(
             @AuthMember final Member member,
-            @RequestBody final MemberRegisterRequest memberRegisterRequest,
-            @RequestBody final Image image
+            @RequestBody final MemberRegisterRequest memberRegisterRequest
     ) {
-        memberCommandFacade.updateMemberInfo(memberRegisterRequest, member, image);
+        memberCommandFacade.updateMemberInfo(memberRegisterRequest, member);
         return Response.onSuccess();
     }
 

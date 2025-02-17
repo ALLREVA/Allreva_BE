@@ -1,10 +1,7 @@
 package com.backend.allreva.member.command.application;
 
-import com.backend.allreva.common.event.Events;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
 import com.backend.allreva.member.command.application.request.RefundAccountRequest;
-import com.backend.allreva.member.command.domain.AddedMemberEvent;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.command.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +17,9 @@ public class MemberInfoCommandService {
      * 회원 정보 등록
      */
     public Member registerMember(
-            final MemberRegisterRequest memberRegisterRequest,
-            final Image image
+            final MemberRegisterRequest memberRegisterRequest
     ) {
-        Member member = memberRegisterRequest.toEntity(image);
+        Member member = memberRegisterRequest.toEntity();
         return memberRepository.save(member);
     }
 
@@ -32,13 +28,12 @@ public class MemberInfoCommandService {
      */
     public Member updateMemberInfo(
             final MemberRegisterRequest memberRegisterRequest,
-            final Member member,
-            final Image image
+            final Member member
     ) {
         member.setMemberInfo(
                 memberRegisterRequest.nickname(),
                 memberRegisterRequest.introduce(),
-                image.getUrl()
+                memberRegisterRequest.image().getUrl()
         );
         return memberRepository.save(member);
     }

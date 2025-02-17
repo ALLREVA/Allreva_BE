@@ -1,7 +1,6 @@
 package com.backend.allreva.member.command.application;
 
 import com.backend.allreva.common.event.Events;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
 import com.backend.allreva.member.command.application.request.RefundAccountRequest;
 import com.backend.allreva.member.command.domain.AddedMemberEvent;
@@ -20,11 +19,9 @@ public class MemberCommandFacade {
 
     @Transactional
     public void registerMember(
-            final MemberRegisterRequest memberRegisterRequest,
-            final Image image
+            final MemberRegisterRequest memberRegisterRequest
     ) {
-
-        Member registeredMember = memberInfoCommandService.registerMember(memberRegisterRequest, image);
+        Member registeredMember = memberInfoCommandService.registerMember(memberRegisterRequest);
 
         AddedMemberEvent addedEvent = new AddedMemberEvent(registeredMember.getId());
         Events.raise(addedEvent);
@@ -35,11 +32,9 @@ public class MemberCommandFacade {
     @Transactional
     public void updateMemberInfo(
             final MemberRegisterRequest memberRegisterRequest,
-            final Member member,
-            final Image image
+            final Member member
     ) {
-
-        memberInfoCommandService.updateMemberInfo(memberRegisterRequest, member, image);
+        memberInfoCommandService.updateMemberInfo(memberRegisterRequest, member);
         memberArtistCommandService.updateMemberArtist(memberRegisterRequest.memberArtistRequests(), member);
     }
 
