@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.backend.allreva.common.application.S3ImageService;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.application.MemberInfoCommandService;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.member.command.domain.MemberRepository;
@@ -41,12 +40,11 @@ class MemberInfoCommandTest {
     @Test
     void 회원_가입_시_회원_정보를_성공적으로_등록한다() {
         // given
-        var uploadedImage = new Image("https://my_picture");
         var memberRegisterRequest = MemberRequestFixture.createMemberRegisterRequest();
         given(memberRepository.save(any(Member.class))).willReturn(member);
 
         // when
-        var updatedMember = memberInfoCommandService.registerMember(memberRegisterRequest, uploadedImage);
+        var updatedMember = memberInfoCommandService.registerMember(memberRegisterRequest);
 
         // then
         assertSoftly(softly -> {
