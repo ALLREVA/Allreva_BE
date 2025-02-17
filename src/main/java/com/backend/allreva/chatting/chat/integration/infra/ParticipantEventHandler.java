@@ -30,6 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -78,9 +80,10 @@ public class ParticipantEventHandler {
                 .orElseThrow(MemberNotFoundException::new);
 
         SortedSet<ChatSummary> chatSummaries = participant.getChatSummaries();
-        chatSummaries.forEach(summary -> {
-            Long chatId = summary.getChatId();
+        List<ChatSummary> summariesCopy = new ArrayList<>(chatSummaries);
 
+        summariesCopy.forEach(summary -> {
+            Long chatId = summary.getChatId();
             PreviewMessage previewMessage = findPreviewMessage(
                     summary.getChatType(),
                     chatId

@@ -1,7 +1,6 @@
 package com.backend.allreva.chatting.notification;
 
 import com.backend.allreva.auth.security.AuthMember;
-import com.backend.allreva.common.config.SecurityEndpointPaths;
 import com.backend.allreva.member.command.domain.Member;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,7 @@ public class ChatNotificationController {
     ) {
         response.setHeader("Access-Control-Allow-Origin", "https://localhost:3000");
         response.setHeader("Access-Control-Allow-Origin", frontProtocol + "://" + frontDomain);
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         return messageSseService.connect(member.getId());
     }
 
