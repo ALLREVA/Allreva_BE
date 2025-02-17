@@ -8,25 +8,23 @@ import java.time.Instant;
 import java.util.List;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 
 @Slf4j
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public final class FcmTokenUtils {
 
-    private static final String KEY_PATH = "src/main/resources/firebase/firebase-service-account.json";
+    private static final String KEY_PATH = "firebase/firebase-service-account.json";
     private static final GoogleCredentials googleCredentials;
     private static AccessToken accessToken;
 
     static {
-        try (InputStream serviceAccount = FcmTokenUtils.class.getResourceAsStream(KEY_PATH)) {
-            if (serviceAccount == null) {
-                throw new IOException("Google service account JSON file not found in classpath: " + KEY_PATH);
-            }
+        try (InputStream serviceAccount = new ClassPathResource(KEY_PATH).getInputStream()) {
             googleCredentials = GoogleCredentials.fromStream(serviceAccount)
                     .createScoped(List.of("https://www.googleapis.com/auth/firebase.messaging"));
         } catch (IOException e) {
-            log.error("GoogleCredentials 초기화 실패");
-            throw new RuntimeException(e);
+            log.error("GoogleCredentials 초기화 실패", e);
+            throw new RuntimeException("Failed to initialize GoogleCredentials", e);
         }
     }
 
