@@ -30,7 +30,7 @@ public class ChatParticipantCustomRepositoryImpl implements ChatParticipantCusto
                 Criteria.where("chatSummaries")
                         .elemMatch(ByChatIdAndType)
         );
-        query.fields().include("chatSummaries.$.lastReadMessageNumber");
+        query.fields().include("chatSummaries.$");
         ChatParticipantDoc result = mongoTemplate
                 .findOne(query, ChatParticipantDoc.class);
 
