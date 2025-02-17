@@ -7,7 +7,10 @@ import com.backend.allreva.notification.command.dto.DeviceTokenRequest;
 import com.backend.allreva.notification.command.dto.NotificationIdRequest;
 import com.backend.allreva.notification.exception.NotificationNotFoundException;
 import com.backend.allreva.notification.infra.DeviceTokenRepository;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -48,9 +51,13 @@ public class NotificationService {
     @TransactionalEventListener
     public void sendMessage(final NotificationEvent event) {
         // device token 가져오기 (지금은 fcm 고정)
-        List<String> deviceTokens = deviceTokenRepository.findTokensByMemberIds(event.getRecipientIds());
-        if (deviceTokens == null || deviceTokens.isEmpty()) {
-            log.debug("알림 전송할 대상이 없습니다.");
+        List<String> deviceTokens = Optional.ofNullable(deviceTokenRepository.findTokensByMemberIds(event.getRecipientIds()))
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
+                .toList();
+        if (deviceTokens.isEmpty()) {
+            log.debug("디바이스 토큰이 없습니다.");
             return;
         }
         // 알림 메세지 보내기
