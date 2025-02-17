@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseOptions;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.PostConstruct;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,10 +14,7 @@ public class FcmInitializer {
 
     @PostConstruct
     public void initialize() {
-        try (InputStream serviceAccount = getClass().getResourceAsStream("/firebase/firebase-service-account.json")) {
-            if (serviceAccount == null) {
-                throw new IOException("Firebase service account file not found in classpath!");
-            }
+        try (InputStream serviceAccount = new ClassPathResource("firebase/firebase-service-account.json").getInputStream()) {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
