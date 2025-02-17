@@ -9,6 +9,7 @@ public enum NotificationMessage {
 
     NEW_NOTIFICATION("새로운 알림 등록", "새로운 알림이 도착했습니다"),
     NEW_RENT_REGISTERED("차량 대절 등록 알림", "새로운 차량 대절 {0}이 등록되었습니다"),
+    NEW_SURVEY_REGISTERED("수요 조사 등록 알림", "새로운 수요 조사 {0}이 등록되었습니다"),
     NEW_CHAT_MESSAGE("%s", "%s");
 
     private final String title;

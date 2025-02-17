@@ -1,6 +1,7 @@
 package com.backend.allreva.survey.command.application;
 
 import com.backend.allreva.common.event.Events;
+import com.backend.allreva.common.event.NotificationMessage;
 import com.backend.allreva.concert.exception.ConcertNotFoundException;
 import com.backend.allreva.concert.infra.dto.ConcertDateInfoResponse;
 import com.backend.allreva.concert.infra.rdb.ConcertJpaRepository;
@@ -40,6 +41,14 @@ public class SurveyCommandService {
         saveBoardingDates(survey, request.boardingDates());
 
         Events.raise(new SurveySavedEvent(survey));
+
+        // push notification
+        List<Long> recipientIds = List.of(memberId);
+        Events.raise(
+                NotificationMessage.NEW_SURVEY_REGISTERED
+                        .toEvent(recipientIds, request.title())
+        );
+
         return survey.getId();
     }
 
