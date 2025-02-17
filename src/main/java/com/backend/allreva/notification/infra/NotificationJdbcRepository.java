@@ -16,7 +16,7 @@ public class NotificationJdbcRepository {
 
     public void saveAllInBatch(List<Notification> notifications) {
         jdbcTemplate.batchUpdate(
-                "INSERT INTO notifications (title, message, recipient_id, is_read, created_at, updated_at, deleted_at) "
+                "INSERT INTO notification (title, message, recipient_id, is_read, created_at, updated_at, deleted_at) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?)",
                 notifications,
                 notifications.size(),
