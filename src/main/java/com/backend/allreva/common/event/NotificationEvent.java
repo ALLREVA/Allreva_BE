@@ -2,12 +2,12 @@ package com.backend.allreva.common.event;
 
 import java.util.List;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
-public record NotificationEvent(
-        List<Long> recipientIds,
-        String title,
-        String message
-) {
-
+public class NotificationEvent extends Event {
+    private final List<Long> recipientIds;
+    private final String title;
+    private final String message;
 }

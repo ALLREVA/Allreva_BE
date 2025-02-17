@@ -10,10 +10,10 @@ import com.backend.allreva.notification.infra.DeviceTokenRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Service
@@ -31,7 +31,7 @@ public class NotificationService {
 
     @Transactional
     public void markAsRead(final Member member, final NotificationIdRequest notificationIdRequest) {
-        Notification notification = notificationRepository.findByIdAndRecipientId(member.getId(), notificationIdRequest.id())
+        Notification notification = notificationRepository.findByIdAndRecipientId(notificationIdRequest.id(), member.getId())
                 .orElseThrow(NotificationNotFoundException::new);
         notification.read();
     }
@@ -45,10 +45,10 @@ public class NotificationService {
     }
 
     @Async
-    @EventListener
+    @TransactionalEventListener
     public void sendMessage(final NotificationEvent event) {
         // device token 가져오기 (지금은 fcm 고정)
-        List<String> deviceTokens = deviceTokenRepository.findTokensByMemberIds(event.recipientIds());
+        List<String> deviceTokens = deviceTokenRepository.findTokensByMemberIds(event.getRecipientIds());
         if (deviceTokens == null || deviceTokens.isEmpty()) {
             log.debug("알림 전송할 대상이 없습니다.");
             return;
@@ -56,12 +56,12 @@ public class NotificationService {
         // 알림 메세지 보내기
         // TODO: 알림 전송 실패 시 대책 마련
         deviceTokens.forEach(fcmToken ->
-                notificationSender.sendMessage(fcmToken, event.title(), event.message())
+                notificationSender.sendMessage(fcmToken, event.getTitle(), event.getMessage())
         );
         log.debug("알림 메세지 전송 완료");
         // 알림 메세지 저장
-        List<Notification> notificationEntities = event.recipientIds().stream()
-                .map(recipientId -> Notification.from(event.title(), event.message(), recipientId))
+        List<Notification> notificationEntities = event.getRecipientIds().stream()
+                .map(recipientId -> Notification.from(event.getTitle(), event.getMessage(), recipientId))
                 .toList();
         notificationRepository.saveAll(notificationEntities);
         log.debug("알림 메세지 저장 완료");
