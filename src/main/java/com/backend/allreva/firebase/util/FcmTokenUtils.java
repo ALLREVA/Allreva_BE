@@ -23,7 +23,7 @@ public final class FcmTokenUtils {
                     .fromStream(serviceAccount)
                     .createScoped(List.of("https://www.googleapis.com/auth/firebase.messaging"));
         } catch (IOException e) {
-            log.error("GoogleCredentials 초기화 실패");
+            log.error("GoogleCredentials 초기화 실패: {0}", e);
             throw new RuntimeException(e);
         }
     }
@@ -41,7 +41,7 @@ public final class FcmTokenUtils {
             log.info("새 엑세스 토큰 발급. 만료 시간: {}", accessToken.getExpirationTime());
             return accessToken.getTokenValue();
         } catch (IOException e) {
-            log.error("엑세스 토큰 발급 실패");
+            log.error("엑세스 토큰 발급 실패: {0}", e);
             throw new RuntimeException(e);
         }
     }
