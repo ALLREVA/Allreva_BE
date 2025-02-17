@@ -23,20 +23,18 @@ public class DiaryCommandService {
 
     public Long add(
             final AddDiaryRequest request,
-            final List<Image> images,
             final Long memberId
     ) {
         ConcertDiary diary = request.to();
 
 
-        diary.addImages(images);
+        diary.addImages(request.images());
         diary.addMemberId(memberId);
         return diaryRepository.save(diary).getId();
     }
 
     public void update(
             final UpdateDiaryRequest request,
-            final List<Image> images,
             final Long memberId
     ) {
         ConcertDiary diary = diaryRepository.findById(request.diaryId())
@@ -49,7 +47,7 @@ public class DiaryCommandService {
                 request.episode(),
                 request.content(),
                 request.seatName(),
-                images
+                request.images()
         );
     }
 

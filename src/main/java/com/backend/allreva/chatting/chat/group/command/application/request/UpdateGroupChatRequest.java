@@ -1,5 +1,6 @@
 package com.backend.allreva.chatting.chat.group.command.application.request;
 
+import com.backend.allreva.common.model.Image;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -11,7 +12,8 @@ public record UpdateGroupChatRequest(
         @Size(min = 1, max = 20)
         String title,
         @Size(max = 50)
-        String description
+        String description,
+        Image image
 
 ) {
 

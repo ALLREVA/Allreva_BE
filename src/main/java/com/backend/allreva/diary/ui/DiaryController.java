@@ -2,7 +2,6 @@ package com.backend.allreva.diary.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.diary.command.application.DiaryCommandService;
 import com.backend.allreva.diary.command.application.request.AddDiaryRequest;
 import com.backend.allreva.diary.command.application.request.UpdateDiaryRequest;
@@ -28,10 +27,9 @@ public class DiaryController {
     @PostMapping
     public Response<Long> addDiary(
             @RequestBody final AddDiaryRequest request,
-            @RequestBody final List<Image> images,
             @AuthMember final Member member
     ) {
-        Long diaryId = diaryCommandService.add(request, images, member.getId());
+        Long diaryId = diaryCommandService.add(request, member.getId());
         return Response.onSuccess(diaryId);
     }
 
@@ -39,10 +37,9 @@ public class DiaryController {
     @PatchMapping
     public Response<Void> updateDiary(
             @RequestBody final UpdateDiaryRequest request,
-            @RequestBody final List<Image> images,
             @AuthMember final Member member
     ) {
-        diaryCommandService.update(request, images, member.getId());
+        diaryCommandService.update(request, member.getId());
         return Response.onSuccess();
     }
 

@@ -48,7 +48,6 @@ public class GroupChatCommandService {
     @Transactional
     public void update(
             final UpdateGroupChatRequest request,
-            final Image image,
             final Long memberId
     ) {
         GroupChat groupChat = groupChatRepository.findById(request.groupChatId())
@@ -59,7 +58,7 @@ public class GroupChatCommandService {
                 memberId,
                 request.title(),
                 request.description(),
-                image
+                request.image()
         );
     }
 

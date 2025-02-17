@@ -54,11 +54,12 @@ class DiaryCommandTest extends IntegrationTestSupport {
                 LocalDate.now(),
                 "episode",
                 "content",
-                "seatName"
+                "seatName",
+                List.of()
         );
 
         // When
-        Long diaryId = diaryCommandService.add(request, List.of(), savedMember.getId());
+        Long diaryId = diaryCommandService.add(request, savedMember.getId());
         ConcertDiary diary = diaryRepository.findById(diaryId).get();
 
         // Then
@@ -75,9 +76,10 @@ class DiaryCommandTest extends IntegrationTestSupport {
                 LocalDate.now(),
                 "episode",
                 "content",
-                "seatName"
+                "seatName",
+                List.of()
         );
-        Long diaryId = diaryCommandService.add(request, List.of(), savedMember.getId());
+        Long diaryId = diaryCommandService.add(request, savedMember.getId());
 
         UpdateDiaryRequest updateRequest = new UpdateDiaryRequest(
                 diaryId,
@@ -85,11 +87,12 @@ class DiaryCommandTest extends IntegrationTestSupport {
                 LocalDate.now(),
                 "episode",
                 "updatedContent",
-                "seatName"
+                "seatName",
+                List.of()
         );
 
         // When
-        diaryCommandService.update(updateRequest, List.of(), savedMember.getId());
+        diaryCommandService.update(updateRequest, savedMember.getId());
         ConcertDiary diary = diaryRepository.findById(diaryId).get();
 
         // Then
@@ -108,9 +111,11 @@ class DiaryCommandTest extends IntegrationTestSupport {
                 LocalDate.now(),
                 "episode",
                 "content",
-                "seatName"
+                "seatName",
+                List.of()
+
         );
-        Long diaryId = diaryCommandService.add(request, List.of(), savedMember.getId());
+        Long diaryId = diaryCommandService.add(request , savedMember.getId());
 
         // When
         diaryCommandService.delete(diaryId, savedMember.getId());

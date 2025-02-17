@@ -50,9 +50,10 @@ class DiaryQueryTest extends IntegrationTestSupport {
                 LocalDate.now(),
                 "episode",
                 "content",
-                "seatName"
+                "seatName",
+                List.of()
         );
-        savedDiaryId = diaryCommandService.add(request, List.of(), savedMember.getId());
+        savedDiaryId = diaryCommandService.add(request, savedMember.getId());
     }
 
     @Transactional

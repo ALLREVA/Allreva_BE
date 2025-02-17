@@ -1,9 +1,11 @@
 package com.backend.allreva.diary.command.application.request;
 
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.diary.command.domain.ConcertDiary;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record AddDiaryRequest(
 
@@ -15,7 +17,8 @@ public record AddDiaryRequest(
         String episode,
 
         String content,
-        String seatName
+        String seatName,
+        List<Image> images
 ) {
 
     public ConcertDiary to() {
