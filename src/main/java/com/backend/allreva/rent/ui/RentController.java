@@ -2,7 +2,6 @@ package com.backend.allreva.rent.ui;
 
 import com.backend.allreva.auth.security.AuthMember;
 import com.backend.allreva.common.dto.Response;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.member.command.domain.Member;
 import com.backend.allreva.rent.command.application.RentCommandFacade;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
@@ -10,15 +9,26 @@ import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
 import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
 import com.backend.allreva.rent.command.domain.value.Region;
 import com.backend.allreva.rent.query.application.RentQueryService;
-import com.backend.allreva.rent.query.application.response.*;
+import com.backend.allreva.rent.query.application.response.DepositAccountResponse;
+import com.backend.allreva.rent.query.application.response.RentAdminDetailResponse;
+import com.backend.allreva.rent.query.application.response.RentAdminSummaryResponse;
+import com.backend.allreva.rent.query.application.response.RentDetailResponse;
+import com.backend.allreva.rent.query.application.response.RentSummaryResponse;
 import com.backend.allreva.survey.query.application.response.SortType;
 import jakarta.validation.constraints.Min;
-import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
@@ -33,20 +43,18 @@ public class RentController implements RentControllerSwagger {
     @PostMapping
     public Response<Long> createRent(
             @RequestBody final RentRegisterRequest rentRegisterRequest,
-            @RequestBody(required = false) final Image image,
             @AuthMember final Member member
     ) {
-        Long rentIdResponse = rentCommandFacade.registerRent(rentRegisterRequest, image, member.getId());
+        Long rentIdResponse = rentCommandFacade.registerRent(rentRegisterRequest, member.getId());
         return Response.onSuccess(rentIdResponse);
     }
 
     @PatchMapping
     public Response<Void> updateRent(
             @RequestBody final RentUpdateRequest rentUpdateRequest,
-            @RequestBody final Image image,
             @AuthMember final Member member
     ) {
-        rentCommandFacade.updateRent(rentUpdateRequest, image, member.getId());
+        rentCommandFacade.updateRent(rentUpdateRequest, member.getId());
         return Response.onSuccess();
     }
 

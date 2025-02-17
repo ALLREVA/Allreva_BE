@@ -1,5 +1,9 @@
 package com.backend.allreva.chatting;
 
+import static com.backend.allreva.rent.fixture.RentRegisterRequestFixture.createRentRegisterRequestFixture;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
 import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
 import com.backend.allreva.chatting.chat.group.command.domain.GroupChat;
@@ -27,10 +31,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static com.backend.allreva.rent.fixture.RentRegisterRequestFixture.createRentRegisterRequestFixture;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GroupChatServiceTest extends IntegrationTestSupport {
 
@@ -123,7 +123,7 @@ class GroupChatServiceTest extends IntegrationTestSupport {
 
         // When
         asyncAspect.init(2);
-        rentCommandFacade.registerRent(request, new Image("test"), savedMember.getId());
+        rentCommandFacade.registerRent(request, savedMember.getId());
         asyncAspect.await();
 
         // Then

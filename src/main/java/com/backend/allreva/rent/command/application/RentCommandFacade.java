@@ -23,11 +23,10 @@ public class RentCommandFacade {
 
     public Long registerRent(
             final RentRegisterRequest rentRegisterRequest,
-            final Image image,
             final Long memberId
     ) {
         // register rent
-        Long rentId = rentCommandService.registerRent(rentRegisterRequest, image, memberId);
+        Long rentId = rentCommandService.registerRent(rentRegisterRequest, memberId);
 
         // create group chat
         groupChatCommandService.add(
@@ -35,7 +34,7 @@ public class RentCommandFacade {
                         rentRegisterRequest.title(),
                         rentRegisterRequest.maxPassenger()
                 ),
-                image,
+                rentRegisterRequest.image(),
                 memberId
         );
 
@@ -51,10 +50,9 @@ public class RentCommandFacade {
 
     public void updateRent(
             final RentUpdateRequest rentUpdateRequest,
-            final Image image,
             final Long memberId
     ) {
-        rentCommandService.updateRent(rentUpdateRequest, image, memberId);
+        rentCommandService.updateRent(rentUpdateRequest, memberId);
     }
 
     public void closeRent(

@@ -1,5 +1,6 @@
 package com.backend.allreva.rent.fixture;
 
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
 import com.backend.allreva.rent.command.domain.value.BusSize;
 import com.backend.allreva.rent.command.domain.value.BusType;
@@ -35,7 +36,8 @@ public final class RentUpdateRequestFixture {
                 LocalDate.of(2024, 9, 13),
                 "charUrl",
                 RefundType.BOTH,
-                "information"
+                "information",
+                new Image("imageUrl")
         );
     }
 }

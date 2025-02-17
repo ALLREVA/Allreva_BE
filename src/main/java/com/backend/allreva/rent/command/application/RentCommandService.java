@@ -2,7 +2,6 @@ package com.backend.allreva.rent.command.application;
 
 import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.common.event.Events;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
 import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
 import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
@@ -24,10 +23,9 @@ public class RentCommandService {
 
     public Long registerRent(
             final RentRegisterRequest rentRegisterRequest,
-            final Image image,
             final Long memberId
     ) {
-        Rent rent = rentRegisterRequest.toEntity(memberId, image);
+        Rent rent = rentRegisterRequest.toEntity(memberId);
         Rent savedRent = rentRepository.save(rent);
         Events.raise(new RentSaveEvent(savedRent));
         return savedRent.getId();
@@ -35,7 +33,6 @@ public class RentCommandService {
 
     public void updateRent(
             final RentUpdateRequest rentUpdateRequest,
-            final Image image,
             final Long memberId
     ) {
         Rent rent = rentRepository.findById(rentUpdateRequest.rentId())
@@ -44,7 +41,7 @@ public class RentCommandService {
         rent.validateMine(memberId);
 
         rentRepository.deleteBoardingDateAllByRentId(rentUpdateRequest.rentId());
-        rent.updateRent(rentUpdateRequest, image);
+        rent.updateRent(rentUpdateRequest);
     }
 
     public void closeRent(

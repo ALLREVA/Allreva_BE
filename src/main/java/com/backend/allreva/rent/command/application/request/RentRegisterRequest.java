@@ -61,12 +61,12 @@ public record RentRegisterRequest(
         String chatUrl,
         @NotNull
         RefundType refundType, // enum
-        String information
+        String information,
+        Image image
 ) {
 
     public Rent toEntity(
-            final Long memberId,
-            final Image image
+            final Long memberId
     ) {
         Rent rent = Rent.builder()
                 .memberId(memberId)

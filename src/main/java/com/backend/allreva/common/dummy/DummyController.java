@@ -3,7 +3,11 @@ package com.backend.allreva.common.dummy;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.concert.command.domain.Concert;
 import com.backend.allreva.concert.command.domain.ConcertRepository;
-import com.backend.allreva.concert.command.domain.value.*;
+import com.backend.allreva.concert.command.domain.value.Code;
+import com.backend.allreva.concert.command.domain.value.ConcertInfo;
+import com.backend.allreva.concert.command.domain.value.ConcertStatus;
+import com.backend.allreva.concert.command.domain.value.DateInfo;
+import com.backend.allreva.concert.command.domain.value.Seller;
 import com.backend.allreva.diary.command.application.request.AddDiaryRequest;
 import com.backend.allreva.diary.command.domain.ConcertDiary;
 import com.backend.allreva.diary.command.domain.DiaryRepository;
@@ -11,7 +15,6 @@ import com.backend.allreva.hall.command.domain.ConcertHall;
 import com.backend.allreva.hall.command.domain.ConcertHallRepository;
 import com.backend.allreva.hall.command.domain.value.ConvenienceInfo;
 import com.backend.allreva.hall.command.domain.value.Location;
-import com.backend.allreva.member.command.application.MemberArtistCommandService;
 import com.backend.allreva.member.command.application.MemberInfoCommandService;
 import com.backend.allreva.member.command.application.request.MemberArtistRequest;
 import com.backend.allreva.member.command.application.request.MemberRegisterRequest;
@@ -33,15 +36,14 @@ import com.backend.allreva.survey_join.command.application.SurveyJoinCommandServ
 import com.backend.allreva.survey_join.command.application.request.JoinSurveyRequest;
 import com.backend.allreva.survey_join.command.domain.value.BoardingType;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RequestMapping("/dummy")
@@ -87,9 +89,10 @@ public class DummyController {
                     "zl존관현zl_" + i,
                     "더미다임마_" + i,
                     LoginProvider.ORIGINAL,
-                    List.of(new MemberArtistRequest("스포티파이 아티스트 아이디??", "baby lion 현상"))
+                    List.of(new MemberArtistRequest("스포티파이 아티스트 아이디??", "baby lion 현상")),
+                    new Image("없어임마")
             );
-            Member member = memberInfoCommandService.registerMember(request, new Image("없어임마"));
+            Member member = memberInfoCommandService.registerMember(request);
             members.add(member);
         }
         return members;
@@ -228,12 +231,12 @@ public class DummyController {
                     startDate.minusDays(1),
                     "채팅url??",
                     RefundType.REFUND,
-                    "차대절 더미데이터_" + i
+                    "차대절 더미데이터_" + i,
+                    new Image("없어임마")
             );
 
             Long rentId = rentCommandService.registerRent(
                     request,
-                    new Image("rent.image.dummy"),
                     members.get(0).getId()
             );
 

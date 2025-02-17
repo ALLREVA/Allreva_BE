@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.RentCommandService;
 import com.backend.allreva.rent.command.domain.Rent;
 import com.backend.allreva.rent.command.domain.RentRepository;
@@ -33,11 +32,10 @@ class RentRegisterTest {
         // given
         var memberId = 1L;
         var rentFormRequest = createRentRegisterRequestFixture();
-        var uploadedImage = new Image("test url");
         given(rentRepository.save(any(Rent.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        rentCommandService.registerRent(rentFormRequest, uploadedImage, memberId);
+        rentCommandService.registerRent(rentFormRequest, memberId);
 
         // then
         var capturedRent = getArgumentCaptorValue();

@@ -1,5 +1,6 @@
 package com.backend.allreva.rent.command.application.request;
 
+import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.domain.value.BusSize;
 import com.backend.allreva.rent.command.domain.value.BusType;
 import com.backend.allreva.rent.command.domain.value.Region;
@@ -46,7 +47,8 @@ public record RentUpdateRequest(
         String chatUrl,
         @NotNull
         RefundType refundType, //enum
-        String information
+        String information,
+        Image image
 ) {
 
 }
