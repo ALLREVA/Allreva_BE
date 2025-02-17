@@ -2,10 +2,13 @@ package com.backend.allreva.rent.command.application;
 
 import com.backend.allreva.chatting.chat.group.command.application.GroupChatCommandService;
 import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
+import com.backend.allreva.common.event.Events;
+import com.backend.allreva.common.event.NotificationMessage;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
 import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
 import com.backend.allreva.rent.command.application.request.RentUpdateRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +26,10 @@ public class RentCommandFacade {
             final Image image,
             final Long memberId
     ) {
+        // register rent
         Long rentId = rentCommandService.registerRent(rentRegisterRequest, image, memberId);
 
+        // create group chat
         groupChatCommandService.add(
                 new AddGroupChatRequest(
                         rentRegisterRequest.title(),
@@ -32,6 +37,13 @@ public class RentCommandFacade {
                 ),
                 image,
                 memberId
+        );
+
+        // push notification
+        List<Long> recipientIds = List.of(memberId);
+        Events.raise(
+                NotificationMessage.NEW_RENT_REGISTERED
+                        .toEvent(recipientIds, rentRegisterRequest.title())
         );
 
         return rentId;
