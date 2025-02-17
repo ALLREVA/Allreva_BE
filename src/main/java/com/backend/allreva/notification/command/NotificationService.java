@@ -31,7 +31,7 @@ public class NotificationService {
 
     @Transactional
     public void markAsRead(final Member member, final NotificationIdRequest notificationIdRequest) {
-        Notification notification = notificationRepository.findByIdAndRecipientId(member.getId(), notificationIdRequest.id())
+        Notification notification = notificationRepository.findByIdAndRecipientId(notificationIdRequest.id(), member.getId())
                 .orElseThrow(NotificationNotFoundException::new);
         notification.read();
     }
