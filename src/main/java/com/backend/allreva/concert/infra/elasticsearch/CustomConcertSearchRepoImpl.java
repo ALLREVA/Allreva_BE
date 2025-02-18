@@ -134,7 +134,7 @@ public class CustomConcertSearchRepoImpl implements CustomConcertSearchRepo {
         return SortOptions.of(s -> s
                 .field(f -> f
                         .field(getSortField(sortDirection))
-                        .order(getSortOrder(sortDirection))
+                        .order(SortOrder.Desc)
                 )
         );
     }
@@ -154,9 +154,5 @@ public class CustomConcertSearchRepoImpl implements CustomConcertSearchRepo {
             case VIEWS -> "view_count";
             case SCORE -> "_score";
         };
-    }
-
-    private SortOrder getSortOrder(final SortDirection sortDirection) {
-        return sortDirection == SortDirection.DATE ? SortOrder.Asc : SortOrder.Desc;
     }
 }
