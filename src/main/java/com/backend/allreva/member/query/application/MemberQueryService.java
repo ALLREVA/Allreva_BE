@@ -2,7 +2,7 @@ package com.backend.allreva.member.query.application;
 
 import com.backend.allreva.member.query.application.response.MemberDetailResponse;
 import com.backend.allreva.member.command.domain.MemberRepository;
-import com.backend.allreva.member.query.application.dto.NicknameDuplication;
+import com.backend.allreva.member.query.application.response.NicknameDuplication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
