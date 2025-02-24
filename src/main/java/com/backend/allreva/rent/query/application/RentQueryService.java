@@ -1,7 +1,6 @@
 package com.backend.allreva.rent.query.application;
 
 import com.backend.allreva.member.command.domain.Member;
-import com.backend.allreva.member.command.domain.MemberRepository;
 import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.command.domain.value.Region;
 import com.backend.allreva.rent.exception.RentNotFoundException;
