@@ -21,7 +21,6 @@ public class ChatController {
 
     private final ChatParticipantRepository chatParticipantRepository;
 
-
     @GetMapping("/list")
     public Response<SortedSet<ChatSummary>> findParticipatingChats(
             @AuthMember final Member member

@@ -4,6 +4,7 @@ import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
 import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.notification.event.ConnectedEvent;
 import com.backend.allreva.common.event.Events;
+import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -22,9 +23,10 @@ public class MessageSseService {
     public void sendSummaryNotification(
             final Long chatId,
             final ChatType chatType,
-            final PreviewMessage previewMessage
-    ) {
-        connectionRepository.sendNotification(chatId, chatType, previewMessage);
+            final PreviewMessage previewMessage,
+            final Member member
+            ) {
+        connectionRepository.sendNotification(chatId, chatType, previewMessage, member);
     }
 
 }

@@ -84,6 +84,7 @@ public class GroupChatCommandService {
         groupChat.subtractHeadcount(memberId);
     }
 
+    @Transactional
     public void delete(final Long groupChatId, final Long memberId) {
         GroupChat groupChat = groupChatRepository.findById(groupChatId)
                 .orElseThrow(GroupChatNotFoundException::new);
