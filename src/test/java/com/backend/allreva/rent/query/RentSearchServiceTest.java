@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.query;
 
 import com.backend.allreva.rent.infra.elasticsearch.RentDocument;
 import com.backend.allreva.rent.infra.elasticsearch.RentDocumentRepository;

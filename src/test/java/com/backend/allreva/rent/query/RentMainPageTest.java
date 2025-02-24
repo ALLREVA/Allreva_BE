@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.query;
 
 import static com.backend.allreva.concert.fixture.ConcertFixture.createConcertFixture;
 import static com.backend.allreva.concert.fixture.ConcertHallFixture.createConcertHallFixture;

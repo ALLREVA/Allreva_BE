@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.application;
 
 import com.backend.allreva.rent.command.application.RentCommandService;
 import com.backend.allreva.rent_join.command.application.RentJoinCommandService;

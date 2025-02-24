@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.query;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 

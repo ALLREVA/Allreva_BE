@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.query;
 
 import static com.backend.allreva.rent.fixture.RentFixture.createRentFixture;
 import static com.backend.allreva.rent.fixture.RentJoinFixture.createRentJoinFixture;
