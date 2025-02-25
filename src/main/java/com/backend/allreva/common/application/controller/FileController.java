@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/avi/v1/file")
+@RequestMapping("/api/v1/file")
 @RequiredArgsConstructor
 public class FileController implements FileControllerSwagger{
     private final FileService fileService;
