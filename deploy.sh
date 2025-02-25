@@ -74,8 +74,8 @@ else
   fi
 
   echo "4. reload nginx"
-  sudo cp /etc/nginx/nginx.blue.conf /etc/nginx/nginx.conf
-  sudo nginx -s reload
+  cp /etc/nginx/nginx.blue.conf /etc/nginx/nginx.conf
+  nginx -s reload
 
   echo "5. green container down"
   docker-compose stop green
