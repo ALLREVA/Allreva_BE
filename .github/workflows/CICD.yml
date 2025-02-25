@@ -29,6 +29,7 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
           MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
           MONGO_INITDB_DATABASE: ${{ secrets.MONGO_INITDB_DATABASE }}
+          
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -36,18 +37,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
           mkdir -p src/test/resources
           echo "${{ secrets.CI_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.CI_YML }}" | base64 --decode > src/test/resources/application.yml
+          
       - name: Create firebase-service-account.json
         run: |
           mkdir -p src/main/resources/firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 --decode > src/main/resources/firebase/firebase-service-account.json
+          
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+        
       - name: Run tests
         run: ./gradlew test
 
@@ -105,35 +110,34 @@ jobs:
       - name: Send docker-compose.yml and .env to local server
         uses: appleboy/scp-action@master
         with:
-          host:  ${{ secrets.LOCAL_SERVER_HOST }}
-          username:  ${{ secrets.LOCAL_SERVER_USER }}
-          password: ${{ secrets.LOCAL_SERVER_PASSWORD }}
-          port:  ${{ secrets.LOCAL_SERVER_PORT }}
+          host: ${{ secrets.LOCAL_SERVER_HOST }}
+          username: ${{ secrets.LOCAL_SERVER_USER }}
+          key: ${{ secrets.LOCAL_SERVER_SSH_KEY }}
+          port: ${{ secrets.LOCAL_SERVER_PORT }}
           source: "docker-compose.yml, .env"
           target: "/home/dwkim/app"
           
       - name: Send deploy.sh to local server
         uses: appleboy/scp-action@master
         with:
-          host:  ${{ secrets.LOCAL_SERVER_HOST }}
-          username:  ${{ secrets.LOCAL_SERVER_USER }}
-          password: ${{ secrets.LOCAL_SERVER_PASSWORD }}
-          port:  ${{ secrets.LOCAL_SERVER_PORT }}
+          host: ${{ secrets.LOCAL_SERVER_HOST }}
+          username: ${{ secrets.LOCAL_SERVER_USER }}
+          key: ${{ secrets.LOCAL_SERVER_SSH_KEY }}
+          port: ${{ secrets.LOCAL_SERVER_PORT }}
           source: "deploy.sh"
           target: "/home/dwkim/app"
           
       - name: Deploy to local server
         uses: appleboy/ssh-action@master
         with:
-          host:  ${{ secrets.LOCAL_SERVER_HOST }}
-          username:  ${{ secrets.LOCAL_SERVER_USER }}
-          password: ${{ secrets.LOCAL_SERVER_PASSWORD }}
-          port:  ${{ secrets.LOCAL_SERVER_PORT }}
+          host: ${{ secrets.LOCAL_SERVER_HOST }}
+          username: ${{ secrets.LOCAL_SERVER_USER }}
+          key: ${{ secrets.LOCAL_SERVER_SSH_KEY }}
+          port: ${{ secrets.LOCAL_SERVER_PORT }}
           script: |
             cd /home/dwkim/app
-            sudo chmod 666 /var/run/docker.sock
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:latest
             chmod +x ./deploy.sh
-            echo "${{ secrets.LOCAL_SERVER_SUDO_PASSWORD }}" | sudo -S ./deploy.sh
-            sudo docker image prune -f
+            ./deploy.sh
+            docker image prune -f
