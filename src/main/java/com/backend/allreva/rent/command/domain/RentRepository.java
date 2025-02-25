@@ -14,18 +14,15 @@ import java.util.Optional;
 
 public interface RentRepository {
 
+    // for command
     Optional<Rent> findById(Long id);
-
     boolean existsById(Long id);
-
     Rent save(Rent rent);
-
     List<RentBoardingDate> updateRentBoardingDates(Long rentId, List<RentBoardingDate> rentBoardingDates);
-
     void deleteBoardingDateAllByRentId(Long rentId);
-
     void delete(Rent rent);
 
+    // for query
     List<RentSummaryResponse> findRentSummaries(Region region, SortType sortType, LocalDate lastEndDate, Long lastId, int pageSize);
     Optional<RentDetailResponse> findRentDetailById(Long rentId);
     Optional<DepositAccountResponse> findDepositAccountById(Long rentId);
