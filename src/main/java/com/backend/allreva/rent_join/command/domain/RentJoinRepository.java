@@ -7,17 +7,13 @@ import java.util.Optional;
 
 public interface RentJoinRepository {
 
+    // for command
     Optional<RentJoin> findById(Long id);
-
     Integer countRentJoin(Long rentId, LocalDate boardingDate);
-
-    boolean existsById(Long id);
-
     boolean existsByBoardingDateAndRentIdAndMemberId(LocalDate boardingDate, Long rentId, Long memberId);
-
     RentJoin save(RentJoin rentJoin);
-
     void delete(RentJoin rentJoin);
 
+    // for query
     List<RentJoinResponse> findRentJoin(Long memberId);
 }

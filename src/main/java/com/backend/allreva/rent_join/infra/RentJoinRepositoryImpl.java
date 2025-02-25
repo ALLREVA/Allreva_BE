@@ -30,11 +30,6 @@ public class RentJoinRepositoryImpl implements RentJoinRepository {
     }
 
     @Override
-    public boolean existsById(final Long id) {
-        return rentJoinJpaRepository.existsById(id);
-    }
-
-    @Override
     public boolean existsByBoardingDateAndRentIdAndMemberId(
             final LocalDate boardingDate,
             final Long rentId,
