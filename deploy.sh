@@ -3,80 +3,69 @@
 docker-compose pull redis
 docker-compose up -d redis
 
-IS_GREEN=$(docker ps | grep green) # 현재 실행중인 App이 blue인지 확인합니다.
+IS_GREEN=$(docker ps --filter "name=green" --filter "status=running" -q) # 실행 중인 green 확인
 
-if [ -z "$IS_GREEN" ]; then # green이 없으면 blue라면
+if [ -z "$IS_GREEN" ]; then
+    echo "### BLUE => GREEN ###"
 
-  echo "### BLUE => GREEN ###"
+    echo "1. Pull green image"
+    docker-compose pull green
 
-  echo "1. get green image"
-  docker-compose pull green # green으로 이미지를 내려받습니다.
+    echo "2. Start green container"
+    docker-compose up -d green
 
-  echo "2. green container up"
-  docker-compose up -d green # green 컨테이너 실행
+    for cnt in {1..20}; do
+        echo "3. Green health check... (${cnt}/20)"
+        REQUEST=$(curl -s http://localhost:8080)
+        if [ -n "$REQUEST" ]; then
+            echo "Health check success"
+            break
+        else
+            sleep 10
+        fi
+    done
 
-  for cnt in {1..20}
-  do
-    echo "3. green health check..."
-    echo "서버 응답 확인중(${cnt}/20)";
-
-    REQUEST=$(curl http://127.0.0.1:8080) # green으로 request
-    if [ -n "$REQUEST" ]
-    then # 서비스 가능하면 health check 중지
-      echo "health check success"
-      break ;
-    else
-      sleep 10
+    if [ "$cnt" -eq 20 ]; then
+        echo "Green 서버가 정상적으로 구동되지 않았습니다."
+        exit 1
     fi
-  done;
 
-  if [ $cnt -eq 20 ]
-  then
-    echo "서버가 정상적으로 구동되지 않았습니다."
-    exit 1
-  fi
+    echo "4. Update Nginx to route to green"
+    docker cp ./nginx.green.conf nginx:/etc/nginx/nginx.conf
+    docker exec nginx nginx -s reload
 
-  echo "4. reload nginx"
-  sudo -n cp /etc/nginx/nginx.green.conf /etc/nginx/nginx.conf
-  sudo -n nginx -s reload
+    echo "5. Stop blue container"
+    docker-compose stop blue
 
-  echo "5. blue container down"
-  docker-compose stop blue
 else
-  echo "### GREEN => BLUE ###"
+    echo "### GREEN => BLUE ###"
 
-  echo "1. get blue image"
-  docker-compose pull blue
+    echo "1. Pull blue image"
+    docker-compose pull blue
 
-  echo "2. blue container up"
-  docker-compose up -d blue
+    echo "2. Start blue container"
+    docker-compose up -d blue
 
-  for cnt in {1..20}
-  do
-    echo "3. blue health check..."
-    echo "서버 응답 확인중(${cnt}/20)";
+    for cnt in {1..20}; do
+        echo "3. Blue health check... (${cnt}/20)"
+        REQUEST=$(curl -s http://localhost:8081)
+        if [ -n "$REQUEST" ]; then
+            echo "Health check success"
+            break
+        else
+            sleep 10
+        fi
+    done
 
-    REQUEST=$(curl http://127.0.0.1:8081) # blue로 request
-
-    if [ -n "$REQUEST" ]
-    then # 서비스 가능하면 health check 중지
-      echo "health check success"
-      break ;
-    else
-      sleep 10
+    if [ "$cnt" -eq 20 ]; then
+        echo "Blue 서버가 정상적으로 구동되지 않았습니다."
+        exit 1
     fi
-  done;
 
-  if [ $cnt -eq 20 ]
-  then
-    echo "서버가 정상적으로 구동되지 않았습니다."
-    exit 1
-  fi
+    echo "4. Update Nginx to route to blue"
+    docker cp ./nginx.blue.conf nginx:/etc/nginx/nginx.conf
+    docker exec nginx nginx -s reload
 
-  echo "4. reload nginx"
-  sudo -n cp /etc/nginx/nginx.blue.conf /etc/nginx/nginx.conf
-  sudo -n nginx -s reload
-
-  echo "5. green container down"
-  docker-compose stop green
+    echo "5. Stop green container"
+    docker-compose stop green
 fi
