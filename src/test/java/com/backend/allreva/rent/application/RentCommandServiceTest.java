@@ -3,6 +3,8 @@ package com.backend.allreva.rent.application;
 import static com.backend.allreva.support.FixtureUtil.fixtureMonkey;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 
 import com.backend.allreva.common.application.S3ImageService;
 import com.backend.allreva.rent.command.application.RentCommandService;
@@ -14,12 +16,7 @@ import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.exception.RentAccessDeniedException;
 import com.backend.allreva.rent.exception.RentNotFoundException;
 import com.backend.allreva.rent.fake.RentFakeRepository;
-
 import lombok.extern.slf4j.Slf4j;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -30,9 +27,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SuppressWarnings("NonAsciiCharacters")
 class RentCommandServiceTest {
 
-    private RentCommandService rentCommandService;
-    private RentRepository rentRepository;
-    private S3ImageService s3ImageService;
+    private final RentCommandService rentCommandService;
+    private final RentRepository rentRepository;
+    private final S3ImageService s3ImageService;
 
     public RentCommandServiceTest() {
         this.rentRepository = new RentFakeRepository();
