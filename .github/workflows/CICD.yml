@@ -138,6 +138,6 @@ jobs:
             cd /home/dwkim/app
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:latest
-            chmod +x ./deploy.sh
-            ./deploy.sh
+            sudo chmod +x ./deploy.sh
+            sudo ./deploy.sh
             docker image prune -f
