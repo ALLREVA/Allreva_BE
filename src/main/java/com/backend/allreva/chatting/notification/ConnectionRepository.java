@@ -2,10 +2,13 @@ package com.backend.allreva.chatting.notification;
 
 import com.backend.allreva.chatting.chat.group.command.domain.MemberGroupChatRepository;
 import com.backend.allreva.chatting.chat.integration.model.value.ChatType;
+import com.backend.allreva.chatting.chat.integration.model.value.Participant;
 import com.backend.allreva.chatting.chat.integration.model.value.PreviewMessage;
 import com.backend.allreva.chatting.chat.single.command.domain.MemberSingleChatRepository;
 import com.backend.allreva.chatting.notification.event.TimedOutEvent;
 import com.backend.allreva.common.event.Events;
+import com.backend.allreva.common.model.Image;
+import com.backend.allreva.member.command.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -59,16 +62,24 @@ public class ConnectionRepository {
     public void sendNotification(
             final Long chatId,
             final ChatType chatType,
-            final PreviewMessage previewMessage
+            final PreviewMessage previewMessage,
+            final Member member
     ) {
+        Image memberProfile = new Image(member.getMemberInfo().getProfileImageUrl());
+        Participant sender = new Participant(
+                member.getId(),
+                member.getMemberInfo().getNickname(),
+                memberProfile
+        );
+
         if (chatType.equals(ChatType.SINGLE)) {
             Set<Long> memberIds = memberSingleChatRepository
                     .findAllMemberIdBySingleChatId(chatId);
-
             PreviewMessageResponse payload = new PreviewMessageResponse(
                     chatId,
                     chatType,
-                    previewMessage
+                    previewMessage,
+                    sender
             );
             sendForEachMembers(memberIds, payload);
         }
@@ -80,9 +91,9 @@ public class ConnectionRepository {
             PreviewMessageResponse payload = new PreviewMessageResponse(
                     chatId,
                     chatType,
-                    previewMessage
+                    previewMessage,
+                    sender
             );
-
             sendForEachMembers(memberIds, payload);
         }
     }

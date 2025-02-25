@@ -51,7 +51,8 @@ public class MessageCommandController {
         messageSseService.sendSummaryNotification(
                 singleChatId,
                 ChatType.SINGLE,
-                previewMessage
+                previewMessage,
+                member
         );
         chatParticipantService.updatePreviewMessage(
                 member.getId(),
@@ -82,7 +83,8 @@ public class MessageCommandController {
         messageSseService.sendSummaryNotification(
                 groupChatId,
                 ChatType.GROUP,
-                previewMessage
+                previewMessage,
+                member
         );
         chatParticipantService.updatePreviewMessage(
                 member.getId(),
