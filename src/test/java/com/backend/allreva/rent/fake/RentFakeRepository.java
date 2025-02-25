@@ -20,7 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 public class RentFakeRepository implements RentRepository {
 
-    private AtomicLong rentId = new AtomicLong(0);
+    private final AtomicLong rentId = new AtomicLong(0);
     private final List<Rent> rentTable = Collections.synchronizedList(new ArrayList<>());
     
     @Override
@@ -67,12 +67,12 @@ public class RentFakeRepository implements RentRepository {
                .ifPresent(rent -> ReflectionTestUtils.setField(rent, "boardingDates", new ArrayList<>()));
     }
 
-    // soft delete, but this is not used in test
     @Override
     public void delete(Rent rent) {
         rentTable.removeIf(o -> Objects.equals(o.getId(), rent.getId()));
     }
 
+    // for query, so not implemented in test
     @Override
     public List<RentSummaryResponse> findRentSummaries(Region region, SortType sortType, LocalDate lastEndDate, Long lastId, int pageSize) {
         return null;
