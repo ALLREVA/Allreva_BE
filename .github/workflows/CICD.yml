@@ -17,12 +17,10 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DB }}
-
       redis:
         image: redis:latest
         ports:
           - 6379:6379
-
       mongodb:
         image: mongo:latest
         ports:
@@ -31,31 +29,25 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
           MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
           MONGO_INITDB_DATABASE: ${{ secrets.MONGO_INITDB_DATABASE }}
-
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
           mkdir -p src/test/resources
           echo "${{ secrets.CI_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.CI_YML }}" | base64 --decode > src/test/resources/application.yml
-
       - name: Create firebase-service-account.json
         run: |
           mkdir -p src/main/resources/firebase
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 --decode > src/main/resources/firebase/firebase-service-account.json
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
       - name: Run tests
         run: ./gradlew test
 
@@ -63,23 +55,21 @@ jobs:
     needs: ci
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
-
       - name: Create application.yml
         run: |
           mkdir -p src/main/resources
           mkdir -p src/main/resources/firebase
           echo "${{ secrets.CD_YML }}" | base64 --decode > src/main/resources/application.yml
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" | base64 --decode > src/main/resources/firebase/firebase-service-account.json
-
+          
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-
+          
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
@@ -89,89 +79,61 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
+            
       - name: Build with Gradle
         run: |
           chmod +x gradlew
           ./gradlew bootJar
-
+          
       - name: DockerHub 로그인
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
+          
       - name: Docker 이미지 빌드
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:latest .
-
+        
       - name: DockerHub 푸시
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:latest
-
-      - name: Get Github action IP
-        id : ip
-        uses: haythem/public-ip@v1.2
-
-      - name: AWS Credentials 설정
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: 보안 그룹에 GitHub Actions IP 추가
-        run: |
-          aws ec2 authorize-security-group-ingress \
-            --group-name ${{ secrets.AWS_SG_NAME }} \
-            --protocol tcp \
-            --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
-
+        
       - name: Create .env file
         run: |
           echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
           echo "APP_NAME=${{ secrets.APP_NAME }}" >> .env
-
-      - name: Send docker-compose.yml
+          
+      - name: Send docker-compose.yml and .env to local server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
+          host:  ${{ secrets.LOCAL_SERVER_HOST }}
+          username:  ${{ secrets.LOCAL_SERVER_USER }}
+          password: ${{ secrets.LOCAL_SERVER_PASSWORD }}
+          port:  ${{ secrets.LOCAL_SERVER_PORT }}
           source: "docker-compose.yml, .env"
-          target: "/home/ec2-user"
-
-      - name: Send deploy.sh
+          target: "/home/dwkim/app"
+          
+      - name: Send deploy.sh to local server
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
+          host:  ${{ secrets.LOCAL_SERVER_HOST }}
+          username:  ${{ secrets.LOCAL_SERVER_USER }}
+          password: ${{ secrets.LOCAL_SERVER_PASSWORD }}
+          port:  ${{ secrets.LOCAL_SERVER_PORT }}
           source: "deploy.sh"
-          target: "/home/ec2-user"
-
-      - name: AWS EC2 배포
+          target: "/home/dwkim/app"
+          
+      - name: Deploy to local server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
+          host:  ${{ secrets.LOCAL_SERVER_HOST }}
+          username:  ${{ secrets.LOCAL_SERVER_USER }}
+          password: ${{ secrets.LOCAL_SERVER_PASSWORD }}
+          port:  ${{ secrets.LOCAL_SERVER_PORT }}
           script: |
+            cd /home/dwkim/app
             sudo chmod 666 /var/run/docker.sock
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.APP_NAME }}:latest
-            chmod 777 ./deploy.sh
-            ./deploy.sh
-            sudo docker image prune -f 
-
-      - name: 보안 그룹에서 GitHub Actions IP 제거
-        if: always()
-        run: |
-          aws ec2 revoke-security-group-ingress \
-            --group-name ${{ secrets.AWS_SG_NAME }} \
-            --protocol tcp \
-            --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
+            chmod +x ./deploy.sh
+            echo "${{ secrets.LOCAL_SERVER_SUDO_PASSWORD }}" | sudo -S ./deploy.sh
+            sudo docker image prune -f
