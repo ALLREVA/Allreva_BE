@@ -1,4 +1,20 @@
 #!/bin/bash
+ENV_PATH="/home/dwkim/app/.env"
+if [ -f "$ENV_PATH" ]; then
+    echo "🔑 환경 변수 로드 중..."
+    export $(grep -v '^#' "$ENV_PATH" | xargs) # 주석 제외하고 변수 추출
+else
+    echo "❌ .env 파일 없음: $ENV_PATH"
+    exit 1
+fi
+
+REQUIRED_VARS=("SUDO_PASSWORD")
+for var in "${REQUIRED_VARS[@]}"; do
+    if [ -z "${!var}" ]; then
+        echo "❌ 필수 변수 누락: $var"
+        exit 1
+    fi
+done
 
 docker-compose pull redis
 docker-compose up -d redis
@@ -37,8 +53,8 @@ if [ -z "$IS_GREEN" ]; then # green이 없으면 blue라면
   fi
 
   echo "4. reload nginx"
-  echo $SUDO_PASSWORD | sudo -S cp /etc/nginx/nginx.green.conf /etc/nginx/nginx.conf
-  echo $SUDO_PASSWORD | sudo -S sudo -n nginx -s reload
+  echo "$SUDO_PASSWORD" | sudo -S cp /etc/nginx/nginx.green.conf /etc/nginx/nginx.conf
+  echo "$SUDO_PASSWORD" | sudo -S sudo -n nginx -s reload
 
   echo "5. blue container down"
   docker-compose stop blue
@@ -74,8 +90,8 @@ else
   fi
 
   echo "4. reload nginx"
-  echo $SUDO_PASSWORD | sudo -S cp /etc/nginx/nginx.blue.conf /etc/nginx/nginx.conf
-  echo $SUDO_PASSWORD | sudo -S nginx -s reload
+  echo "$SUDO_PASSWORD" | sudo -S cp /etc/nginx/nginx.blue.conf /etc/nginx/nginx.conf
+  echo "$SUDO_PASSWORD" | sudo -S nginx -s reload
 
   echo "5. green container down"
   docker-compose stop green
