@@ -36,7 +36,7 @@ public class RentCommandService {
         return savedRent.getId();
     }
 
-    public void updateRent(
+    public Rent updateRent(
             final RentUpdateRequest rentUpdateRequest,
             final Long memberId
     ) {
@@ -47,6 +47,7 @@ public class RentCommandService {
 
         rentRepository.deleteBoardingDateAllByRentId(rentUpdateRequest.rentId());
         rent.updateRent(rentUpdateRequest);
+        return rent;
     }
 
     public void closeRent(
@@ -75,9 +76,10 @@ public class RentCommandService {
     ) {
         Rent rent = rentRepository.findById(rentIdRequest.rentId())
                 .orElseThrow(RentNotFoundException::new);
+        
+        rent.validateMine(memberId);
 
         s3ImageService.delete(rent.getDetailInfo().getImage().getUrl());
-        rent.validateMine(memberId);
         rentRepository.delete(rent);
     }
 }
