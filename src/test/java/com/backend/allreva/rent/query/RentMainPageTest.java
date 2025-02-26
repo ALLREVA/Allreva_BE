@@ -69,8 +69,8 @@ class RentMainPageTest extends IntegrationTestSupport {
     void 차량_대절_리스트를_마감순으로_조회한다() {
         // given
         var registerId = 1L;
-        var rent1 = rentRepository.save(createRentFixture(registerId, 1L, Region.서울, LocalDate.of(2024, 9, 21)));
-        var rent2 = rentRepository.save(createRentFixture(registerId, 2L, Region.경기, LocalDate.of(2024, 9, 20)));
+        var rent1 = rentRepository.save(createRentFixture(registerId, 1L, Region.서울, LocalDate.of(2024, 9, 20)));
+        var rent2 = rentRepository.save(createRentFixture(registerId, 2L, Region.경기, LocalDate.of(2024, 9, 21)));
 
         // when
         var rentSummaries = rentQueryService.getRentSummaries(null, SortType.CLOSING, null, null, 10);
