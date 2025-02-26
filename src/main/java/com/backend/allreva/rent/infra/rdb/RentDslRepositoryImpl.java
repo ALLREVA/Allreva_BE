@@ -273,6 +273,7 @@ public class RentDslRepositoryImpl {
                 )
                 .where(
                         rent.id.eq(rentId),
+                        rentBoardingDate.date.eq(boardingDate),
                         rent.memberId.eq(memberId)
                 )
                 .groupBy(rent.id, rentBoardingDate.date)
