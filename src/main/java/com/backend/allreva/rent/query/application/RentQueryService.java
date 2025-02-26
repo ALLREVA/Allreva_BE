@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,18 +34,18 @@ public class RentQueryService {
         return rentRepository.findRentMainSummaries();
     }
 
+    @Transactional(readOnly = true)
     public RentDetailResponse getRentDetailById(final Long id, final Member member) {
         RentDetailResponse rentDetailResponse = rentRepository.findRentDetailById(id)
                 .orElseThrow(RentNotFoundException::new);
         // 만약 회원으로 접속했다면
         if (member != null) {
             // 날짜 별 차량 대절 신청 여부 확인
-            rentDetailResponse.getBoardingDates().forEach(response -> {
-                        if (rentJoinRepository.existsByBoardingDateAndRentIdAndMemberId(response.getDate(), id, member.getId()))
-                            response.setIsApplied(true);
-                        else
-                            response.setIsApplied(false);
-            });
+            rentDetailResponse.getBoardingDates().forEach(response ->
+                response.setIsApplied(
+                        rentJoinRepository.existsByBoardingDateAndRentIdAndMemberId(response.getDate(), id, member.getId())
+                )
+            );
             // 환불 계좌 정보 확인
             rentDetailResponse.setRefundAccount(member.getRefundAccount());
         }
@@ -60,6 +61,7 @@ public class RentQueryService {
         return rentRepository.findRentAdminSummaries(memberId);
     }
 
+    @Transactional(readOnly = true)
     public RentAdminDetailResponse getRentAdminDetail(
             final Long memberId,
             final LocalDate boardingDate,
