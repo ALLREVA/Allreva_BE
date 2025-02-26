@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.domain.Rent;
 import com.backend.allreva.rent.command.domain.RentBoardingDate;
+import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.command.domain.value.AdditionalInfo;
 import com.backend.allreva.rent.command.domain.value.Bus;
 import com.backend.allreva.rent.command.domain.value.BusSize;
@@ -13,7 +14,6 @@ import com.backend.allreva.rent.command.domain.value.DetailInfo;
 import com.backend.allreva.rent.command.domain.value.OperationInfo;
 import com.backend.allreva.rent.command.domain.value.Price;
 import com.backend.allreva.rent.command.domain.value.Region;
-import com.backend.allreva.rent.infra.rdb.RentJpaRepository;
 import com.backend.allreva.rent_join.command.domain.RentJoin;
 import com.backend.allreva.rent_join.command.domain.RentJoinRepository;
 import com.backend.allreva.rent_join.command.domain.value.BoardingType;
@@ -34,7 +34,7 @@ class RentJoinPageTest extends IntegrationTestSupport {
     @Autowired
     private RentJoinQueryService rentJoinQueryService;
     @Autowired
-    private RentJpaRepository rentJpaRepository;
+    private RentRepository rentRepository;
     @Autowired
     private RentJoinRepository rentJoinRepository;
 
@@ -42,19 +42,19 @@ class RentJoinPageTest extends IntegrationTestSupport {
     void 자신이_참여중인_차량_대절_리스트를_조회한다() {
         // given
         var registerId = 1L;
-        var user2Id = 2L;
-        var user3Id = 3L;
-        var savedRent = rentJpaRepository.save(createRentFixture(registerId, 1L));
-        var boardingDates = savedRent.getBoardingDates();
-        var gilDongRentJoin = rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), user2Id, "홍길동", boardingDates.get(0).getDate()));
-        rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), user3Id, "김철수", boardingDates.get(1).getDate()));
+        var rent = rentRepository.save(createRentFixture(registerId, 1L));
+
+        var userA = 2L;
+        var userB = 3L;
+        var rentJoinByUserA = rentJoinRepository.save(createRentJoinFixture(rent.getId(), userA, "userA", rent.getBoardingDates().get(0).getDate()));
+        rentJoinRepository.save(createRentJoinFixture(rent.getId(), userB, "userB", rent.getBoardingDates().get(1).getDate()));
 
         // when
-        var rentJoinSummaries = rentJoinQueryService.getRentJoin(user2Id);
+        var rentJoinSummaries = rentJoinQueryService.getRentJoin(userA);
 
         // then
         assertThat(rentJoinSummaries).hasSize(1);
-        assertThat(rentJoinSummaries.get(0).rentJoinId()).isEqualTo(gilDongRentJoin.getId());
+        assertThat(rentJoinSummaries.get(0).rentJoinId()).isEqualTo(rentJoinByUserA.getId());
     }
 
     private Rent createRentFixture(Long memberId, Long concertId) {
