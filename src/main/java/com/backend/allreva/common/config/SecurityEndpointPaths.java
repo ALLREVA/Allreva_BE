@@ -52,6 +52,7 @@ public final class SecurityEndpointPaths {
             "/api/v1/concert-halls/**",
             // search
             "/api/v1/search/**",
-            "/api/v1/artists/search"
+            "/api/v1/artists/search",
+            "/api/v1/file/**"
     };
 }
