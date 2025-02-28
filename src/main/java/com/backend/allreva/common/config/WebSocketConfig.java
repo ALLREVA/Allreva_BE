@@ -38,7 +38,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(WEB_SOCKET_ENDPOINT)
-                .setAllowedOriginPatterns("*"); // 배포 전 수정 필요
+                .setAllowedOriginPatterns("*")
+                .withSockJS(); // 배포 전 수정 필요
     }
 
     @Override
