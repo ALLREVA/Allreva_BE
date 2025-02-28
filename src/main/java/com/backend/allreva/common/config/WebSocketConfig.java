@@ -3,6 +3,7 @@ package com.backend.allreva.common.config;
 import com.backend.allreva.auth.application.JwtService;
 import com.backend.allreva.auth.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -19,6 +20,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSocketMessageBroker

@@ -15,9 +15,6 @@ public final class SecurityEndpointPaths {
             "/swagger-resources/**",
             // auth
             "/api/v1/auth/**",
-            WEB_SOCKET_ENDPOINT,
-            TOPIC,
-            PREFIX
     };
 
     public static final String[] ADMIN_LIST = {
@@ -53,6 +50,9 @@ public final class SecurityEndpointPaths {
             // search
             "/api/v1/search/**",
             "/api/v1/artists/search",
-            "/api/v1/file/**"
+            "/api/v1/file/**",
+            "/ws-chat/**",
+            "/room/**",
+            "/chat/**"
     };
 }
