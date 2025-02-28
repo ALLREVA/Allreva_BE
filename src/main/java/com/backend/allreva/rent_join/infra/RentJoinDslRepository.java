@@ -12,6 +12,7 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,24 @@ import org.springframework.stereotype.Repository;
 public class RentJoinDslRepository {
 
     private final JPAQueryFactory queryFactory;
+
+    /**
+     * [Count] 차 대절 현재 참여자 수 조회
+     */
+    public Integer countRentJoin(
+            final Long rentId,
+            final LocalDate boardingDate
+    ) {
+        return queryFactory.select(rentJoin.passengerNum.sum().coalesce(0))
+                .from(rentJoin)
+                .leftJoin(rentBoardingDate)
+                    .on(rentBoardingDate.rent.id.eq(rentJoin.rentId))
+                .where(
+                        rentJoin.rentId.eq(rentId),
+                        rentJoin.boardingDate.eq(boardingDate)
+                )
+                .fetchOne();
+    }
 
     /**
      * [Participate] 자신이 참여한 차 대절 조회

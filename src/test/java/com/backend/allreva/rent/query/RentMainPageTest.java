@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.query;
 
 import static com.backend.allreva.concert.fixture.ConcertFixture.createConcertFixture;
 import static com.backend.allreva.concert.fixture.ConcertHallFixture.createConcertHallFixture;
@@ -42,9 +42,9 @@ class RentMainPageTest extends IntegrationTestSupport {
     @Autowired
     private RentQueryService rentQueryService;
     @Autowired
-    private RentJoinRepository rentJoinRepository;
-    @Autowired
     private RentRepository rentRepository;
+    @Autowired
+    private RentJoinRepository rentJoinRepository;
     @Autowired
     private ConcertHallRepository concertHallRepository;
     @Autowired
@@ -54,60 +54,57 @@ class RentMainPageTest extends IntegrationTestSupport {
     void 차량_대절_리스트를_지역별로_조회한다() {
         // given
         var registerId = 1L;
-        var savedRent1 = rentRepository.save(createRentFixture(
-                registerId, 1L, Region.서울, LocalDate.of(2024, 9, 20)));
-        rentRepository.save(createRentFixture(
-                registerId, 2L, Region.경기, LocalDate.of(2024, 9, 21)));
+        var rent1 = rentRepository.save(createRentFixture(registerId, 1L, Region.서울, LocalDate.of(2024, 9, 20)));
+        rentRepository.save(createRentFixture(registerId, 2L, Region.경기, LocalDate.of(2024, 9, 21)));
 
         // when
-        var rentSummaries = rentQueryService.getRentSummaries(
-                Region.서울, SortType.LATEST, null, null, 10);
+        var rentSummaries = rentQueryService.getRentSummaries(Region.서울, SortType.LATEST, null, null, 10);
 
         // then
         assertThat(rentSummaries).hasSize(1);
-        assertThat(rentSummaries.get(0).rentId()).isEqualTo(savedRent1.getId());
+        assertThat(rentSummaries.get(0).rentId()).isEqualTo(rent1.getId());
     }
 
     @Test
     void 차량_대절_리스트를_마감순으로_조회한다() {
         // given
         var registerId = 1L;
-        var savedRent1 = rentRepository.save(createRentFixture(
-                registerId, 1L, Region.서울, LocalDate.of(2024, 9, 21)));
-        var savedRent2 = rentRepository.save(createRentFixture(
-                registerId, 2L, Region.경기, LocalDate.of(2024, 9, 20)));
+        var rent1 = rentRepository.save(createRentFixture(registerId, 1L, Region.서울, LocalDate.of(2024, 9, 20)));
+        var rent2 = rentRepository.save(createRentFixture(registerId, 2L, Region.경기, LocalDate.of(2024, 9, 21)));
 
         // when
-        var rentSummaries = rentQueryService.getRentSummaries(
-                null, SortType.CLOSING, null, null, 10);
+        var rentSummaries = rentQueryService.getRentSummaries(null, SortType.CLOSING, null, null, 10);
 
         // then
         assertThat(rentSummaries).hasSize(2);
-        assertThat(rentSummaries.get(0).rentId()).isEqualTo(savedRent2.getId());
-        assertThat(rentSummaries.get(1).rentId()).isEqualTo(savedRent1.getId());
+        assertSoftly(softly -> {
+            softly.assertThat(rentSummaries.get(0).rentId()).isEqualTo(rent1.getId());
+            softly.assertThat(rentSummaries.get(1).rentId()).isEqualTo(rent2.getId());
+        });
     }
 
     @Test
     void 차량_대절_폼_상세_조회를_성공한다() {
         // given
-        var registerId = 1L;
-        var register = createMemberFixture(registerId, MemberRole.USER);
-        var user2Id = 2L;
-        var user3Id = 3L;
         var concertHall = concertHallRepository.save(createConcertHallFixture());
         var concert = concertRepository.save(createConcertFixture(concertHall.getId()));
-        var savedRent = rentRepository.save(createRentFixture(registerId, concert.getId(), Region.서울, LocalDate.of(2024, 9, 21)));
-        var boardingDates = savedRent.getBoardingDates();
-        rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), user2Id, "홍길동", boardingDates.get(0).getDate()));
-        rentJoinRepository.save(createRentJoinFixture(savedRent.getId(), user3Id, "김철수", boardingDates.get(1).getDate()));
+
+        var registerId = 1L;
+        var register = createMemberFixture(registerId, MemberRole.USER);
+        var rent = rentRepository.save(createRentFixture(registerId, concert.getId(), Region.서울, LocalDate.of(2024, 9, 21)));
+
+        var userA = 2L;
+        var userB = 3L;
+        rentJoinRepository.save(createRentJoinFixture(rent.getId(), userA, "홍길동", rent.getBoardingDates().get(0).getDate()));
+        rentJoinRepository.save(createRentJoinFixture(rent.getId(), userB, "김철수", rent.getBoardingDates().get(1).getDate()));
 
         // when
-        var rentDetail = rentQueryService.getRentDetailById(savedRent.getId(), register);
+        var rentDetail = rentQueryService.getRentDetailById(rent.getId(), register);
 
         // then
         assertThat(rentDetail).isNotNull();
         assertSoftly(softly -> {
-            softly.assertThat(rentDetail.getTitle()).isEqualTo(savedRent.getDetailInfo().getTitle());
+            softly.assertThat(rentDetail.getTitle()).isEqualTo(rent.getDetailInfo().getTitle());
             softly.assertThat(rentDetail.getConcertName()).isEqualTo(concert.getConcertInfo().getTitle());
             softly.assertThat(rentDetail.getDropOffArea()).isEqualTo(concertHall.getName());
             softly.assertThat(rentDetail.getBoardingDates().get(0).getParticipationCount()).isEqualTo(2);
@@ -122,10 +119,10 @@ class RentMainPageTest extends IntegrationTestSupport {
         var registerId = 1L;
         var concertHall = concertHallRepository.save(createConcertHallFixture());
         var concert = concertRepository.save(createConcertFixture(concertHall.getId()));
-        var savedRent = rentRepository.save(createRentFixture(registerId, concert.getId(), Region.서울, LocalDate.of(2024, 9, 21)));
+        var rent = rentRepository.save(createRentFixture(registerId, concert.getId(), Region.서울, LocalDate.of(2024, 9, 21)));
 
         // when
-        var rentDetail = rentQueryService.getRentDetailById(savedRent.getId(), null);
+        var rentDetail = rentQueryService.getRentDetailById(rent.getId(), null);
 
         // then
         assertThat(rentDetail).isNotNull();
@@ -139,11 +136,10 @@ class RentMainPageTest extends IntegrationTestSupport {
     void 입금_계좌_조회를_성공한다() {
         // given
         var registerId = 1L;
-        var savedRent = rentRepository.save(createRentFixture(
-                registerId, 1L, Region.서울, LocalDate.of(2024, 9, 21)));
+        var rent = rentRepository.save(createRentFixture(registerId, 1L, Region.서울, LocalDate.of(2024, 9, 21)));
 
         // when
-        var depositAccount = rentQueryService.getDepositAccountById(savedRent.getId());
+        var depositAccount = rentQueryService.getDepositAccountById(rent.getId());
 
         // then
         assertThat(depositAccount).isNotNull();

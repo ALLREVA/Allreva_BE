@@ -4,7 +4,6 @@ import com.backend.allreva.chatting.chat.group.command.application.GroupChatComm
 import com.backend.allreva.chatting.chat.group.command.application.request.AddGroupChatRequest;
 import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.event.NotificationMessage;
-import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.application.request.RentIdRequest;
 import com.backend.allreva.rent.command.application.request.RentRegisterRequest;
 import com.backend.allreva.rent.command.application.request.RentUpdateRequest;

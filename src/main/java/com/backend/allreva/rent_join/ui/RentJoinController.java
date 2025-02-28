@@ -10,6 +10,7 @@ import com.backend.allreva.rent_join.command.application.request.RentJoinUpdateR
 import com.backend.allreva.rent_join.query.RentJoinQueryService;
 import com.backend.allreva.rent_join.query.response.RentJoinResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/rents")
 @RestController
+@Validated
 public class RentJoinController implements RentJoinControllerSwagger{
 
     private final RentJoinCommandService rentJoinCommandService;

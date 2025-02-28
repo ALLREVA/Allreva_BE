@@ -1,17 +1,20 @@
-package com.backend.allreva.rent.integration;
+package com.backend.allreva.rent.query;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.backend.allreva.rent.infra.elasticsearch.RentDocument;
 import com.backend.allreva.rent.infra.elasticsearch.RentDocumentRepository;
 import com.backend.allreva.rent.query.application.RentSearchService;
 import com.backend.allreva.rent.query.application.response.RentThumbnail;
 import com.backend.allreva.support.IntegrationTestSupport;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RentSearchServiceTest extends IntegrationTestSupport {
@@ -54,7 +57,6 @@ class RentSearchServiceTest extends IntegrationTestSupport {
         rentDocumentRepository.save(rentDocument1);
         rentDocumentRepository.save(rentDocument2);
         rentDocumentRepository.save(rentDocument3);
-
     }
 
     @AfterAll
@@ -72,6 +74,6 @@ class RentSearchServiceTest extends IntegrationTestSupport {
         List<RentThumbnail> result = rentSearchService.searchRentThumbnails("아기사자");
 
         //then
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).hasSize(2);
     }
 }

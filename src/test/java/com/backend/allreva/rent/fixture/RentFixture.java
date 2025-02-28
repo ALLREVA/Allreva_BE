@@ -47,7 +47,7 @@ public final class RentFixture {
                                 .build())
                         .build())
                 .additionalInfo(AdditionalInfo.builder()
-                        .recruitmentCount(30)
+                        .recruitmentCount(20)
                         .chatUrl("chatUrl")
                         .refundType(RefundType.BOTH)
                         .information("information")
