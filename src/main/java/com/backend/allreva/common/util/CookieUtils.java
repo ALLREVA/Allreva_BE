@@ -18,7 +18,7 @@ public final class CookieUtils {
             final int maxAge
     ) {
         ResponseCookie cookie = ResponseCookie.from(name, value)
-                .domain(isLocalhost(cookieDomain) ? null : cookieDomain)
+                .domain(cookieDomain)
                 .path("/")
                 .maxAge(maxAge)
                 .httpOnly(true)
@@ -27,9 +27,5 @@ public final class CookieUtils {
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-    }
-
-    private static boolean isLocalhost(String domain) {
-        return domain.equals("localhost");
     }
 }
