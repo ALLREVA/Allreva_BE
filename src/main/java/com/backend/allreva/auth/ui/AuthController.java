@@ -27,7 +27,7 @@ public class AuthController implements AuthControllerSwagger {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) {
-        String domainName = request.getServerName();
+        String domainName = request.getServerName(); // localhost 확인 용도
         UserInfoResponse userInfoResponse = authService.kakaoLogin(authorizationCode);
         if (userInfoResponse.isUser()) {
             cookieService.addRefreshTokenCookie(response, userInfoResponse.refreshToken(), domainName);
