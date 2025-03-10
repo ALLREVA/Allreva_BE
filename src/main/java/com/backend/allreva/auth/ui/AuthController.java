@@ -4,6 +4,7 @@ import com.backend.allreva.auth.application.AuthService;
 import com.backend.allreva.auth.application.CookieService;
 import com.backend.allreva.auth.application.dto.UserInfoResponse;
 import com.backend.allreva.common.dto.Response;
+import com.backend.allreva.common.util.DomainUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class AuthController implements AuthControllerSwagger {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) {
-        String domainName = request.getServerName(); // localhost 확인 용도
+        String domainName = DomainUtils.getDomainName(request);
         UserInfoResponse userInfoResponse = authService.kakaoLogin(authorizationCode);
         if (userInfoResponse.isUser()) {
             cookieService.addRefreshTokenCookie(response, userInfoResponse.refreshToken(), domainName);
@@ -42,7 +43,7 @@ public class AuthController implements AuthControllerSwagger {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) {
-        String domainName = request.getServerName();
+        String domainName = DomainUtils.getDomainName(request);
         UserInfoResponse userInfoResponse = authService.reissueAccessToken(refreshToken);
         cookieService.addRefreshTokenCookie(response, userInfoResponse.refreshToken(), domainName);
         response.addHeader("Authorization", "Bearer " + userInfoResponse.accessToken());
@@ -55,7 +56,7 @@ public class AuthController implements AuthControllerSwagger {
             final HttpServletRequest request,
             final HttpServletResponse response
     ) {
-        String domainName = request.getServerName();
+        String domainName = DomainUtils.getDomainName(request);
         UserInfoResponse userInfoResponse = authService.reissueAccessToken(refreshToken);
         cookieService.addRefreshTokenCookie(response, userInfoResponse.refreshToken(), domainName);
         response.addHeader("Authorization", "Bearer " + userInfoResponse.accessToken());
