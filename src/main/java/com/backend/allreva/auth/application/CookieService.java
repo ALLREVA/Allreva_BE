@@ -15,7 +15,8 @@ public class CookieService {
 
     public void addRefreshTokenCookie(
             final HttpServletResponse response,
-            final String refreshToken
+            final String refreshToken,
+            final String domainName
     ) {
         CookieUtils.addCookie(
                 response,
