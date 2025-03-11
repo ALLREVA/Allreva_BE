@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum OAuth2ErrorCode implements ErrorCodeInterface {
 
     UNSUPPORTED_PROVIDER(HttpStatus.BAD_REQUEST.value(), "UNSUPPORTED_PROVIDER", "지원하지 않는 provider 입니다."),
+    INVALID_REDIRECT_URI(HttpStatus.BAD_REQUEST.value(), "INVALID_REDIRECT_URI", "유효하지 않은 redirect uri 입니다."),
     ;
 
     private final Integer status;

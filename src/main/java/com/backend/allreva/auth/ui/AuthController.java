@@ -29,7 +29,7 @@ public class AuthController implements AuthControllerSwagger {
             final HttpServletResponse response
     ) {
         String domainName = DomainUtils.getDomainName(request);
-        UserInfoResponse userInfoResponse = authService.kakaoLogin(authorizationCode);
+        UserInfoResponse userInfoResponse = authService.kakaoLogin(authorizationCode, domainName);
         if (userInfoResponse.isUser()) {
             cookieService.addRefreshTokenCookie(response, userInfoResponse.refreshToken(), domainName);
             response.addHeader("Authorization", "Bearer " + userInfoResponse.accessToken());
