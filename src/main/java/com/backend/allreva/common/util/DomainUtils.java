@@ -11,7 +11,10 @@ public final class DomainUtils {
     public static String getDomainName(HttpServletRequest request) {
         //  ️Nginx 프록시를 고려하여 `Origin` 헤더 확인
         String domainName = request.getHeader("Origin");
-        log.info("Origin: {}", domainName);
+        if (domainName == null) {
+            domainName = request.getHeader("Referer");
+        }
+        log.info("DomainName: {}", domainName);
 
         return domainName;
     }
