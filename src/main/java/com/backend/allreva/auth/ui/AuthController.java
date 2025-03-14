@@ -62,4 +62,16 @@ public class AuthController implements AuthControllerSwagger {
         response.addHeader("Authorization", "Bearer " + userInfoResponse.accessToken());
         return Response.onSuccess(userInfoResponse);
     }
+
+    @GetMapping("/logout")
+    public Response<Void> logout(
+            @CookieValue(name = "refreshToken", required = false) final String refreshToken,
+            final HttpServletRequest request,
+            final HttpServletResponse response
+    ) {
+        String domainName = DomainUtils.getDomainName(request);
+        authService.logout(refreshToken);
+        cookieService.deleteRefreshTokenCookie(response, domainName);
+        return Response.onSuccess();
+    }
 }

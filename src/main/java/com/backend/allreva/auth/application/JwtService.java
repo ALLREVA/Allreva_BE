@@ -165,4 +165,13 @@ public class JwtService {
             throw new TokenNotMatchException();
         }
     }
+
+    /**
+     * Refresh Token을 Redis에서 삭제합니다.
+     * @param refreshToken Cookie에 저장되있던 Refresh Token
+     */
+    public void deleteRefreshTokenInRedis(final String refreshToken) {
+        Optional<RefreshToken> refreshTokenFromRedis = refreshTokenRepository.findRefreshTokenByToken(refreshToken);
+        refreshTokenFromRedis.ifPresent(refreshTokenRepository::delete);
+    }
 }

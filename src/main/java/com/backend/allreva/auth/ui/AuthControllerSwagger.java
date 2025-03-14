@@ -31,4 +31,11 @@ public interface AuthControllerSwagger {
             HttpServletRequest request,
             HttpServletResponse response
     );
+
+    @Operation(summary = "로그아웃", description = "refresh token을 삭제함으로써 로그아웃합니다.")
+    Response<Void> logout(
+            final String refreshToken,
+            final HttpServletRequest request,
+            final HttpServletResponse response
+    );
 }

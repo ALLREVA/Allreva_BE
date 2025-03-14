@@ -28,4 +28,22 @@ public final class CookieUtils {
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
+
+    // 쿠키 제거
+    public static void deleteCookie(
+            final HttpServletResponse response,
+            final String cookieDomain,
+            final String name
+    ) {
+        ResponseCookie cookie = ResponseCookie.from(name, "")
+                .domain(cookieDomain)
+                .path("/")
+                .maxAge(0) // maxAge 0
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
 }

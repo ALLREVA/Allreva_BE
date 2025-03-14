@@ -27,6 +27,17 @@ public class CookieService {
         );
     }
 
+    public void deleteRefreshTokenCookie(
+            final HttpServletResponse response,
+            final String domainName
+    ) {
+        CookieUtils.deleteCookie(
+                response,
+                isLocalhost(domainName) ? null : prodDomainName,
+                "refreshToken"
+        );
+    }
+
     private static boolean isLocalhost(String domain) {
         return domain.contains("localhost");
     }

@@ -110,4 +110,18 @@ public class AuthService {
                 .profileImageUrl(member.getMemberInfo().getProfileImageUrl())
                 .build();
     }
+
+    /**
+     * Redis에 저장된 Refresh Token을 제거합니다.
+     */
+    public void logout(final String refreshToken) {
+        if (refreshToken == null) {
+            throw new TokenEmptyException();
+        }
+
+        // redis refresh token은 따로 만료기간이 없어서 영구 저장됨 -> 없다면 문제 있는거.
+        jwtService.validRefreshTokenExistInRedis(refreshToken);
+
+        jwtService.deleteRefreshTokenInRedis(refreshToken);
+    }
 }
