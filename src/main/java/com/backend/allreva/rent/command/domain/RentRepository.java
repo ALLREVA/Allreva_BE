@@ -16,6 +16,7 @@ public interface RentRepository {
 
     // for command
     Optional<Rent> findById(Long id);
+    Optional<RentBoardingInfo> findByIdAndBoardingDate(Long rentId, LocalDate date);
     boolean existsById(Long id);
     Rent save(Rent rent);
     List<RentBoardingInfo> updateRentBoardingInfos(Long rentId, List<RentBoardingInfo> rentBoardingInfos);

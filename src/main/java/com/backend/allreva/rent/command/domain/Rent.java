@@ -58,15 +58,15 @@ public class Rent extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "rent", cascade = CascadeType.ALL)
-    private List<RentBoardingInfo> boardingDates = new ArrayList<>();
+    private List<RentBoardingInfo> boardingInfos = new ArrayList<>();
 
     @Builder.Default
     @Column(nullable = false)
     private boolean isClosed = false; //마감 여부
 
-    public void assignBoardingDates(List<RentBoardingInfo> boardingDates) {
-        boardingDates.forEach(boardingDate -> boardingDate.assignRent(this));
-        this.boardingDates = boardingDates;
+    public void assignBoardingInfos(List<RentBoardingInfo> boardingInfos) {
+        boardingInfos.forEach(boardingInfo -> boardingInfo.assignRent(this));
+        this.boardingInfos = boardingInfos;
     }
 
     public void updateRent(
@@ -107,7 +107,7 @@ public class Rent extends BaseEntity {
                         .recruitmentCount(request.recruitmentCount())
                         .build())
                 .toList();
-        assignBoardingDates(rentBoardingInfos);
+        assignBoardingInfos(rentBoardingInfos);
         isClosed = false;
 
         Events.raise(new RentSaveEvent(this));

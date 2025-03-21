@@ -1,6 +1,8 @@
 package com.backend.allreva.rent.command.domain;
 
+import com.backend.allreva.common.event.Events;
 import com.backend.allreva.common.model.BaseEntity;
+import com.backend.allreva.rent_join.exception.PassengersMaximumReachedException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is NULL")
-@SQLDelete(sql = "UPDATE rent_form_boarding_date SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE rent_boarding_info SET deleted_at = NOW() WHERE id = ?")
 @Entity
 @Table(name = "rent_boarding_info")
 public class RentBoardingInfo extends BaseEntity {
@@ -48,6 +50,17 @@ public class RentBoardingInfo extends BaseEntity {
 
     protected void assignRent(Rent rent) {
         this.rent = rent;
+    }
+
+    public void checkPassengersMaximumReached() {
+        if (passengerCount + passengerCount > recruitmentCount) {
+            throw new PassengersMaximumReachedException();
+        }
+
+        // rent close event
+        if (passengerCount + passengerCount == recruitmentCount) {
+            Events.raise(new RentClosedEvent(rent.getId()));
+        }
     }
 }
 

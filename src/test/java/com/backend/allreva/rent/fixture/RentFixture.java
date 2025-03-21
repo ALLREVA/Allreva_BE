@@ -47,24 +47,17 @@ public final class RentFixture {
                                 .build())
                         .build())
                 .additionalInfo(AdditionalInfo.builder()
-                        .recruitmentCount(20)
                         .chatUrl("chatUrl")
                         .refundType(RefundType.BOTH)
                         .information("information")
                         .endDate(LocalDate.of(2024, 9, 13))
                         .build())
                 .build();
-        rent.assignBoardingDates(List.of(RentBoardingInfo.builder()
+        rent.assignBoardingInfos(List.of(RentBoardingInfo.builder()
                 .rent(rent)
                 .date(LocalDate.of(2024, 9, 20))
+                .recruitmentCount(20)
                 .build()));
         return rent;
-    }
-
-    public static List<RentBoardingInfo> createRentBoardingDateFixture(final Rent rent) {
-        return List.of(RentBoardingInfo.builder()
-                .rent(rent)
-                .date(LocalDate.of(2024, 9, 20))
-                .build());
     }
 }

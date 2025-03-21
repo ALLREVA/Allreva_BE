@@ -31,6 +31,14 @@ public class RentRepositoryImpl implements RentRepository {
     }
 
     @Override
+    public Optional<RentBoardingInfo> findByIdAndBoardingDate(
+            final Long rentId,
+            final LocalDate date
+    ) {
+        return rentBoardingInfoJpaRepository.findByRentIdAndDate(rentId, date);
+    }
+
+    @Override
     public boolean existsById(final Long id) {
         return rentJpaRepository.existsById(id);
     }

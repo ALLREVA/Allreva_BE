@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RentJoinJpaRepository extends JpaRepository<RentJoin, Long> {
 
-    boolean existsByBoardingDateAndRentIdAndMemberId(LocalDate boardingDate, Long rentId, Long memberId);
+    boolean existsByMemberIdAndRentIdAndBoardingDate(Long memberId, Long rentId, LocalDate boardingDate);
 }

@@ -31,6 +31,20 @@ public class RentFakeRepository implements RentRepository {
     }
 
     @Override
+    public Optional<RentBoardingInfo> findByIdAndBoardingDate(final Long rentId, final LocalDate date) {
+        Optional<Rent> rentOptional = rentTable.stream()
+                .filter(rent -> Objects.equals(rent.getId(), rentId))
+                .findFirst();
+        if (rentOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        List<RentBoardingInfo> boardingInfos = rentOptional.get().getBoardingInfos();
+        return boardingInfos.stream()
+                .filter(bi -> Objects.equals(bi.getDate(), date))
+                .findFirst();
+    }
+
+    @Override
     public boolean existsById(Long id) {
         return rentTable.stream()
                 .anyMatch(rent -> Objects.equals(rent.getId() - 1, id));

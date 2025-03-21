@@ -68,14 +68,17 @@ public record RentRegisterRequest(
     public Rent toEntity(
             final Long memberId
     ) {
+        List<RentBoardingInfo> rentBoardingInfos = rentBoardingDateRequests.stream()
+                .map(date -> RentBoardingInfo.builder()
+                        .date(date)
+                        .recruitmentCount(recruitmentCount)
+                        .build())
+                .toList();
+
         Rent rent = Rent.builder()
                 .memberId(memberId)
                 .concertId(concertId)
-                .boardingDates(rentBoardingDateRequests.stream()
-                        .map(request -> RentBoardingInfo.builder()
-                                .date(request)
-                                .build())
-                        .toList())
+                .boardingInfos(rentBoardingInfos)
                 .detailInfo(DetailInfo.builder()
                         .image(image)
                         .title(title)
@@ -106,13 +109,7 @@ public record RentRegisterRequest(
                         .build())
                 .build();
 
-        List<RentBoardingInfo> rentBoardingInfos = rentBoardingDateRequests.stream()
-                .map(date -> RentBoardingInfo.builder()
-                        .date(date)
-                        .recruitmentCount(recruitmentCount)
-                        .build())
-                .toList();
-        rent.assignBoardingDates(rentBoardingInfos);
+        rent.assignBoardingInfos(rentBoardingInfos);
         return rent;
     }
 }

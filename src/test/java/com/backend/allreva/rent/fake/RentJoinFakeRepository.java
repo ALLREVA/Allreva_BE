@@ -25,20 +25,10 @@ public class RentJoinFakeRepository implements RentJoinRepository {
     }
 
     @Override
-    public Integer countRentJoin(final Long rentId, final LocalDate boardingDate) {
-        return rentJoinTable.stream()
-                .filter(rentJoin -> Objects.equals(rentJoin.getRentId(), rentId))
-                .filter(rentJoin -> Objects.equals(rentJoin.getBoardingDate(), boardingDate))
-                .map(RentJoin::getPassengerNum)
-                .reduce(Integer::sum)
-                .orElse(0);
-    }
-
-    @Override
-    public boolean existsByBoardingDateAndRentIdAndMemberId(
-            final LocalDate boardingDate,
+    public boolean existsRentJoin(
+            final Long memberId,
             final Long rentId,
-            final Long memberId
+            final LocalDate boardingDate
     ) {
         return rentJoinTable.stream()
                 .anyMatch(rentJoin -> Objects.equals(rentJoin.getBoardingDate(), boardingDate)
@@ -67,7 +57,7 @@ public class RentJoinFakeRepository implements RentJoinRepository {
 
     // for query, so not implemented in test
     @Override
-    public List<RentJoinResponse> findRentJoin(final Long memberId) {
+    public List<RentJoinResponse> findByMemberId(final Long memberId) {
         return List.of();
     }
 }

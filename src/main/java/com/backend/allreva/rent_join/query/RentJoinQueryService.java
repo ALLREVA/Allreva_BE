@@ -13,6 +13,6 @@ public class RentJoinQueryService {
     private final RentJoinRepository rentJoinRepository;
 
     public List<RentJoinResponse> getRentJoin(final Long memberId) {
-        return rentJoinRepository.findRentJoin(memberId);
+        return rentJoinRepository.findByMemberId(memberId);
     }
 }

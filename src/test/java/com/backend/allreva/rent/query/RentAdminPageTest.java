@@ -43,7 +43,7 @@ class RentAdminPageTest extends IntegrationTestSupport {
         assertSoftly(softly -> {
             // 총 모집 인원 테스트
             var recruitmentCountByQuery = rentAdminSummaries.get(0).recruitmentCount();
-            var recruitmentCount = rent.getAdditionalInfo().getRecruitmentCount();
+            var recruitmentCount = rent.getBoardingInfos().get(0).getRecruitmentCount();
             softly.assertThat(recruitmentCountByQuery).isEqualTo(recruitmentCount);
             // 현재 모집 인원 테스트
             var participationCountByQuery = rentAdminSummaries.get(0).participationCount();

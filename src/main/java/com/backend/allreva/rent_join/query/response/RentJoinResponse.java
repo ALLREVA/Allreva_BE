@@ -12,7 +12,7 @@ public record RentJoinResponse(
         Long rentId, // 차량 대절 ID
         String title, // 차량 대절 제목
         LocalDate rentBoardingDate, // 공연일(차 대절 가용 날짜)
-        String boardingArea, // TODO: boardingArea or Region?
+        String boardingArea,
         LocalDateTime rentStartDate, // 차량 대절 모집 시작 시간
         LocalDate rentEndDate, // 차량 대절 모집 종료 시간
         int recruitmentCount, // 최대 모집 인원
