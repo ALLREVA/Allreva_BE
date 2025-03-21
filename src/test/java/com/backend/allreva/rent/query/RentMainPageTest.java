@@ -11,7 +11,7 @@ import com.backend.allreva.concert.command.domain.ConcertRepository;
 import com.backend.allreva.hall.command.domain.ConcertHallRepository;
 import com.backend.allreva.member.command.domain.value.MemberRole;
 import com.backend.allreva.rent.command.domain.Rent;
-import com.backend.allreva.rent.command.domain.RentBoardingDate;
+import com.backend.allreva.rent.command.domain.RentBoardingInfo;
 import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.command.domain.value.AdditionalInfo;
 import com.backend.allreva.rent.command.domain.value.Bus;
@@ -186,11 +186,11 @@ class RentMainPageTest extends IntegrationTestSupport {
                         .build())
                 .build();
         rent.assignBoardingDates(List.of(
-                RentBoardingDate.builder()
+                RentBoardingInfo.builder()
                         .rent(rent)
                         .date(LocalDate.of(2024, 9, 20))
                         .build(),
-                RentBoardingDate.builder()
+                RentBoardingInfo.builder()
                         .rent(rent)
                         .date(LocalDate.of(2024, 9, 21))
                         .build()));

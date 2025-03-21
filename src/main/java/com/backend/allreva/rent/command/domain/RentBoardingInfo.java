@@ -16,8 +16,8 @@ import java.time.LocalDate;
 @SQLRestriction("deleted_at is NULL")
 @SQLDelete(sql = "UPDATE rent_form_boarding_date SET deleted_at = NOW() WHERE id = ?")
 @Entity
-@Table(name = "rent_form_boarding_date")
-public class RentBoardingDate extends BaseEntity {
+@Table(name = "rent_boarding_info")
+public class RentBoardingInfo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,10 +28,22 @@ public class RentBoardingDate extends BaseEntity {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(nullable = false)
+    private int recruitmentCount; // 모집 인원
+
+    @Column(nullable = false)
+    private int passengerCount; // 신청 인원
+
     @Builder
-    private RentBoardingDate(Rent rent, LocalDate date) {
+    private RentBoardingInfo(
+            Rent rent,
+            LocalDate date,
+            int recruitmentCount
+    ) {
         this.rent = rent;
         this.date = date;
+        this.recruitmentCount = recruitmentCount;
+        this.passengerCount = 0;
     }
 
     protected void assignRent(Rent rent) {

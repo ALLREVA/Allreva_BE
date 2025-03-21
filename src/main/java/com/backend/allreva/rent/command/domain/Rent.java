@@ -33,9 +33,9 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is NULL")
-@SQLDelete(sql = "UPDATE rent_form SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE rent SET deleted_at = NOW() WHERE id = ?")
 @Entity
-@Table(name = "rent_form")
+@Table(name = "rent")
 public class Rent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,13 +58,13 @@ public class Rent extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "rent", cascade = CascadeType.ALL)
-    private List<RentBoardingDate> boardingDates = new ArrayList<>();
+    private List<RentBoardingInfo> boardingDates = new ArrayList<>();
 
     @Builder.Default
     @Column(nullable = false)
     private boolean isClosed = false; //마감 여부
 
-    public void assignBoardingDates(List<RentBoardingDate> boardingDates) {
+    public void assignBoardingDates(List<RentBoardingInfo> boardingDates) {
         boardingDates.forEach(boardingDate -> boardingDate.assignRent(this));
         this.boardingDates = boardingDates;
     }
@@ -95,19 +95,19 @@ public class Rent extends BaseEntity {
                         .build())
                 .build();
         this.additionalInfo = AdditionalInfo.builder()
-                .recruitmentCount(request.recruitmentCount())
                 .chatUrl(request.chatUrl())
                 .refundType(request.refundType())
                 .information(request.information())
                 .endDate(request.endDate())
                 .build();
-        List<RentBoardingDate> rentBoardingDates = request.rentBoardingDateRequests().stream()
-                .map(date -> RentBoardingDate.builder()
+        List<RentBoardingInfo> rentBoardingInfos = request.rentBoardingDateRequests().stream()
+                .map(date -> RentBoardingInfo.builder()
                         .rent(this)
                         .date(date)
+                        .recruitmentCount(request.recruitmentCount())
                         .build())
                 .toList();
-        assignBoardingDates(rentBoardingDates);
+        assignBoardingDates(rentBoardingInfos);
         isClosed = false;
 
         Events.raise(new RentSaveEvent(this));

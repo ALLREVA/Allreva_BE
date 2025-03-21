@@ -1,7 +1,7 @@
 package com.backend.allreva.rent.fake;
 
 import com.backend.allreva.rent.command.domain.Rent;
-import com.backend.allreva.rent.command.domain.RentBoardingDate;
+import com.backend.allreva.rent.command.domain.RentBoardingInfo;
 import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.command.domain.value.Region;
 import com.backend.allreva.rent.query.application.response.DepositAccountResponse;
@@ -51,20 +51,20 @@ public class RentFakeRepository implements RentRepository {
     }
 
     @Override
-    public List<RentBoardingDate> updateRentBoardingDates(Long rentId, List<RentBoardingDate> rentBoardingDates) {
+    public List<RentBoardingInfo> updateRentBoardingInfos(Long rentId, List<RentBoardingInfo> rentBoardingInfos) {
         rentTable.stream()
                 .filter(o -> Objects.equals(o.getId(), rentId))
                 .findFirst()
-                .ifPresent(rent -> ReflectionTestUtils.setField(rent, "rentBoardingDates", rentBoardingDates));
-        return rentBoardingDates;
+                .ifPresent(rent -> ReflectionTestUtils.setField(rent, "rentBoardingInfos", rentBoardingInfos));
+        return rentBoardingInfos;
     }
 
     @Override
-    public void deleteBoardingDateAllByRentId(Long rentId) {
+    public void deleteBoardingInfoAllByRentId(Long rentId) {
         rentTable.stream()
                .filter(o -> Objects.equals(o.getId(), rentId))
                .findFirst()
-               .ifPresent(rent -> ReflectionTestUtils.setField(rent, "boardingDates", new ArrayList<>()));
+               .ifPresent(rent -> ReflectionTestUtils.setField(rent, "boardingInfos", new ArrayList<>()));
     }
 
     @Override

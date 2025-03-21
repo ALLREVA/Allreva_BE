@@ -1,7 +1,7 @@
 package com.backend.allreva.rent.infra.rdb;
 
 import com.backend.allreva.rent.command.domain.Rent;
-import com.backend.allreva.rent.command.domain.RentBoardingDate;
+import com.backend.allreva.rent.command.domain.RentBoardingInfo;
 import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.command.domain.value.Region;
 import com.backend.allreva.rent.query.application.response.DepositAccountResponse;
@@ -23,7 +23,7 @@ public class RentRepositoryImpl implements RentRepository {
 
     private final RentJpaRepository rentJpaRepository;
     private final RentDslRepositoryImpl rentDslRepository;
-    private final RentBoardingDateJpaRepository rentBoardingDateJpaRepository;
+    private final RentBoardingInfoJpaRepository rentBoardingInfoJpaRepository;
 
     @Override
     public Optional<Rent> findById(final Long id) {
@@ -41,18 +41,18 @@ public class RentRepositoryImpl implements RentRepository {
     }
 
     @Override
-    public List<RentBoardingDate> updateRentBoardingDates(
+    public List<RentBoardingInfo> updateRentBoardingInfos(
             final Long rentId,
-            final List<RentBoardingDate> rentBoardingDates
+            final List<RentBoardingInfo> rentBoardingInfos
     ) {
-        rentBoardingDateJpaRepository.deleteAllByRentId(rentId);
+        rentBoardingInfoJpaRepository.deleteAllByRentId(rentId);
         // TODO: bulk insert
-        return rentBoardingDateJpaRepository.saveAll(rentBoardingDates);
+        return rentBoardingInfoJpaRepository.saveAll(rentBoardingInfos);
     }
 
     @Override
-    public void deleteBoardingDateAllByRentId(final Long rentId) {
-        rentBoardingDateJpaRepository.deleteAllByRentId(rentId);
+    public void deleteBoardingInfoAllByRentId(final Long rentId) {
+        rentBoardingInfoJpaRepository.deleteAllByRentId(rentId);
     }
 
     @Override

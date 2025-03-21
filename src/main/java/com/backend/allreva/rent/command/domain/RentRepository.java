@@ -18,8 +18,8 @@ public interface RentRepository {
     Optional<Rent> findById(Long id);
     boolean existsById(Long id);
     Rent save(Rent rent);
-    List<RentBoardingDate> updateRentBoardingDates(Long rentId, List<RentBoardingDate> rentBoardingDates);
-    void deleteBoardingDateAllByRentId(Long rentId);
+    List<RentBoardingInfo> updateRentBoardingInfos(Long rentId, List<RentBoardingInfo> rentBoardingInfos);
+    void deleteBoardingInfoAllByRentId(Long rentId);
     void delete(Rent rent);
 
     // for query

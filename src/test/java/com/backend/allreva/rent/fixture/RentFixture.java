@@ -2,7 +2,7 @@ package com.backend.allreva.rent.fixture;
 
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.domain.Rent;
-import com.backend.allreva.rent.command.domain.RentBoardingDate;
+import com.backend.allreva.rent.command.domain.RentBoardingInfo;
 import com.backend.allreva.rent.command.domain.value.AdditionalInfo;
 import com.backend.allreva.rent.command.domain.value.Bus;
 import com.backend.allreva.rent.command.domain.value.BusSize;
@@ -54,15 +54,15 @@ public final class RentFixture {
                         .endDate(LocalDate.of(2024, 9, 13))
                         .build())
                 .build();
-        rent.assignBoardingDates(List.of(RentBoardingDate.builder()
+        rent.assignBoardingDates(List.of(RentBoardingInfo.builder()
                 .rent(rent)
                 .date(LocalDate.of(2024, 9, 20))
                 .build()));
         return rent;
     }
 
-    public static List<RentBoardingDate> createRentBoardingDateFixture(final Rent rent) {
-        return List.of(RentBoardingDate.builder()
+    public static List<RentBoardingInfo> createRentBoardingDateFixture(final Rent rent) {
+        return List.of(RentBoardingInfo.builder()
                 .rent(rent)
                 .date(LocalDate.of(2024, 9, 20))
                 .build());

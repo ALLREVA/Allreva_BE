@@ -18,9 +18,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class AdditionalInfo {
-    @Column(nullable = false)
-    private int recruitmentCount; //모집인원
-
     @Column(nullable = false, name = "eddate")
     private LocalDate endDate; //모집마감날짜
 

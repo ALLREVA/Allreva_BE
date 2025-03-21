@@ -4,7 +4,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import com.backend.allreva.common.model.Image;
 import com.backend.allreva.rent.command.domain.Rent;
-import com.backend.allreva.rent.command.domain.RentBoardingDate;
+import com.backend.allreva.rent.command.domain.RentBoardingInfo;
 import com.backend.allreva.rent.command.domain.RentRepository;
 import com.backend.allreva.rent.command.domain.value.AdditionalInfo;
 import com.backend.allreva.rent.command.domain.value.Bus;
@@ -92,11 +92,11 @@ class RentJoinPageTest extends IntegrationTestSupport {
                         .build())
                 .build();
         rent.assignBoardingDates(List.of(
-                RentBoardingDate.builder()
+                RentBoardingInfo.builder()
                         .rent(rent)
                         .date(LocalDate.of(2024, 9, 20))
                         .build(),
-                RentBoardingDate.builder()
+                RentBoardingInfo.builder()
                         .rent(rent)
                         .date(LocalDate.of(2024, 9, 21))
                         .build()));

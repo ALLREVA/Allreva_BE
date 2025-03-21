@@ -45,7 +45,7 @@ public class RentCommandService {
 
         rent.validateMine(memberId);
 
-        rentRepository.deleteBoardingDateAllByRentId(rentUpdateRequest.rentId());
+        rentRepository.deleteBoardingInfoAllByRentId(rentUpdateRequest.rentId());
         rent.updateRent(rentUpdateRequest);
         return rent;
     }
