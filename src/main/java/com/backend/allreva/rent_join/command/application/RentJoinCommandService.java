@@ -34,7 +34,7 @@ public class RentJoinCommandService {
 
         RentBoardingInfo rentBoardingInfo = rentRepository.findByIdAndBoardingDate(request.rentId(), request.boardingDate())
                 .orElseThrow(RentNotFoundException::new);
-        rentBoardingInfo.checkPassengersMaximumReached();
+        rentBoardingInfo.addPassengerCount(request.passengerNum());
 
         RentJoin rentJoin = request.toEntity(memberId);
         RentJoin savedRentJoin = rentJoinRepository.save(rentJoin);

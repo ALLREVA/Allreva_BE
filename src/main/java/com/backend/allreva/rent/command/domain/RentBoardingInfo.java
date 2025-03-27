@@ -52,14 +52,23 @@ public class RentBoardingInfo extends BaseEntity {
         this.rent = rent;
     }
 
-    public void checkPassengersMaximumReached() {
-        if (passengerCount + passengerCount > recruitmentCount) {
+    public void addPassengerCount(int passengerCount) {
+        checkPassengersMaximumReached(passengerCount);
+        this.passengerCount += passengerCount;
+
+        checkIfRecruitmentCompleted();
+    }
+
+    private void checkPassengersMaximumReached(int passengerCount) {
+        if (this.passengerCount + passengerCount > recruitmentCount) {
             throw new PassengersMaximumReachedException();
         }
+    }
 
-        // rent close event
-        if (passengerCount + passengerCount == recruitmentCount) {
-            Events.raise(new RentClosedEvent(rent.getId()));
+    private void checkIfRecruitmentCompleted() {
+        if (passengerCount == recruitmentCount) {
+            // Recruitment is complete, raise domain event
+            Events.raise(new RentClosedEvent(this.id));
         }
     }
 }
