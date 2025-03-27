@@ -15,7 +15,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Slf4j
 @Component
-@Profile("!local")
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
     private final HandlerExceptionResolver resolver;
