@@ -29,7 +29,7 @@ public class RentQueryService {
     private final RentJoinRepository rentJoinRepository;
 
     public List<RentSummaryResponse> getRentMainSummaries() {
-        return rentRepository.findRentSummaries(null, null, null, null, 3);
+        return rentRepository.findRentSummaries(null, SortType.LATEST, null, null, 3);
     }
 
     public List<RentSummaryResponse> getRentSummaries(
