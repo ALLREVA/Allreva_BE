@@ -20,7 +20,11 @@ import java.time.LocalDate;
 @SQLRestriction("deleted_at is NULL")
 @SQLDelete(sql = "UPDATE rent_join SET deleted_at = NOW() WHERE id = ?")
 @Entity
+@Table(name = "rent_join", indexes = {
+        @Index(name = "idx_rent_join_member_id", columnList = "member_id")
+})
 public class RentJoin extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

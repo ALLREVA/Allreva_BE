@@ -37,6 +37,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Table(name = "rent")
 public class Rent extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
