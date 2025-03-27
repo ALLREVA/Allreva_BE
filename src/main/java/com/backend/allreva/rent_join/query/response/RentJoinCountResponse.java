@@ -1,4 +1,4 @@
-package com.backend.allreva.rent.query.application.response;
+package com.backend.allreva.rent_join.query.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,5 +11,11 @@ public record RentJoinCountResponse(
         int refundCount, // 입금 처리 - 환불 인원
         int additionalDepositCount // 입금 처리 - 추가 입금 인원
 ) {
-    public static final RentJoinCountResponse EMPTY = RentJoinCountResponse.builder().build();
+    public static final RentJoinCountResponse EMPTY = RentJoinCountResponse.builder()
+            .rentUpCount(0)
+            .rentDownCount(0)
+            .rentRoundCount(0)
+            .refundCount(0)
+            .additionalDepositCount(0)
+            .build();
 }

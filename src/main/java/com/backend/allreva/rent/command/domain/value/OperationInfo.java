@@ -15,8 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class OperationInfo {
+
     @Column(nullable = false)
-    private String boardingArea;
+    private String boardingArea; // 상행 지역
 
     @Column(nullable = false)
     private String upTime;

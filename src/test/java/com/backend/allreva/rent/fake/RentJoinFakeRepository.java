@@ -25,7 +25,15 @@ public class RentJoinFakeRepository implements RentJoinRepository {
     }
 
     @Override
-    public boolean existsRentJoin(
+    public List<RentJoin> findByRentIdAndBoardingDate(final Long rentId, final LocalDate boardingDate) {
+        return rentJoinTable.stream()
+                .filter(rentJoin -> Objects.equals(rentJoin.getRentId(), rentId))
+                .filter(rentJoin -> Objects.equals(rentJoin.getBoardingDate(), boardingDate))
+                .toList();
+    }
+
+    @Override
+    public boolean exists(
             final Long memberId,
             final Long rentId,
             final LocalDate boardingDate

@@ -17,6 +17,9 @@ public class RentJoinDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
+    /**
+     * [Participate] 자신이 참여한 차 대절 조회
+     */
     public List<RentJoinResponse> findByMemberId(final Long memberId) {
         return queryFactory.select(Projections.constructor(RentJoinResponse.class,
                         rent.id,

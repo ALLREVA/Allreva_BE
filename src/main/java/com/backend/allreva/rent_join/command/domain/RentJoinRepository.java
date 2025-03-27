@@ -8,11 +8,9 @@ import java.util.Optional;
 public interface RentJoinRepository {
 
     Optional<RentJoin> findById(Long id);
-
-    boolean existsRentJoin(Long memberId, Long rentId, LocalDate boardingDate);
-
+    List<RentJoin> findByRentIdAndBoardingDate(Long rentId, LocalDate boardingDate);
+    boolean exists(Long memberId, Long rentId, LocalDate boardingDate);
     RentJoin save(RentJoin rentJoin);
-
     void delete(RentJoin rentJoin);
 
     List<RentJoinResponse> findByMemberId(Long memberId);

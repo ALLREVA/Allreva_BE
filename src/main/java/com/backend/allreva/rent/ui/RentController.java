@@ -39,7 +39,6 @@ public class RentController implements RentControllerSwagger {
     private final RentCommandFacade rentCommandFacade;
     private final RentQueryService rentQueryService;
 
-
     @PostMapping
     public Response<Long> createRent(
             @RequestBody final RentRegisterRequest rentRegisterRequest,
@@ -92,26 +91,28 @@ public class RentController implements RentControllerSwagger {
         return Response.onSuccess(rentQueryService.getRentSummaries(region, sortType, lastEndDate, lastId, pageSize));
     }
 
+    @GetMapping("/register/list")
+    public Response<List<RentAdminSummaryResponse>> getRentAdminSummaries(
+            @AuthMember Member member,
+            @RequestParam(name = "lastId", required = false) final Long lastId,
+            @RequestParam(name = "pageSize", defaultValue = "10") @Min(10) final int pageSize
+    ) {
+        return Response.onSuccess(rentQueryService.getRentAdminSummaries(member.getId(), lastId, pageSize));
+    }
+
     @GetMapping("/{id}")
     public Response<RentDetailResponse> getRentDetailById(
             @PathVariable final Long id,
             @AuthMember final Member member
     ) {
-        return Response.onSuccess(rentQueryService.getRentDetailById(id, member));
+        return Response.onSuccess(rentQueryService.getRentDetail(id, member));
     }
 
     @GetMapping("/{id}/deposit-account")
     public Response<DepositAccountResponse> getDepositAccountById(
             @PathVariable final Long id
     ) {
-        return Response.onSuccess(rentQueryService.getDepositAccountById(id));
-    }
-
-    @GetMapping("/register/list")
-    public Response<List<RentAdminSummaryResponse>> getRentAdminSummaries(
-            @AuthMember Member member
-    ) {
-        return Response.onSuccess(rentQueryService.getRentAdminSummariesByMemberId(member.getId()));
+        return Response.onSuccess(rentQueryService.getDepositAccount(id));
     }
 
     @GetMapping("/{id}/register")

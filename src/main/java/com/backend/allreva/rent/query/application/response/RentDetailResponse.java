@@ -51,6 +51,7 @@ public class RentDetailResponse {
             final String dropOffArea,
             final String upTime,
             final String downTime,
+            final List<RentBoardingDateResponse> boardingDates,
             final BusSize busSize,
             final BusType busType,
             final int maxPassenger,
@@ -73,6 +74,7 @@ public class RentDetailResponse {
         this.dropOffArea = dropOffArea;
         this.upTime = upTime;
         this.downTime = downTime;
+        this.boardingDates = boardingDates;
         this.busSize = busSize;
         this.busType = busType;
         this.maxPassenger = maxPassenger;

@@ -28,7 +28,7 @@ public class RentJoinCommandService {
             final RentJoinApplyRequest request,
             final Long memberId
     ) {
-        if (rentJoinRepository.existsRentJoin(memberId, request.rentId(), request.boardingDate())) {
+        if (rentJoinRepository.exists(memberId, request.rentId(), request.boardingDate())) {
             throw new RentJoinAlreadyExistsException();
         }
 

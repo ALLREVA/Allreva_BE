@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class Price {
+
     @Column(nullable = false)
     private int roundPrice;
 

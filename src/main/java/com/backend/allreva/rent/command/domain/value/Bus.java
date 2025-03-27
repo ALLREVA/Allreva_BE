@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class Bus {
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BusSize busSize;

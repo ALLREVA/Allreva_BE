@@ -22,7 +22,12 @@ public class RentJoinRepositoryImpl implements RentJoinRepository {
     }
 
     @Override
-    public boolean existsRentJoin(
+    public List<RentJoin> findByRentIdAndBoardingDate(final Long rentId, final LocalDate boardingDate) {
+        return rentJoinJpaRepository.findByRentIdAndBoardingDate(rentId, boardingDate);
+    }
+
+    @Override
+    public boolean exists(
             final Long memberId,
             final Long rentId,
             final LocalDate boardingDate

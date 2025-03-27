@@ -18,15 +18,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class AdditionalInfo {
+
     @Column(nullable = false, name = "eddate")
-    private LocalDate endDate; //모집마감날짜
+    private LocalDate endDate; // 모집마감날짜
 
     @Column(nullable = false)
-    private String chatUrl; //채팅방 날짜
+    private String chatUrl; // 채팅방 날짜
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RefundType refundType; //환불 정책
+    private RefundType refundType; // 환불 정책
 
-    private String information; //안내 사항
+    private String information; // 안내 사항
 }

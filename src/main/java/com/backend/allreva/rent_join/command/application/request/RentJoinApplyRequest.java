@@ -7,7 +7,9 @@ import com.backend.allreva.rent_join.command.domain.value.RefundType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import lombok.Builder;
 
+@Builder
 public record RentJoinApplyRequest(
         @NotNull
         Long rentId,

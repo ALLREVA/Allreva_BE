@@ -1,14 +1,13 @@
 package com.backend.allreva.support;
 
-import java.util.Arrays;
-
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.BeanArbitraryIntrospector;
+import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
 import com.navercorp.fixturemonkey.api.introspector.FailoverIntrospector;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.api.introspector.PriorityConstructorArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,8 @@ public final class FixtureUtil {
             Arrays.asList(
                 FieldReflectionArbitraryIntrospector.INSTANCE,
                 PriorityConstructorArbitraryIntrospector.INSTANCE,
-                BeanArbitraryIntrospector.INSTANCE
+                BeanArbitraryIntrospector.INSTANCE,
+                ConstructorPropertiesArbitraryIntrospector.INSTANCE
                 //BuilderArbitraryIntrospector.INSTANCE
             )
         ))

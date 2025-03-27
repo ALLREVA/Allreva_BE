@@ -65,6 +65,17 @@ public interface RentControllerSwagger {
     );
 
     @Operation(
+            summary = "내가 등록한 차 대절 리스트 조회 API",
+            description = """
+                    사용자가 등록한 차량 대절 폼의 요약된 정보를 리스트로 조회합니다.
+                    """)
+    Response<List<RentAdminSummaryResponse>> getRentAdminSummaries(
+            Member member,
+            Long lastId,
+            @Min(10) int pageSize
+    );
+
+    @Operation(
             summary = "차량 대절 폼 상세 조회 API",
             description = """
                     차량 대절 폼을 상세 조회합니다.
@@ -84,15 +95,6 @@ public interface RentControllerSwagger {
                     """)
     Response<DepositAccountResponse> getDepositAccountById(
             Long id
-    );
-
-    @Operation(
-            summary = "내가 등록한 차 대절 리스트 조회 API",
-            description = """
-                    사용자가 등록한 차량 대절 폼의 요약된 정보를 리스트로 조회합니다.
-                    """)
-    Response<List<RentAdminSummaryResponse>> getRentAdminSummaries(
-            Member member
     );
 
     @Operation(
