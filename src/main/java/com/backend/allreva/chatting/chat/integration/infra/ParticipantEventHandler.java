@@ -192,7 +192,11 @@ public class ParticipantEventHandler {
             final Long groupChatId
     ) {
         ChatParticipantDoc participantDoc = participantRepository.findChatParticipantDocByMemberId(memberId)
-                .orElseThrow(NotFoundException::new);
+                .orElseGet(() -> {
+                    ChatParticipantDoc doc = new ChatParticipantDoc(memberId);
+                    participantRepository.save(doc);
+                    return doc;
+                });
 
         GroupChat groupChat = groupChatRepository.findById(groupChatId)
                 .orElseThrow(NotFoundException::new);
@@ -216,7 +220,11 @@ public class ParticipantEventHandler {
             final Long memberId
     ) {
         ChatParticipantDoc memberDocument = participantRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
+                .orElseGet(() -> {
+                    ChatParticipantDoc doc = new ChatParticipantDoc(memberId);
+                    participantRepository.save(doc);
+                    return doc;
+                });
 
         OtherMember otherMember = singleChatRepository
                 .findOtherMemberInfo(memberId, singleChatId);
