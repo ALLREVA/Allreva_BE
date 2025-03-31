@@ -1,23 +1,14 @@
 package com.backend.allreva.chatting.message.domain.value;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Content {
 
     private ContentType contentType;
     private String payload;
 
-    public Content(
-            final ContentType contentType,
-            final String payload
-    ) {
-        this.contentType = contentType;
-        this.payload = payload;
-    }
 }
